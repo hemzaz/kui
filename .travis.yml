@@ -26,11 +26,15 @@ env:
     - NO_INSTALLER=true         # we don't need to bother building electron package tarballs or DMGs
 
 before_script:
-  - export DISPLAY=:1; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-  - export DISPLAY=:2; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-  - export DISPLAY=:3; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-  - export DISPLAY=:4; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-  - export DISPLAY=:5; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
+  # Start Weston in headless mode for Wayland support (replacing Xvfb)
+  - export WAYLAND_DISPLAY=wayland-0; weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+  - export WAYLAND_DISPLAY=wayland-1; weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+  - export WAYLAND_DISPLAY=wayland-2; weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+  - export WAYLAND_DISPLAY=wayland-3; weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+  - export WAYLAND_DISPLAY=wayland-4; weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+  - export WAYLAND_DISPLAY=wayland-0  # Set default display
+  - export GDK_BACKEND=wayland  # Force GTK to use Wayland backend
+  - sleep 2  # Wait for Weston to start
   - ${TRAVIS_BUILD_DIR}/tools/travis/cleanupNvm.sh
 
 # upload codecov (disabled)

@@ -3,13 +3,33 @@
 # see https://github.com/IBM/kui/issues/5608
 ./tools/travis/check-error-handlers.sh
 
-echo "Launching xvfb"
+echo "Launching Wayland compositor (Weston)"
 if [ "$TRAVIS_OS_NAME" = "linux" ]; then
-    export DISPLAY=:1; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-    export DISPLAY=:2; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-    export DISPLAY=:3; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-    export DISPLAY=:4; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
-    export DISPLAY=:5; Xvfb $DISPLAY -screen 0 ${WINDOW_WIDTH}x${WINDOW_HEIGHT}x24 $DISPLAY -ac > /dev/null &
+    # Start Weston in headless mode for Wayland support
+    # Multiple instances for parallel test execution
+    export WAYLAND_DISPLAY=wayland-0
+    weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+
+    export WAYLAND_DISPLAY=wayland-1
+    weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+
+    export WAYLAND_DISPLAY=wayland-2
+    weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+
+    export WAYLAND_DISPLAY=wayland-3
+    weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+
+    export WAYLAND_DISPLAY=wayland-4
+    weston --backend=headless-backend.so --width=${WINDOW_WIDTH} --height=${WINDOW_HEIGHT} > /dev/null 2>&1 &
+
+    # Set default Wayland display
+    export WAYLAND_DISPLAY=wayland-0
+
+    # Force GTK to use Wayland backend
+    export GDK_BACKEND=wayland
+
+    # Wait for Weston to start
+    sleep 2
 fi
 
 ./tools/travis/cleanupNvm.sh
