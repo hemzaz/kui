@@ -26,7 +26,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.20.11",
     "babel-plugin-dynamic-import-node-babel-7": "^2.0.7",
     "babel-plugin-ignore-html-and-css-imports": "^0.0.2",
-    "spectron": "starpit/spectron#7eebbebbf5346a1c488bb8f46506c881b6e25179"
+    "spectron": "^19.0.0"
   },
   "kui": {
     "electron": false,

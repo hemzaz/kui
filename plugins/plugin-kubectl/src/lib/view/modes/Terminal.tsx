@@ -16,9 +16,9 @@
 
 import React from 'react'
 import { v4 as uuid } from 'uuid'
-import { FitAddon } from 'xterm-addon-fit'
-import { WebglAddon } from 'xterm-addon-webgl'
-import { Terminal as XTerminal, ITheme } from 'xterm'
+import { FitAddon } from '@xterm/addon-fit'
+import { WebglAddon } from '@xterm/addon-webgl'
+import { Terminal as XTerminal, ITheme } from '@xterm/xterm'
 
 import { Events, Job, Streamable, ToolbarText, i18n, isResizable } from '@kui-shell/core'
 

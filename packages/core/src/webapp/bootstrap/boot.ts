@@ -76,7 +76,7 @@ const domReady = (inSandbox: boolean, client?: Client) => async () => {
           // import(/* webpackChunkName: "electron" */ /* webpackMode: "lazy" */ './init-electron').then(_ =>
           //   _.render(client, root)
           // )
-          client(root)
+          client(root, false)
         } else {
           client(root, false)
         }
