@@ -33,7 +33,8 @@ import { cleanupTerminalAfterTermination } from './util'
 import { setChannelForTab } from './sessionCache'
 import { getChannelForTab, invalidateSession } from './session'
 import { Channel, WebViewChannelRendererSide } from './channel'
-import ElectronRendererSideChannel from './electron-main-channel'
+// REMOVED: Electron-specific import for Tauri migration
+// import ElectronRendererSideChannel from './electron-main-channel'
 
 import cwd from '../lib/util/cwd'
 
@@ -717,11 +718,12 @@ const remoteChannelFactory: ChannelFactory = async (tab: Tab): Promise<Channel> 
   }
 }
 
-const electronChannelFactory: ChannelFactory = async (tab: Tab, execUUID: string) => {
-  const channel = new ElectronRendererSideChannel()
-  await channel.init(execUUID)
-  return channel
-}
+// REMOVED: Electron-specific channel factory for Tauri migration
+// const electronChannelFactory: ChannelFactory = async (tab: Tab, execUUID: string) => {
+//   const channel = new ElectronRendererSideChannel()
+//   await channel.init(execUUID)
+//   return channel
+// }
 
 const webviewChannelFactory: ChannelFactory = async () => {
   console.log('webviewChannelFactory')
@@ -753,7 +755,7 @@ const getOrCreateChannel = async (
     ? window['webview-proxy'] !== undefined
       ? webviewChannelFactory
       : remoteChannelFactory
-    : electronChannelFactory
+    : webviewChannelFactory // Changed from electronChannelFactory for Tauri
 
   const env = Object.assign({}, process.env, execOptions.env || {})
 

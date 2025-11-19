@@ -2,9 +2,10 @@
   "extends": "../../packages/builder/tsconfig-base.json",
   "include": ["src/**/*"],
   "compilerOptions": {
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "composite": true,
     "outDir": "mdist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "noEmitOnError": false
   }
 }

@@ -42,9 +42,10 @@ const SpaceFiller = React.lazy(
 const CurrentContext = React.lazy(() => import('@kui-shell/plugin-kubectl/components/mdist/CurrentContext'))
 const CurrentNamespace = React.lazy(() => import('@kui-shell/plugin-kubectl/components/mdist/CurrentNamespace'))
 
-const Search = React.lazy(() => import('@kui-shell/plugin-electron-components/mdist/components/Search'))
+// REMOVED: Electron-specific components not needed for Tauri
+// const Search = React.lazy(() => import('@kui-shell/plugin-electron-components/mdist/components/Search'))
 const CurrentGitBranch = React.lazy(() => import('@kui-shell/plugin-git').then(_ => ({ default: _.CurrentGitBranch })))
-const UpdateChecker = React.lazy(() => import('@kui-shell/plugin-electron-components/mdist/components/UpdateChecker'))
+// const UpdateChecker = React.lazy(() => import('@kui-shell/plugin-electron-components/mdist/components/UpdateChecker'))
 const ProxyOfflineIndicator = React.lazy(() =>
   import('@kui-shell/plugin-proxy-support').then(_ => ({ default: _.ProxyOfflineIndicator }))
 )
@@ -104,7 +105,7 @@ export default class Client extends React.PureComponent<KuiProps> {
         {...props}
         isPopup={isPopup}
         quietExecCommand={quietExecCommand}
-        toplevel={!inBrowser() && <Search />}
+        // REMOVED: toplevel={!inBrowser() && <Search />} - Electron-specific component
         guidebooks={guidebooks.submenu}
         commandLine={
           props.commandLine ||
@@ -140,7 +141,7 @@ export default class Client extends React.PureComponent<KuiProps> {
           {/* <ClusterUtilization /> */}
           {/* !isPopup && <OpenWhiskGridWidget /> */}
           {!offline && inBrowser() && <ProxyOfflineIndicator />}
-          {!offline && !isPopup && !inBrowser() && <UpdateChecker />}
+          {/* REMOVED: {!offline && !isPopup && !inBrowser() && <UpdateChecker />} - Electron-specific component */}
           <Settings />
           <GitHubIcon />
         </MeterWidgets>
