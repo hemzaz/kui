@@ -42,7 +42,36 @@ npm ci --ignore-scripts
 # Run husky install (from prepare script)
 npx cross-env husky install || true
 # Manually run compilation step from postinstall
+echo "Running TypeScript compilation..."
 npm run postinstall
+
+# Add small delay to ensure async file operations complete
+sleep 1
+
+# Verify critical mdist files exist before proceeding
+echo "Verifying compiled output exists..."
+MAX_RETRIES=10
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+  if [ -f "packages/react/mdist/index.js" ] && [ -f "plugins/plugin-bash-like/mdist/index.js" ] && [ -f "packages/core/mdist/index.js" ]; then
+    echo "Compilation verification successful"
+    break
+  fi
+
+  echo "Waiting for compilation to complete... (attempt $((RETRY_COUNT + 1))/$MAX_RETRIES)"
+  sleep 2
+  RETRY_COUNT=$((RETRY_COUNT + 1))
+done
+
+if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+  echo "ERROR: Compilation did not complete within expected time"
+  echo "Checking which files are missing:"
+  [ ! -f "packages/react/mdist/index.js" ] && echo "  - packages/react/mdist/index.js"
+  [ ! -f "plugins/plugin-bash-like/mdist/index.js" ] && echo "  - plugins/plugin-bash-like/mdist/index.js"
+  [ ! -f "packages/core/mdist/index.js" ] && echo "  - packages/core/mdist/index.js"
+  exit 1
+fi
 if [ "$CLIENT" != "default" ]; then ./bin/switch-client.sh ${CLIENT-default}; fi
 ./tools/codecov/instrument.sh
 if [ "$MOCHA_RUN_TARGET" = "webpack" ]; then export KUI_USE_PROXY=true; if [ "$DEPLOY" = "cluster" ]; then npx kui-build-webpack && npx kui-build-docker-with-proxy && (kui-run-cproxy &); else npm run watch:webpack; fi; elif [ -z "$TEST_FROM_BUILD" ]; then npm run watch:electron; else npm run build:electron:$TRAVIS_OS_NAME:${TRAVIS_CPU_ARCH-amd64}; fi
