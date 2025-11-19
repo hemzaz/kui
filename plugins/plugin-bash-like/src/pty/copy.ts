@@ -17,7 +17,7 @@
 import type { XtermResponse, XtermResponseCell } from '@kui-shell/core'
 import { prepareCellForDomRenderer } from '@kui-shell/xterm-helpers'
 
-import { IBufferCell, IBufferLine, Terminal } from 'xterm'
+import { IBufferCell, IBufferLine, Terminal } from '@xterm/xterm'
 
 /**
  * @return a XtermResponseCell matching the styling of the given xtermjs

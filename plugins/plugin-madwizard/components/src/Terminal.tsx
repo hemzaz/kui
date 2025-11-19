@@ -16,10 +16,10 @@
 
 import React from 'react'
 import { eventChannelUnsafe } from '@kui-shell/core/mdist/api/Events'
-import { ITheme, Terminal } from 'xterm'
-import { FitAddon } from 'xterm-addon-fit'
-import { WebglAddon } from 'xterm-addon-webgl'
-import { SearchAddon, ISearchOptions } from 'xterm-addon-search'
+import { ITheme, Terminal } from '@xterm/xterm'
+import { FitAddon } from '@xterm/addon-fit'
+import { WebglAddon } from '@xterm/addon-webgl'
+import { SearchAddon, ISearchOptions } from '@xterm/addon-search'
 import { Toolbar, ToolbarContent, ToolbarItem, SearchInput } from '@patternfly/react-core'
 
 import '../../web/scss/components/Terminal/_index.scss'

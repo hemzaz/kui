@@ -18,8 +18,8 @@
 
 import Debug from 'debug'
 import { v4 as uuid } from 'uuid'
-import { IDisposable, Terminal as XTerminal } from 'xterm'
-// import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks'
+import { IDisposable, Terminal as XTerminal } from '@xterm/xterm'
+// import { webLinksInit } from '@xterm/xterm/lib/addons/webLinks/webLinks'
 
 // eslint-disable-next-line import/no-duplicates
 import type { Tab, REPL, Job, Abortable } from '@kui-shell/core'
