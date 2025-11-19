@@ -32,6 +32,10 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Install Wayland dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwayland-dev libwayland-client0 libwayland-server0 weston xwayland libxkbcommon-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -49,6 +53,10 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Install Wayland dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwayland-dev libwayland-client0 libwayland-server0 weston xwayland libxkbcommon-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -84,6 +92,10 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Install Wayland dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwayland-dev libwayland-client0 libwayland-server0 weston xwayland libxkbcommon-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -103,6 +115,10 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Install Wayland dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwayland-dev libwayland-client0 libwayland-server0 weston xwayland libxkbcommon-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -144,6 +160,10 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Install Wayland dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwayland-dev libwayland-client0 libwayland-server0 weston xwayland libxkbcommon-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -169,6 +189,10 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Install Wayland dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwayland-dev libwayland-client0 libwayland-server0 weston xwayland libxkbcommon-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -286,6 +310,10 @@ jobs:
         node-version: [18.x]
     steps:
     - uses: actions/checkout@v3
+    - name: Install Wayland dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwayland-dev libwayland-client0 libwayland-server0 weston xwayland libxkbcommon-dev
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
