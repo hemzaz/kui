@@ -92,7 +92,7 @@
     "eslint-plugin-standard": "^4.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
-    "nan": "github:jkleinsc/nan#6a2f95a6a2209d8aa7542fb18099fd808a802059",
+    "nan": "git+https://github.com/jkleinsc/nan.git#6a2f95a6a2209d8aa7542fb18099fd808a802059",
     "prettier": "^2.8.7",
     "typedoc": "^0.24.1",
     "typedoc-plugin-markdown": "^3.15.1",
@@ -151,6 +151,7 @@
   },
   "overrides": {
     "nan": "$nan",
-    "colors": "$colors"
+    "colors": "$colors",
+    "deep-eql": "^5.0.2"
   }
 }
