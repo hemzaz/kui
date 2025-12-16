@@ -1,0 +1,193 @@
+/*
+ * Copyright 2024 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// AI Chat Color Variables
+// These use CSS custom properties that adapt to light/dark themes
+
+:root {
+  // Spacing
+  --kui-ai-spacing-xs: 0.25rem;
+  --kui-ai-spacing-sm: 0.5rem;
+  --kui-ai-spacing-md: 1rem;
+  --kui-ai-spacing-lg: 1.5rem;
+  --kui-ai-spacing-xl: 2rem;
+
+  // Typography
+  --kui-ai-font-size-sm: 0.875rem;
+  --kui-ai-font-size-base: 1rem;
+  --kui-ai-font-size-lg: 1.125rem;
+  --kui-ai-line-height-tight: 1.4;
+  --kui-ai-line-height-normal: 1.6;
+
+  // Border radius
+  --kui-ai-border-radius-sm: 0.25rem;
+  --kui-ai-border-radius-md: 0.5rem;
+  --kui-ai-border-radius-lg: 0.75rem;
+
+  // Transitions
+  --kui-ai-transition-fast: 150ms ease-in-out;
+  --kui-ai-transition-normal: 250ms ease-in-out;
+  --kui-ai-transition-slow: 350ms ease-in-out;
+
+  // Z-indices
+  --kui-ai-z-index-sidebar: 100;
+  --kui-ai-z-index-modal: 200;
+  --kui-ai-z-index-popover: 300;
+
+  // Sidebar
+  --kui-ai-sidebar-width: 400px;
+  --kui-ai-sidebar-width-collapsed: 0;
+
+  // Message bubble max width
+  --kui-ai-message-max-width: 85%;
+
+  // Animation timing
+  --kui-ai-typing-animation-duration: 1.5s;
+}
+
+// Light theme colors
+body[kui-theme-style='light'] {
+  // Background colors
+  --kui-ai-bg-primary: var(--color-base00);
+  --kui-ai-bg-secondary: var(--color-base01);
+  --kui-ai-bg-tertiary: var(--color-base02);
+  --kui-ai-bg-hover: var(--color-base03);
+
+  // Text colors
+  --kui-ai-text-primary: var(--color-text-01);
+  --kui-ai-text-secondary: var(--color-text-02);
+  --kui-ai-text-muted: var(--color-base04);
+  --kui-ai-text-inverse: var(--color-base00);
+
+  // Border colors
+  --kui-ai-border-primary: var(--color-base03);
+  --kui-ai-border-secondary: var(--color-base02);
+
+  // Message bubble colors
+  --kui-ai-message-user-bg: var(--color-base0D);
+  --kui-ai-message-user-text: var(--color-base07);
+  --kui-ai-message-assistant-bg: var(--color-base02);
+  --kui-ai-message-assistant-text: var(--color-text-01);
+  --kui-ai-message-system-bg: var(--color-base0A);
+  --kui-ai-message-system-text: var(--color-base00);
+  --kui-ai-message-error-bg: var(--color-base08);
+  --kui-ai-message-error-text: var(--color-base07);
+
+  // Context panel colors
+  --kui-ai-context-bg: var(--color-base01);
+  --kui-ai-context-border: var(--color-base03);
+  --kui-ai-context-header-bg: var(--color-base02);
+
+  // Settings colors
+  --kui-ai-settings-bg: var(--color-base00);
+  --kui-ai-settings-section-bg: var(--color-base01);
+
+  // Button colors
+  --kui-ai-button-primary-bg: var(--color-base0D);
+  --kui-ai-button-primary-text: var(--color-base07);
+  --kui-ai-button-primary-hover: #{darken(#054ada, 10%)};
+  --kui-ai-button-secondary-bg: var(--color-base02);
+  --kui-ai-button-secondary-text: var(--color-text-01);
+  --kui-ai-button-secondary-hover: var(--color-base03);
+
+  // Icon colors
+  --kui-ai-icon-primary: var(--color-base0D);
+  --kui-ai-icon-secondary: var(--color-base04);
+  --kui-ai-icon-success: var(--color-base0B);
+  --kui-ai-icon-warning: var(--color-base0A);
+  --kui-ai-icon-error: var(--color-base08);
+
+  // Code block colors
+  --kui-ai-code-bg: var(--color-base02);
+  --kui-ai-code-border: var(--color-base03);
+  --kui-ai-code-text: var(--color-base06);
+
+  // Loading colors
+  --kui-ai-loading-bg: var(--color-base03);
+  --kui-ai-loading-shimmer: rgba(255, 255, 255, 0.3);
+
+  // Scrollbar colors
+  --kui-ai-scrollbar-track: var(--color-base01);
+  --kui-ai-scrollbar-thumb: var(--color-base03);
+  --kui-ai-scrollbar-thumb-hover: var(--color-base04);
+}
+
+// Dark theme colors
+body[kui-theme-style='dark'] {
+  // Background colors
+  --kui-ai-bg-primary: var(--color-base00);
+  --kui-ai-bg-secondary: var(--color-base01);
+  --kui-ai-bg-tertiary: var(--color-base02);
+  --kui-ai-bg-hover: var(--color-base03);
+
+  // Text colors
+  --kui-ai-text-primary: var(--color-text-01);
+  --kui-ai-text-secondary: var(--color-text-02);
+  --kui-ai-text-muted: var(--color-base04);
+  --kui-ai-text-inverse: var(--color-base00);
+
+  // Border colors
+  --kui-ai-border-primary: var(--color-base03);
+  --kui-ai-border-secondary: var(--color-base02);
+
+  // Message bubble colors
+  --kui-ai-message-user-bg: var(--color-base0D);
+  --kui-ai-message-user-text: var(--color-base00);
+  --kui-ai-message-assistant-bg: var(--color-base02);
+  --kui-ai-message-assistant-text: var(--color-text-01);
+  --kui-ai-message-system-bg: var(--color-base0A);
+  --kui-ai-message-system-text: var(--color-base00);
+  --kui-ai-message-error-bg: var(--color-base08);
+  --kui-ai-message-error-text: var(--color-base00);
+
+  // Context panel colors
+  --kui-ai-context-bg: var(--color-base01);
+  --kui-ai-context-border: var(--color-base03);
+  --kui-ai-context-header-bg: var(--color-base02);
+
+  // Settings colors
+  --kui-ai-settings-bg: var(--color-base00);
+  --kui-ai-settings-section-bg: var(--color-base01);
+
+  // Button colors
+  --kui-ai-button-primary-bg: var(--color-base0D);
+  --kui-ai-button-primary-text: var(--color-base00);
+  --kui-ai-button-primary-hover: #{lighten(#4589ff, 10%)};
+  --kui-ai-button-secondary-bg: var(--color-base02);
+  --kui-ai-button-secondary-text: var(--color-text-01);
+  --kui-ai-button-secondary-hover: var(--color-base03);
+
+  // Icon colors
+  --kui-ai-icon-primary: var(--color-base0D);
+  --kui-ai-icon-secondary: var(--color-base04);
+  --kui-ai-icon-success: var(--color-base0B);
+  --kui-ai-icon-warning: var(--color-base0A);
+  --kui-ai-icon-error: var(--color-base08);
+
+  // Code block colors
+  --kui-ai-code-bg: var(--color-base02);
+  --kui-ai-code-border: var(--color-base03);
+  --kui-ai-code-text: var(--color-base06);
+
+  // Loading colors
+  --kui-ai-loading-bg: var(--color-base03);
+  --kui-ai-loading-shimmer: rgba(255, 255, 255, 0.1);
+
+  // Scrollbar colors
+  --kui-ai-scrollbar-track: var(--color-base01);
+  --kui-ai-scrollbar-thumb: var(--color-base03);
+  --kui-ai-scrollbar-thumb-hover: var(--color-base04);
+}

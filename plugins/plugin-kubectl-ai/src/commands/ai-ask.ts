@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { Arguments, Registrar, UsageError } from '@kui-shell/core'
+import { Arguments, Registrar, UsageError, XtermResponse } from '@kui-shell/core'
+import { ClusterDataCollector } from '../context/cluster-data-collector'
+import { ProviderFactory } from '../services/provider-factory'
+import { loadConfig } from '../utils/config-loader'
+import type { AIProviderError } from '../types/ai-types'
 
 interface AskOptions {
   context?: boolean
@@ -25,11 +29,23 @@ interface AskOptions {
 }
 
 /**
+ * Parse resource string (format: kind/name or just name)
+ */
+function parseResourceString(resourceStr: string): { kind: string; name: string } {
+  const parts = resourceStr.split('/')
+  if (parts.length === 2) {
+    return { kind: parts[0], name: parts[1] }
+  }
+  // Default to pod if only name is provided
+  return { kind: 'pod', name: resourceStr }
+}
+
+/**
  * Command handler for /ai ask
  * Ask the AI assistant a question about Kubernetes
  */
-async function aiAskHandler(args: Arguments<AskOptions>): Promise<string> {
-  const { argvNoOptions, parsedOptions } = args
+async function aiAskHandler(args: Arguments<AskOptions>): Promise<string | XtermResponse> {
+  const { argvNoOptions, parsedOptions, REPL } = args
 
   // Extract question from arguments (everything after 'ask')
   const askIndex = argvNoOptions.indexOf('ask')
@@ -57,33 +73,98 @@ async function aiAskHandler(args: Arguments<AskOptions>): Promise<string> {
     })
   }
 
-  // Build options object
-  const options = {
-    question: question.trim(),
-    includeContext: parsedOptions.context || false,
-    streaming: parsedOptions.streaming || false,
-    namespace: parsedOptions.namespace || parsedOptions.n,
-    resource: parsedOptions.resource
+  try {
+    // Load AI configuration
+    const config = await loadConfig()
+
+    // Initialize AI provider
+    const provider = ProviderFactory.getProvider(config)
+
+    // Prepare completion request
+    const request = {
+      prompt: question.trim(),
+      streaming: parsedOptions.streaming || config.streaming
+    }
+
+    // Gather cluster context if requested
+    if (parsedOptions.context || parsedOptions.resource) {
+      const collector = new ClusterDataCollector(REPL)
+      const namespace = parsedOptions.namespace || parsedOptions.n
+
+      const captureOptions: {
+        namespace?: string
+        resource?: { kind: string; name: string; namespace: string }
+      } = {
+        namespace
+      }
+
+      // Add resource context if specified
+      if (parsedOptions.resource) {
+        const resource = parseResourceString(parsedOptions.resource)
+        captureOptions.resource = {
+          kind: resource.kind,
+          name: resource.name,
+          namespace: namespace || 'default'
+        }
+      }
+
+      const snapshot = await collector.captureClusterSnapshot(captureOptions)
+      request['clusterData'] = snapshot
+    }
+
+    // Handle streaming vs non-streaming
+    if (request.streaming) {
+      // For streaming, we'll accumulate chunks and return as string
+      // In the future, we could use XtermResponse for true streaming
+      let fullResponse = ''
+
+      for await (const chunk of provider.streamCompletion(request)) {
+        if (!chunk.done) {
+          fullResponse += chunk.delta
+        }
+      }
+
+      return formatResponse(question.trim(), fullResponse)
+    } else {
+      // Non-streaming completion
+      const response = await provider.complete(request)
+      return formatResponse(question.trim(), response.content, response.usage, response.cost)
+    }
+  } catch (error) {
+    const err = error as AIProviderError
+    throw new UsageError({
+      message: `AI request failed: ${err.message}`,
+      usage: {
+        command: 'ai ask',
+        docs: 'Ask the AI assistant a question about Kubernetes',
+        example: 'ai ask "why is my pod crashing?"'
+      }
+    })
+  }
+}
+
+/**
+ * Format the response for display
+ */
+function formatResponse(
+  question: string,
+  answer: string,
+  usage?: { inputTokens: number; outputTokens: number },
+  cost?: number
+): string {
+  const parts = ['Question:', question, '', 'Answer:', answer, '']
+
+  if (usage) {
+    parts.push('---')
+    parts.push(
+      `Tokens: ${usage.inputTokens} input, ${usage.outputTokens} output (${usage.inputTokens + usage.outputTokens} total)`
+    )
+    if (cost) {
+      parts.push(`Cost: $${cost.toFixed(6)}`)
+    }
   }
 
-  // TODO: Implement actual AI provider call
-  // For now, return a placeholder response
-  const response = [
-    `Question: ${options.question}`,
-    '',
-    'AI Response:',
-    'This is a placeholder response. The AI provider integration is not yet implemented.',
-    '',
-    'Options:',
-    `- Include context: ${options.includeContext}`,
-    `- Streaming: ${options.streaming}`,
-    options.namespace ? `- Namespace: ${options.namespace}` : '',
-    options.resource ? `- Resource: ${options.resource}` : ''
-  ]
-    .filter(Boolean)
-    .join('\n')
-
-  return response
+  return parts.join('\n')
 }
 
 /**

@@ -15,6 +15,12 @@
  */
 
 import { Arguments, Registrar, UsageError } from '@kui-shell/core'
+import { ProviderFactory } from '../services/provider-factory'
+import { loadConfig } from '../utils/config-loader'
+import { MANIFEST_GENERATION_PROMPT } from '../prompts/system-prompts'
+import type { AIProviderError } from '../types/ai-types'
+import * as fs from 'fs'
+import * as path from 'path'
 
 interface CreateOptions {
   namespace?: string
@@ -31,7 +37,7 @@ interface CreateOptions {
  * Generate Kubernetes manifest from description
  */
 async function aiCreateHandler(args: Arguments<CreateOptions>): Promise<string> {
-  const { argvNoOptions, parsedOptions } = args
+  const { argvNoOptions, parsedOptions, REPL } = args
 
   // Extract description from arguments (everything after 'create')
   const createIndex = argvNoOptions.indexOf('create')
@@ -66,68 +72,180 @@ async function aiCreateHandler(args: Arguments<CreateOptions>): Promise<string> 
     })
   }
 
-  // Build options object
-  const options = {
-    description: description.trim(),
-    namespace: parsedOptions.namespace || parsedOptions.n,
-    replicas: parsedOptions.replicas,
-    port: parsedOptions.port,
-    image: parsedOptions.image,
-    apply: parsedOptions.apply || false,
-    save: parsedOptions.save
+  try {
+    // Load AI configuration and initialize provider
+    const config = await loadConfig()
+    const provider = ProviderFactory.getProvider(config)
+
+    // Build manifest generation prompt
+    const prompt = buildCreatePrompt(description.trim(), parsedOptions)
+
+    // Call AI provider
+    const response = await provider.complete({
+      prompt,
+      systemPrompt: MANIFEST_GENERATION_PROMPT,
+      streaming: false
+    })
+
+    // Extract YAML from response (may be wrapped in markdown code blocks)
+    const manifest = extractYamlFromResponse(response.content)
+
+    // Validate that we got YAML
+    if (!manifest || manifest.trim().length === 0) {
+      throw new Error('No valid YAML manifest generated')
+    }
+
+    // Handle --save option
+    if (parsedOptions.save) {
+      const filepath = path.resolve(parsedOptions.save)
+      fs.writeFileSync(filepath, manifest, 'utf8')
+    }
+
+    // Handle --apply option
+    let applyResult = ''
+    if (parsedOptions.apply) {
+      // Write manifest to temporary file
+      const tmpFile = `/tmp/kui-ai-manifest-${Date.now()}.yaml`
+      fs.writeFileSync(tmpFile, manifest, 'utf8')
+
+      try {
+        // Apply using kubectl
+        const result = await REPL.qexec(`kubectl apply -f ${tmpFile}`)
+        applyResult = typeof result === 'string' ? result : JSON.stringify(result)
+      } catch (error) {
+        const err = error as Error
+        applyResult = `Failed to apply: ${err.message}`
+      } finally {
+        // Clean up temp file
+        try {
+          fs.unlinkSync(tmpFile)
+        } catch {
+          // Ignore cleanup errors
+        }
+      }
+    }
+
+    return formatCreateResponse(
+      description.trim(),
+      manifest,
+      parsedOptions,
+      applyResult,
+      response.usage,
+      response.cost
+    )
+  } catch (error) {
+    const err = error as AIProviderError
+    throw new UsageError({
+      message: `AI manifest generation failed: ${err.message}`,
+      usage: {
+        command: 'ai create',
+        docs: 'Generate Kubernetes manifest from natural language description',
+        example: 'ai create "nginx deployment with 3 replicas"'
+      }
+    })
+  }
+}
+
+/**
+ * Build the manifest generation prompt
+ */
+function buildCreatePrompt(description: string, options: CreateOptions): string {
+  const parts = [
+    `Generate a production-ready Kubernetes manifest for: ${description}`,
+    '',
+    'Requirements:',
+    '- Follow Kubernetes best practices',
+    '- Include appropriate labels and annotations',
+    '- Add resource limits and requests',
+    '- Include health checks (liveness/readiness probes) where applicable',
+    '- Use secure defaults',
+    ''
+  ]
+
+  if (options.namespace) {
+    parts.push(`- Namespace: ${options.namespace}`)
+  }
+  if (options.replicas) {
+    parts.push(`- Replicas: ${options.replicas}`)
+  }
+  if (options.port) {
+    parts.push(`- Port: ${options.port}`)
+  }
+  if (options.image) {
+    parts.push(`- Container Image: ${options.image}`)
   }
 
-  // TODO: Implement actual manifest generation
-  // 1. Send description to AI provider with manifest generation prompt
-  // 2. Parse and validate generated YAML
-  // 3. Optionally apply or save
-  // 4. Return formatted response
+  parts.push('')
+  parts.push('Return only the YAML manifest, no explanations.')
+  parts.push('If multiple resources are needed (e.g., Deployment + Service), include all separated by ---')
 
-  const response = [
-    `Creating Kubernetes manifest for: ${options.description}`,
-    '',
-    'Configuration:',
-    options.namespace ? `- Namespace: ${options.namespace}` : '- Namespace: default',
-    options.replicas ? `- Replicas: ${options.replicas}` : '',
-    options.port ? `- Port: ${options.port}` : '',
-    options.image ? `- Image: ${options.image}` : '',
-    '',
-    'Generated Manifest:',
-    '---',
-    '# This is a placeholder manifest',
-    '# The AI manifest generation is not yet implemented',
-    'apiVersion: apps/v1',
-    'kind: Deployment',
-    'metadata:',
-    '  name: example',
-    '  namespace: ' + (options.namespace || 'default'),
-    'spec:',
-    '  replicas: ' + (options.replicas || 1),
-    '  selector:',
-    '    matchLabels:',
-    '      app: example',
-    '  template:',
-    '    metadata:',
-    '      labels:',
-    '        app: example',
-    '    spec:',
-    '      containers:',
-    '      - name: app',
-    '        image: ' + (options.image || 'nginx:latest'),
-    options.port ? `        ports:\n        - containerPort: ${options.port}` : '',
-    '---',
-    '',
-    options.apply
-      ? 'Status: Would apply to cluster (not implemented)'
-      : 'Tip: Use --apply to automatically create this resource',
-    options.save
-      ? `Status: Would save to ${options.save} (not implemented)`
-      : 'Tip: Use --save <filename> to save this manifest'
-  ]
-    .filter(Boolean)
-    .join('\n')
+  return parts.join('\n')
+}
 
-  return response
+/**
+ * Extract YAML from AI response (handles markdown code blocks)
+ */
+function extractYamlFromResponse(response: string): string {
+  // Remove markdown code blocks if present
+  const yamlBlockMatch = response.match(/```(?:yaml|yml)?\n([\s\S]*?)```/)
+  if (yamlBlockMatch) {
+    return yamlBlockMatch[1].trim()
+  }
+
+  // If no code blocks, assume entire response is YAML
+  return response.trim()
+}
+
+/**
+ * Format the create response for display
+ */
+function formatCreateResponse(
+  description: string,
+  manifest: string,
+  options: CreateOptions,
+  applyResult: string,
+  usage?: { inputTokens: number; outputTokens: number },
+  cost?: number
+): string {
+  const parts = ['Generated Kubernetes Manifest', '='.repeat(60), '', `Description: ${description}`, '']
+
+  if (options.namespace) {
+    parts.push(`Namespace: ${options.namespace}`)
+  }
+  if (options.replicas) {
+    parts.push(`Replicas: ${options.replicas}`)
+  }
+  if (options.port) {
+    parts.push(`Port: ${options.port}`)
+  }
+  if (options.image) {
+    parts.push(`Image: ${options.image}`)
+  }
+
+  parts.push('', 'Manifest:', '---', manifest, '---', '')
+
+  if (options.save) {
+    parts.push(`Saved to: ${path.resolve(options.save)}`)
+  }
+
+  if (options.apply) {
+    parts.push('', 'Apply Result:', applyResult)
+  } else {
+    parts.push('Tip: Use --apply to automatically create this resource in your cluster')
+  }
+
+  if (usage) {
+    parts.push('')
+    parts.push('---')
+    parts.push(
+      `Tokens: ${usage.inputTokens} input, ${usage.outputTokens} output (${usage.inputTokens + usage.outputTokens} total)`
+    )
+    if (cost) {
+      parts.push(`Cost: $${cost.toFixed(6)}`)
+    }
+  }
+
+  return parts.join('\n')
 }
 
 /**

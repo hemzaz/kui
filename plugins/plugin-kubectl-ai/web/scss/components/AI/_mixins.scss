@@ -1,0 +1,330 @@
+/*
+ * Copyright 2024 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// Scrollbar styling mixin
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--kui-ai-scrollbar-track);
+    border-radius: var(--kui-ai-border-radius-sm);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--kui-ai-scrollbar-thumb);
+    border-radius: var(--kui-ai-border-radius-sm);
+
+    &:hover {
+      background: var(--kui-ai-scrollbar-thumb-hover);
+    }
+  }
+
+  // Firefox scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: var(--kui-ai-scrollbar-thumb) var(--kui-ai-scrollbar-track);
+}
+
+// Card/panel styling
+@mixin panel-card {
+  background: var(--kui-ai-bg-secondary);
+  border: 1px solid var(--kui-ai-border-primary);
+  border-radius: var(--kui-ai-border-radius-md);
+  padding: var(--kui-ai-spacing-md);
+}
+
+// Smooth transitions
+@mixin smooth-transition($properties...) {
+  transition-property: $properties;
+  transition-duration: var(--kui-ai-transition-normal);
+  transition-timing-function: ease-in-out;
+}
+
+// Focus outline
+@mixin focus-outline {
+  outline: 2px solid var(--kui-ai-icon-primary);
+  outline-offset: 2px;
+}
+
+// Hover effect for interactive elements
+@mixin hover-effect {
+  transition: all var(--kui-ai-transition-fast);
+
+  &:hover {
+    background: var(--kui-ai-bg-hover);
+    cursor: pointer;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Truncate text with ellipsis
+@mixin truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Multi-line truncate
+@mixin truncate-multiline($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Loading shimmer animation
+@mixin loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--kui-ai-loading-bg) 0%,
+    var(--kui-ai-loading-shimmer) 50%,
+    var(--kui-ai-loading-bg) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Typing indicator animation
+@mixin typing-indicator {
+  .typing-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--kui-ai-text-secondary);
+    animation: typing-bounce 1.4s infinite ease-in-out;
+
+    &:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+  }
+}
+
+@keyframes typing-bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+// Fade in animation
+@mixin fade-in($duration: var(--kui-ai-transition-normal)) {
+  animation: fadeIn $duration ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Slide in from right animation
+@mixin slide-in-right($duration: var(--kui-ai-transition-normal)) {
+  animation: slideInRight $duration ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Slide out to right animation
+@mixin slide-out-right($duration: var(--kui-ai-transition-normal)) {
+  animation: slideOutRight $duration ease-in;
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Message bubble base styles
+@mixin message-bubble($bg-color, $text-color) {
+  background: $bg-color;
+  color: $text-color;
+  border-radius: var(--kui-ai-border-radius-lg);
+  padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+  max-width: var(--kui-ai-message-max-width);
+  word-wrap: break-word;
+  line-height: var(--kui-ai-line-height-normal);
+}
+
+// Code block styling
+@mixin code-block {
+  background: var(--kui-ai-code-bg);
+  border: 1px solid var(--kui-ai-code-border);
+  border-radius: var(--kui-ai-border-radius-sm);
+  padding: var(--kui-ai-spacing-sm);
+  font-family: var(--font-monospace);
+  font-size: var(--kui-ai-font-size-sm);
+  overflow-x: auto;
+  @include custom-scrollbar;
+}
+
+// Inline code styling
+@mixin inline-code {
+  background: var(--kui-ai-code-bg);
+  border: 1px solid var(--kui-ai-code-border);
+  border-radius: var(--kui-ai-border-radius-sm);
+  padding: 2px 6px;
+  font-family: var(--font-monospace);
+  font-size: 0.9em;
+  color: var(--kui-ai-code-text);
+}
+
+// Collapsible section
+@mixin collapsible-section {
+  .collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--kui-ai-spacing-sm);
+    cursor: pointer;
+    user-select: none;
+    @include hover-effect;
+
+    .icon {
+      transition: transform var(--kui-ai-transition-fast);
+    }
+
+    &.expanded .icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  .collapsible-content {
+    overflow: hidden;
+    transition: max-height var(--kui-ai-transition-normal),
+                opacity var(--kui-ai-transition-normal);
+
+    &.collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+
+    &.expanded {
+      max-height: 1000px;
+      opacity: 1;
+    }
+  }
+}
+
+// Button base styles
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kui-ai-spacing-xs);
+  padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+  border: none;
+  border-radius: var(--kui-ai-border-radius-md);
+  font-size: var(--kui-ai-font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  @include smooth-transition(background-color, transform, box-shadow);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    @include focus-outline;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+// Icon button
+@mixin icon-button {
+  @include button-base;
+  padding: var(--kui-ai-spacing-sm);
+  background: transparent;
+  color: var(--kui-ai-icon-secondary);
+
+  &:hover {
+    background: var(--kui-ai-bg-hover);
+    color: var(--kui-ai-icon-primary);
+  }
+}
+
+// Badge/tag styling
+@mixin badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--kui-ai-border-radius-sm);
+  font-size: var(--kui-ai-font-size-sm);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+// Skeleton loader
+@mixin skeleton-loader($height: 1rem, $width: 100%) {
+  height: $height;
+  width: $width;
+  border-radius: var(--kui-ai-border-radius-sm);
+  @include loading-shimmer;
+}
