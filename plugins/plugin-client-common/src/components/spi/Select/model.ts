@@ -60,7 +60,7 @@ export function isDivider(group: Divider | Group): group is Divider {
   return (group as Divider).divider === true
 }
 
-type NonGroupedProps = BaseProps & {
+export type NonGroupedProps = BaseProps & {
   /** select options */
   options: SelectOptions[]
 }

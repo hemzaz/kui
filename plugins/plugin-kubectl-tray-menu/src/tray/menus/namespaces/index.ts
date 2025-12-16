@@ -61,8 +61,8 @@ class NamespaceWatcher {
       }
 
       this.namespaces = namespaces
-    } catch (_err) {
-      this.debug('findAndSetCurrentNamespace failure', _err.message)
+    } catch (err) {
+      this.debug('findAndSetCurrentNamespace failure', err.message)
     }
   }
 
@@ -171,7 +171,7 @@ class NamespaceWatcher {
         this.findAndSetCurrentNamespace(namespaces, currentNamespaceP)
       })
       // eslint-disable-next-line no-empty, @typescript-eslint/no-unused-vars
-    } catch (_err) {}
+    } catch (err) {}
   }
 
   public invalidate() {

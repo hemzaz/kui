@@ -27,7 +27,7 @@ const apiVersion = 'v1'
 export function getTabState(tab: TabState, key: string) {
   try {
     return tab.getState(name, apiVersion, key)
-  } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
+  } catch (err) { // eslint-disable-line @typescript-eslint/no-unused-vars
     return undefined
   }
 }
@@ -58,7 +58,7 @@ async function capture(tabState: TabState) {
       }
 
       debug('captured tab state', tab.uuid, currentContext, currentNamespace)
-    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (err) {  
       if (!/command not found/.test(err)) {
         console.error(`plugin-kubectl: failed to capture tab-state`, err, tabState)
       }
@@ -90,7 +90,7 @@ async function restore(tabState: TabState) {
     }
 
     debug('restored tab state', tab.uuid, context, namespace)
-  } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
+  } catch (err) {  
     if (!/command not found/.test(err)) {
       console.error(`plugin-kubectl: failed to restore tab-state`, err, tabState)
     }
@@ -102,7 +102,7 @@ const switchTo = async (currentTabState: TabState, nextTabState: TabState) => {
     try {
       await capture(currentTabState)
       await restore(nextTabState)
-    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    } catch (err) {  
       console.error(`plugin-kubectl: failed to switch tab`, err, currentTabState, nextTabState)
     }
   }

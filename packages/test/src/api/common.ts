@@ -161,7 +161,7 @@ export const restart = async (ctx: ISuite) => {
   try {
     await ctx.app.restart()
     addCommands(ctx)
-  } catch (_err) {
+  } catch (err) {
     const errorIsNavigatedError: boolean =
       err.message.includes('Inspected target navigated or closed') ||
       err.message.includes('cannot determine loading status') ||
@@ -179,7 +179,7 @@ export const restart = async (ctx: ISuite) => {
 export const refresh = async (ctx: ISuite, wait = true, clean = false) => {
   try {
     await ctx.app.client.refresh()
-  } catch (_err) {
+  } catch (err) {
     const errorIsNavigatedError: boolean =
       err.message.includes('Inspected target navigated or closed') ||
       err.message.includes('cannot determine loading status') ||
@@ -241,7 +241,7 @@ export const before = (ctx: ISuite, options?: BeforeOptions): HookFunction => {
           try {
             await refresh(ctx, !noProxySessionWait, true)
             return
-          } catch (_err) {
+          } catch (err) {
             const errorIsNavigatedError: boolean =
               err.message.includes('Inspected target navigated or closed') ||
               err.message.includes('cannot determine loading status') ||
@@ -299,7 +299,7 @@ export const before = (ctx: ISuite, options?: BeforeOptions): HookFunction => {
       if (afterStart) {
         await afterStart()
       }
-    } catch (_err) {
+    } catch (err) {
       console.error('error refreshing in before for fresh start', err)
       throw err
     }
@@ -392,7 +392,7 @@ export const oops =
                 console.error('error trying to get the output of the final block', err)
               })
           )
-        } catch (_err) {
+        } catch (err) {
           console.error('error trying to get output html', err)
         }
 

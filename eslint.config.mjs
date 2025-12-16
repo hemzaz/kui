@@ -122,7 +122,14 @@ export default tseslint.config(
   // JavaScript files - relax TypeScript rules
   {
     files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2018
+      }
+    },
     rules: {
+      'no-undef': 'off',
       '@typescript-eslint/explicit-member-accessibility': 'off',
       '@typescript-eslint/no-var-requires': 'off'
     }

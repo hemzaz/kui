@@ -275,7 +275,7 @@ export const okWithStringEventually =
       () => {
         try {
           return okWithString(expect, exact)(res)
-        } catch (_err) {
+        } catch (err) {
           // swallow
         }
       },
@@ -290,7 +290,7 @@ export const okWithPtyOutputEventually =
       () => {
         try {
           return okWithPtyOutput(expect, exact)(res)
-        } catch (_err) {
+        } catch (err) {
           // swallow
         }
       },

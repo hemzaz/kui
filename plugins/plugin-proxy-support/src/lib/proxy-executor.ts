@@ -204,13 +204,14 @@ class ProxyEvaluator implements ReplEval {
                         } else {
                           // e.g. k get pod nonExistantName
                           debug('rejecting as other error', response)
-                          const err: CodedError = new Error(response.response.message)
-                          err.stack = response.response.stack
+                          const errorResponse = response.response as CodedError & { message: string; stack?: string; statusCode?: number }
+                          const err: CodedError = new Error(errorResponse.message)
+                          err.stack = errorResponse.stack
                           err.code = code
 
                           // see https://github.com/IBM/kui/issues/3318
                           err.statusCode =
-                            response.response.statusCode !== undefined ? response.response.statusCode : code
+                            errorResponse.statusCode !== undefined ? errorResponse.statusCode : code
 
                           err.body = response.response
                           reject(err)

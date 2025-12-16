@@ -44,13 +44,13 @@ export default (
     const i18n = (locale: string): Record<string, string> => {
       try {
         return locale && require(`@kui-shell/${plugin}/i18n/${namespace}_${locale.replace(/-/, '_')}.json`)
-      } catch (_err) {
+      } catch (err) {
         try {
           return (
             (locale && require(`@kui-shell/${plugin}/i18n/${namespace}_${locale.replace(/-.*$/, '')}.json`)) ||
             defaultStrings
           )
-        } catch (_err) {
+        } catch (err) {
           console.error('Could not find translation for given locale', plugin, locale)
           return defaultStrings
         }
@@ -71,7 +71,7 @@ export default (
             return str.replace(new RegExp(`\\{${idx}\\}`, 'g'), param.toString())
           }, str)
     }
-  } catch (_err) {
+  } catch (err) {
     return (x: string) => x
   }
 }

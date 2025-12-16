@@ -20,7 +20,7 @@ export const filters = [{ name: 'Kui snapshot', extensions: ['md'] }]
  * Open a file and replay its session (Electron-only, stub for Tauri builds)
  * For Tauri, use Tauri's file dialog API instead.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export default async function open(_createWindow: (executeThisArgvPlease?: string[]) => void) {
   console.log('open() is deprecated (Electron-only). For Tauri, use Tauri file dialog APIs.')
 }

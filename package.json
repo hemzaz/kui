@@ -79,6 +79,8 @@
     "@kui-shell/test": "file:packages/test",
     "@kui-shell/webpack": "file:packages/webpack",
     "@tauri-apps/cli": "^2.9.6",
+    "@types/react": "^18.3.27",
+    "@types/react-dom": "^18.3.7",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "colors": "1.4.0",

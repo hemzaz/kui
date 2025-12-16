@@ -74,6 +74,23 @@ export const getMedia = () => state.media
 export const isHeadless = () => state.media === Media.Headless
 
 /**
+ * Tauri runtime type definition
+ */
+interface TauriRuntime {
+  core: {
+    invoke: <T = unknown>(cmd: string, args?: Record<string, unknown>) => Promise<T>
+  }
+  [key: string]: unknown
+}
+
+/**
+ * Window with Tauri runtime
+ */
+export interface WindowWithTauri extends Window {
+  __TAURI__?: TauriRuntime
+}
+
+/**
  * Are we running in Tauri?
  *
  */
@@ -83,9 +100,6 @@ export const inTauri = () => {
   }
 
   // Check for Tauri runtime
-  interface WindowWithTauri extends Window {
-    __TAURI__?: unknown
-  }
   if (typeof window !== 'undefined' && (window as WindowWithTauri).__TAURI__ !== undefined) {
     setMedia(Media.Tauri)
     return true

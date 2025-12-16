@@ -63,7 +63,7 @@ function doSpawn(
           reject(new Error(`non-zero exit code: ${exitCode}`))
         }
       })
-    } catch (_err) {
+    } catch (err) {
       reject(err)
     }
   })
@@ -157,7 +157,7 @@ export const doExec = async (
             // caller expects JSON back
             try {
               resolve(JSON.parse(rawOut))
-            } catch (_err) {
+            } catch (err) {
               const error = new Error('unexpected non-JSON')
               error['value'] = rawOut
               reject(error)
@@ -189,12 +189,12 @@ export const doExec = async (
           const cleanErr = rawErr.replace(/(^\/[^/]+\/[^:]+: )(line \d+: )?/, '')
           try {
             handleNonZeroExitCode(cmdLine, exitCode, rawOut, cleanErr, execOptions)
-          } catch (_err) {
+          } catch (err) {
             reject(err)
           }
         }
       })
-    } catch (_err) {
+    } catch (err) {
       reject(err)
     }
   })

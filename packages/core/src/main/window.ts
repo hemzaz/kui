@@ -25,6 +25,15 @@ import Debug from 'debug'
 const debug = Debug('main/window')
 
 import { isTauriRuntime } from './tauri-bridge'
+import type { WindowWithTauri } from '../core/capabilities'
+
+/**
+ * Tauri Window type
+ * Note: Using 'any' here to avoid importing the entire @tauri-apps/api at compile time
+ * The actual Window class from @tauri-apps/api/window is imported dynamically at runtime
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TauriWindow = any
 
 /**
  * Window preferences for creating new windows
@@ -42,9 +51,6 @@ export interface WindowPreferences {
  * Check if Tauri window API is available
  */
 function isTauriAvailable(): boolean {
-  interface WindowWithTauri extends Window {
-    __TAURI__?: unknown
-  }
   return isTauriRuntime() && typeof window !== 'undefined' && (window as WindowWithTauri).__TAURI__ !== undefined
 }
 
@@ -60,7 +66,7 @@ export async function createWindow(prefs: WindowPreferences = {}): Promise<void>
   try {
     debug('Creating window with preferences:', prefs)
 
-    await window.__TAURI__!.core.invoke('create_new_window', {
+    await (window as WindowWithTauri).__TAURI__!.core.invoke('create_new_window', {
       argv: prefs.argv,
       width: prefs.width,
       height: prefs.height,
@@ -89,7 +95,9 @@ async function windowOperation(operation: string, data: Record<string, unknown> 
       ...data
     })
 
-    const result = await window.__TAURI__!.core.invoke('synchronous_message', { message })
+    const result = await (window as WindowWithTauri).__TAURI__!.core.invoke<string>('synchronous_message', {
+      message
+    })
     debug(`Window operation ${operation} completed:`, result)
     return result
   } catch (error) {
@@ -156,7 +164,7 @@ export async function quitApplication(): Promise<void> {
  * Get the current window (Tauri API)
  * Returns the Tauri Window object for advanced operations
  */
-export async function getCurrentWindow(): Promise<unknown> {
+export async function getCurrentWindow(): Promise<TauriWindow | null> {
   if (!isTauriAvailable()) {
     debug('Tauri not available')
     return null
@@ -165,7 +173,7 @@ export async function getCurrentWindow(): Promise<unknown> {
   try {
     // Import Tauri window API dynamically
     const { getCurrentWindow: getTauriWindow } = await import('@tauri-apps/api/window')
-    return getTauriWindow()
+    return getTauriWindow() as TauriWindow
   } catch (error) {
     console.error('Failed to get current window:', error)
     return null
@@ -175,7 +183,7 @@ export async function getCurrentWindow(): Promise<unknown> {
 /**
  * Get all windows (Tauri API)
  */
-export async function getAllWindows(): Promise<unknown[]> {
+export async function getAllWindows(): Promise<TauriWindow[]> {
   if (!isTauriAvailable()) {
     debug('Tauri not available')
     return []
@@ -183,7 +191,7 @@ export async function getAllWindows(): Promise<unknown[]> {
 
   try {
     const { getAllWindows: getTauriWindows } = await import('@tauri-apps/api/window')
-    return getTauriWindows()
+    return (await getTauriWindows()) as TauriWindow[]
   } catch (error) {
     console.error('Failed to get all windows:', error)
     return []

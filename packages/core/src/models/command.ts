@@ -29,7 +29,7 @@ import * as Yargs from 'yargs-parser'
  *
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type KResponse<Content extends any = any> = Entity<Content>
+export type KResponse<Content = any> = Entity<Content>
 export default KResponse
 
 /**

@@ -43,6 +43,7 @@ function cellShouldHaveBadge2(hint: CellShould) {
 /** Check whether the cell hints include a hint to display as badge */
 export function cellShouldHaveBadge(hints: CellShould | CellShould[]): CellShould | void {
   if (!hints) {
+    // No hints provided
   } else if (Array.isArray(hints)) {
     return hints.find(cellShouldHaveBadge2)
   } else if (cellShouldHaveBadge2(hints)) {

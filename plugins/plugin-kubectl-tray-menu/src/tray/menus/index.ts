@@ -23,8 +23,8 @@ import UpdateFunction from '../update'
  * Tauri has different APIs for system tray menus that would need separate implementation.
  */
 export default async function buildContextMenu(
-  _createWindow as __createWindow: CreateWindowFunction,
-  _updateFn as __updateFn: UpdateFunction
+  _createWindow: CreateWindowFunction,
+  _updateFn: UpdateFunction
 ): Promise<any> {
   // No-op: Electron Menu removed for Tauri
   console.warn('Tray menu buildContextMenu called but not implemented for Tauri')

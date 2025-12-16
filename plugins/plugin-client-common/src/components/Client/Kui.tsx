@@ -170,7 +170,7 @@ export class Kui extends React.PureComponent<Props, State> {
       debug('initial state:inBrowser?', inBrowser())
       debug('initial state:given properties', props)
       debug('initial state:final value', this.state)
-    } catch (_err) {
+    } catch (err) {
       console.log('using default configuration')
       this.state = {
         isBootstrapped: !!props.noBootstrap,

@@ -23,7 +23,7 @@
  * Install application menu (Electron-only, no-op for Tauri)
  * In Tauri, menus are configured in the Rust backend
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export const install = async (_createWindow: (executeThisArgvPlease?: string[]) => void) => {
   console.log('menu.install() is deprecated (Electron-only). For Tauri, configure menus in src-tauri/src/menu.rs')
   // No-op for Tauri builds

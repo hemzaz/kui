@@ -83,7 +83,7 @@ export interface MetadataBearing<Content = void> extends MetadataNamedResource {
   presentation?: Presentation
 }
 
-export type MetadataBearingWithContent<T extends any = any> = MetadataBearing<T>
+export type MetadataBearingWithContent<T = any> = MetadataBearing<T>
 
 export function isMetadataBearing(spec: MetadataBearing | Entity): spec is MetadataBearing {
   const meta = spec as MetadataBearing
@@ -108,7 +108,7 @@ export function hasDisplayName(resource: MetadataBearing): resource is WithDispl
 export interface MetadataBearingByReference<Content = void> extends MetadataBearing<Content> {
   resource: MetadataBearing<Content>
 }
-export type MetadataBearingByReferenceWithContent<T extends any = any> = MetadataBearingByReference<T>
+export type MetadataBearingByReferenceWithContent<T = any> = MetadataBearingByReference<T>
 export function isMetadataBearingByReference<T extends MetadataBearingByReference>(
   spec: MetadataBearing | Entity | MetadataBearingWithContent | T
 ): spec is T {

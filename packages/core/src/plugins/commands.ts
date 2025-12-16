@@ -63,6 +63,7 @@ export default async function commandsOffered(plugin?: string): Promise<Table> {
     if (A.length - idx === 0) {
       return subtree.usage
     } else if (!subtree.children) {
+      // No children to search
     } else {
       const prefixPlus = `${prefix}/${A[idx]}`
       return find(command, A, idx + 1, prefixPlus, subtree.children[prefixPlus])

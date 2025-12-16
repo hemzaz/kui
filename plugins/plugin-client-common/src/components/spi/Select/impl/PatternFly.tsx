@@ -22,6 +22,7 @@ import { flatten } from '@kui-shell/core/mdist/api/Util'
 import { pexecInCurrentTab } from '@kui-shell/core/mdist/api/Exec'
 
 import Props, { SelectOptions, isGrouped, isDivider } from '../model'
+import type { NonGroupedProps } from '../model'
 
 interface State {
   isOpen: boolean
@@ -72,7 +73,7 @@ export default class PatternFlySelect extends React.PureComponent<Props, State> 
           isDivider(group) ? [] : group.options.map(option => this.onClick.bind(this, option))
         )
       )
-    : this.props.options.map(option => this.onClick.bind(this, option))
+    : (this.props as NonGroupedProps).options.map(option => this.onClick.bind(this, option))
 
   private readonly _onSelect = this.onSelect.bind(this)
   private readonly _onToggle = this.onToggle.bind(this)
@@ -109,7 +110,7 @@ export default class PatternFlySelect extends React.PureComponent<Props, State> 
 
       return groups
     } else {
-      return this.props.options.map((option, idx) => this.option(option, idx))
+      return (this.props as NonGroupedProps).options.map((option, idx) => this.option(option, idx))
     }
   }
 
