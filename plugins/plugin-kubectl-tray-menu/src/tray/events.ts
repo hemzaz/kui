@@ -20,9 +20,8 @@ import { EventEmitter } from 'events'
 const refreshEvents = new EventEmitter()
 
 /**
- * [Main Process] Emit a kubernetes config change event. Called from
- * electron-main, which is the touchpoint for calls from the renderer
- * process (below).
+ * [Main Process] Emit a kubernetes config change event.
+ * Stubbed out for Tauri migration.
  */
 export function emitRefresh() {
   Debug('plugin-kubectl-tray-menu/events')('emitRefreshFromMain')
@@ -31,28 +30,17 @@ export function emitRefresh() {
 
 /**
  * [Main Process] This is how tray menu watchers register for
- * kubernetes config change event .
+ * kubernetes config change events.
  */
 export function onRefresh(cb: () => void) {
   refreshEvents.on('/refresh', cb)
 }
 
-/** [Renderer Process] */
+/**
+ * [Renderer Process] Stubbed out for Tauri migration.
+ * Electron IPC removed.
+ */
 export async function emitRefreshFromRenderer() {
-  try {
-    Debug('plugin-kubectl-tray-menu/events')('emitRefreshFromRenderer')
-    const { ipcRenderer } = await import('electron')
-    ipcRenderer.send(
-      '/exec/invoke',
-      JSON.stringify({
-        module: 'plugin-kubectl-tray-menu',
-        main: 'initTray',
-        args: {
-          command: '/tray/refresh'
-        }
-      })
-    )
-  } catch (err) {
-    console.error('Error sending kubernetes config refresh event from renderer to main', err)
-  }
+  Debug('plugin-kubectl-tray-menu/events')('emitRefreshFromRenderer - no-op in Tauri')
+  // No-op: Electron IPC removed for Tauri
 }

@@ -15,6 +15,7 @@
  */
 
 import { join, relative } from 'path'
+import type { Application } from './spectron-compat'
 import * as colors from 'colors'
 import { Func, Suite, HookFunction, after as mochaAfter } from 'mocha'
 
@@ -160,7 +161,7 @@ export const restart = async (ctx: ISuite) => {
   try {
     await ctx.app.restart()
     addCommands(ctx)
-  } catch (err) {
+  } catch (_err) {
     const errorIsNavigatedError: boolean =
       err.message.includes('Inspected target navigated or closed') ||
       err.message.includes('cannot determine loading status') ||
@@ -178,7 +179,7 @@ export const restart = async (ctx: ISuite) => {
 export const refresh = async (ctx: ISuite, wait = true, clean = false) => {
   try {
     await ctx.app.client.refresh()
-  } catch (err) {
+  } catch (_err) {
     const errorIsNavigatedError: boolean =
       err.message.includes('Inspected target navigated or closed') ||
       err.message.includes('cannot determine loading status') ||
@@ -240,7 +241,7 @@ export const before = (ctx: ISuite, options?: BeforeOptions): HookFunction => {
           try {
             await refresh(ctx, !noProxySessionWait, true)
             return
-          } catch (err) {
+          } catch (_err) {
             const errorIsNavigatedError: boolean =
               err.message.includes('Inspected target navigated or closed') ||
               err.message.includes('cannot determine loading status') ||
@@ -298,7 +299,7 @@ export const before = (ctx: ISuite, options?: BeforeOptions): HookFunction => {
       if (afterStart) {
         await afterStart()
       }
-    } catch (err) {
+    } catch (_err) {
       console.error('error refreshing in before for fresh start', err)
       throw err
     }
@@ -391,7 +392,7 @@ export const oops =
                 console.error('error trying to get the output of the final block', err)
               })
           )
-        } catch (err) {
+        } catch (_err) {
           console.error('error trying to get output html', err)
         }
 
@@ -510,7 +511,7 @@ export const expectedVersion = version
  * on env vars to transit "in debug mode". E.g. see ExecIntoPod
  *
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 declare let __KUI_RUNNING_KUI_TEST: boolean
 export function setDebugMode(this: ISuite) {
   it('should inject RUNNING_KUI_TEST', () => {

@@ -366,7 +366,7 @@ export default class XTerm extends React.PureComponent<Props, State> {
         <Toolbar className="madwizard--toolbar">
           <ToolbarContent className="flex-fill">
             <ToolbarItem variant="search-filter" className="flex-fill">
-              {this.props.searchable !== false && this.searchInput()}
+              {this.props.searchable === true && this.searchInput()}
             </ToolbarItem>
           </ToolbarContent>
         </Toolbar>

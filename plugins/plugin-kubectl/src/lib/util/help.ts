@@ -158,7 +158,7 @@ const renderHelpUnsafe = <O extends KubeOptions>(
       .split(/[\n\r]/)
       .filter(x => x)
       .map(line => {
-        const match = line.match(/\s*((.+:)|\S+)\s+(.*)/) // eslint-disable-line @typescript-eslint/no-unused-vars
+        const match = line.match(/\s*((.+:)|\S+)\s+(.*)/)  
         if (match && match.length === 4) {
           const thisCommand = match[1]
           const docs = match[3]

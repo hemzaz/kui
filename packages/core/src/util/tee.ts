@@ -20,8 +20,8 @@ const debug = Debug('util/tee')
 
 export default async function (response: Entity) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
+     
     const { createWriteStream } = await import('fs')
     const stream = createWriteStream(process.env.KUI_TEE_TO_FILE)
     const logger = (data: string | Buffer) => stream.write(data)
@@ -36,13 +36,10 @@ export default async function (response: Entity) {
 
       if (process.env.KUI_TEE_TO_FILE_EXIT_ON_END_MARKER) {
         // we were asked to exit after writing an end marker
-        try {
-          debug('attempting to quit')
-          const { ipcRenderer } = require('electron')
-          ipcRenderer.send('synchronous-message', JSON.stringify({ operation: 'quit' }))
-        } catch (err) {
-          console.error('Error exiting', err)
-        }
+        // Stubbed out for Tauri migration - Electron ipcRenderer removed
+        // Tauri uses different app lifecycle APIs
+        debug('Exit requested but not implemented for Tauri')
+        process.exit(0)
       }
     }
   } catch (err) {

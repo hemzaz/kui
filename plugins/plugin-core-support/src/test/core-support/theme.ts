@@ -71,7 +71,7 @@ const reloadAndThen = (theme: Theme) => (ctx: Common.ISuite) => {
  * Click on the theme button and expect the theme list
  *
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 /* const clickOnThemeButtonThenClickOnTheme = (clickOn: Theme) => (ctx: Common.ISuite, nClicks = 1) => {
   it(`should click on help button, then theme link, then present theme list, then click on ${clickOn.name}`, async () => {
     try {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-use-before-define */
+ 
 
 import { Arguments, KResponse, ResourceWithMetadata, MultiModalResponse } from '@kui-shell/core'
 

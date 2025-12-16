@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Required for network access to Kubernetes APIs -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+
+    <!-- Required for PTY operations and shell execution -->
+    <key>com.apple.security.temporary-exception.mach-lookup.global-name</key>
+    <array>
+        <string>com.apple.tsm.uiserver</string>
+    </array>
+
+    <!-- Required for file system access (notebooks, config files) -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+
+    <!-- Required for accessing kubectl configs in home directory -->
+    <key>com.apple.security.files.user-selected.read-only</key>
+    <true/>
+
+    <!-- Required for executing kubectl and other CLI tools -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+
+    <!-- Required for JIT compilation (Monaco editor, xterm.js) -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+
+    <!-- Required for accessing resources -->
+    <key>com.apple.security.assets.pictures.read-write</key>
+    <true/>
+</dict>
+</plist>

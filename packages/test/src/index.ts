@@ -34,3 +34,6 @@ export { TestStringResponse } from './api/string-response'
 export { TestMMR, MMRExpectMode } from './api/mmr'
 export { TestNavResponse, testAbout } from './api/NavResponse'
 export { TestTable } from './api/table'
+
+// Tauri migration: Export spectron-compat types
+export { Application, ElementArray } from './api/spectron-compat'

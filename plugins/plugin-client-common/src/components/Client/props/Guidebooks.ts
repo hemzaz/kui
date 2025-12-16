@@ -18,7 +18,7 @@
 export type Guidebook = { notebook: string; filepath: string; play?: string }
 
 /** An interior node in config.d/notebooks.json */
-// eslint-disable-next-line no-use-before-define
+ 
 type Menu = { label: string; submenu: MenuItem[]; expanded?: boolean }
 
 /** Any node in config.d/notebooks.json */

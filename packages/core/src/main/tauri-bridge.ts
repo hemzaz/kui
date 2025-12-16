@@ -24,11 +24,20 @@
 import Debug from 'debug'
 const debug = Debug('main/tauri-bridge')
 
-// Check if we're running in Tauri or Electron
-const isTauri = typeof window !== 'undefined' && (window as any).__TAURI__ !== undefined
-const isElectron = typeof window !== 'undefined' && (window as any).electron !== undefined
+// Type definitions for IPC messages
+type IpcListener = (event: Record<string, unknown>, ...args: unknown[]) => void
 
-debug('Runtime detection:', { isTauri, isElectron })
+// Check if we're running in Tauri
+interface WindowWithTauri extends Window {
+  __TAURI__?: {
+    core: {
+      invoke: (cmd: string, args?: Record<string, unknown>) => Promise<unknown>
+    }
+  }
+}
+const isTauri = typeof window !== 'undefined' && (window as WindowWithTauri).__TAURI__ !== undefined
+
+debug('Runtime detection:', { isTauri })
 
 /**
  * Tauri invoke function (available in Tauri apps)
@@ -37,7 +46,7 @@ declare global {
   interface Window {
     __TAURI__?: {
       core: {
-        invoke: (cmd: string, args?: Record<string, any>) => Promise<any>
+        invoke: (cmd: string, args?: Record<string, unknown>) => Promise<unknown>
       }
     }
   }
@@ -48,20 +57,20 @@ declare global {
  * Provides a unified API for both Electron and Tauri
  */
 export interface IpcRenderer {
-  send(channel: string, ...args: any[]): void
-  invoke(channel: string, ...args: any[]): Promise<any>
-  on(channel: string, listener: (event: any, ...args: any[]) => void): void
-  once(channel: string, listener: (event: any, ...args: any[]) => void): void
-  removeListener(channel: string, listener: (...args: any[]) => void): void
+  send(channel: string, ...args: unknown[]): void
+  invoke(channel: string, ...args: unknown[]): Promise<unknown>
+  on(channel: string, listener: IpcListener): void
+  once(channel: string, listener: IpcListener): void
+  removeListener(channel: string, listener: (...args: unknown[]) => void): void
 }
 
 /**
  * Tauri IPC Renderer implementation
  */
 class TauriIpcRenderer implements IpcRenderer {
-  private listeners: Map<string, Set<Function>> = new Map()
+  private listeners: Map<string, Set<IpcListener>> = new Map()
 
-  async send(channel: string, ...args: any[]): Promise<void> {
+  public async send(channel: string, ...args: unknown[]): Promise<void> {
     debug('Tauri send:', channel, args)
     const message = args[0]
 
@@ -75,7 +84,7 @@ class TauriIpcRenderer implements IpcRenderer {
     }
   }
 
-  async invoke(channel: string, ...args: any[]): Promise<any> {
+  public async invoke(channel: string, ...args: unknown[]): Promise<unknown> {
     debug('Tauri invoke:', channel, args)
 
     // Map Electron IPC channels to Tauri commands
@@ -90,14 +99,15 @@ class TauriIpcRenderer implements IpcRenderer {
           message: args[0]
         })
 
-      case 'capture-page-to-clipboard':
-        const [contentsId, rect] = args
+      case 'capture-page-to-clipboard': {
+        const rect = args[1] as { x: number; y: number; width: number; height: number }
         return window.__TAURI__!.core.invoke('capture_to_clipboard', {
           x: rect.x,
           y: rect.y,
           width: rect.width,
           height: rect.height
         })
+      }
 
       default:
         console.warn('Unhandled Tauri invoke channel:', channel)
@@ -105,7 +115,7 @@ class TauriIpcRenderer implements IpcRenderer {
     }
   }
 
-  on(channel: string, listener: (event: any, ...args: any[]) => void): void {
+  public on(channel: string, listener: IpcListener): void {
     debug('Tauri on:', channel)
     if (!this.listeners.has(channel)) {
       this.listeners.set(channel, new Set())
@@ -113,25 +123,25 @@ class TauriIpcRenderer implements IpcRenderer {
     this.listeners.get(channel)!.add(listener)
   }
 
-  once(channel: string, listener: (event: any, ...args: any[]) => void): void {
+  public once(channel: string, listener: IpcListener): void {
     debug('Tauri once:', channel)
-    const wrappedListener = (event: any, ...args: any[]) => {
+    const wrappedListener: IpcListener = (event: Record<string, unknown>, ...args: unknown[]) => {
       listener(event, ...args)
       this.removeListener(channel, wrappedListener)
     }
     this.on(channel, wrappedListener)
   }
 
-  removeListener(channel: string, listener: (...args: any[]) => void): void {
+  public removeListener(channel: string, listener: (...args: unknown[]) => void): void {
     debug('Tauri removeListener:', channel)
     const channelListeners = this.listeners.get(channel)
     if (channelListeners) {
-      channelListeners.delete(listener)
+      channelListeners.delete(listener as IpcListener)
     }
   }
 
   // Helper method to emit events (for internal use)
-  emit(channel: string, ...args: any[]): void {
+  public emit(channel: string, ...args: unknown[]): void {
     const channelListeners = this.listeners.get(channel)
     if (channelListeners) {
       channelListeners.forEach(listener => {
@@ -146,20 +156,15 @@ class TauriIpcRenderer implements IpcRenderer {
 }
 
 /**
- * Get the appropriate IPC renderer based on the runtime
+ * Get the Tauri IPC renderer
  */
 export function getIpcRenderer(): IpcRenderer {
   if (isTauri) {
     debug('Using Tauri IPC renderer')
     return new TauriIpcRenderer()
-  } else if (isElectron) {
-    debug('Using Electron IPC renderer')
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { ipcRenderer } = require('electron')
-    return ipcRenderer
   } else {
     debug('No IPC renderer available')
-    throw new Error('Neither Tauri nor Electron runtime detected')
+    throw new Error('Tauri runtime not detected')
   }
 }
 
@@ -171,17 +176,8 @@ export function isTauriRuntime(): boolean {
 }
 
 /**
- * Check if running in Electron
- */
-export function isElectronRuntime(): boolean {
-  return isElectron
-}
-
-/**
  * Get runtime name
  */
 export function getRuntimeName(): string {
-  if (isTauri) return 'Tauri'
-  if (isElectron) return 'Electron'
-  return 'Unknown'
+  return isTauri ? 'Tauri' : 'Unknown'
 }

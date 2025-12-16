@@ -14,7 +14,7 @@
     "test3": "PORT_OFFSET=2 npm run test",
     "test4": "PORT_OFFSET=3 npm run test",
     "test5": "PORT_OFFSET=4 npm run test",
-    "build:prep": "",
+    "build:prep": "npm run compile",
     "build:tauri:mac:amd64": "npm run build:prep && cd src-tauri && cargo build --release --target x86_64-apple-darwin",
     "build:tauri:mac:arm64": "npm run build:prep && cd src-tauri && cargo build --release --target aarch64-apple-darwin",
     "build:tauri:linux:amd64": "npm run build:prep && cd src-tauri && cargo build --release --target x86_64-unknown-linux-gnu",
@@ -69,15 +69,16 @@
     "@kui-shell/plugin-patternfly4-themes": "file:plugins/plugin-patternfly4-themes",
     "@kui-shell/plugin-proxy-support": "file:plugins/plugin-proxy-support",
     "@kui-shell/plugin-s3": "file:plugins/plugin-s3",
-    "@kui-shell/react": "file:packages/react"
+    "@kui-shell/react": "file:packages/react",
+    "@tauri-apps/api": "^2.9.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@kui-shell/builder": "file:packages/builder",
     "@kui-shell/proxy": "file:packages/proxy",
     "@kui-shell/test": "file:packages/test",
     "@kui-shell/webpack": "file:packages/webpack",
-    "@tauri-apps/cli": "^2.9.0",
-    "@eslint/js": "^9.17.0",
+    "@tauri-apps/cli": "^2.9.6",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "colors": "1.4.0",
@@ -88,15 +89,15 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-promise": "^7.1.0",
     "eslint-plugin-react": "^7.37.2",
-    "globals": "^15.13.0",
+    "globals": "^15.15.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "nan": "git+https://github.com/jkleinsc/nan.git#6a2f95a6a2209d8aa7542fb18099fd808a802059",
-    "prettier": "^2.8.7",
-    "typescript-eslint": "^8.16.0",
+    "prettier": "^3.7.4",
     "typedoc": "^0.24.1",
     "typedoc-plugin-markdown": "^3.15.1",
-    "typescript": "^4.9.5"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.16.0"
   },
   "lint-staged": {
     "**/*.{scss,css,html,js,json,md,ts,tsx}": [

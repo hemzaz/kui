@@ -16,7 +16,7 @@
 
 import Debug from 'debug'
 import { CreateWindowFunction } from '@kui-shell/core'
-import { MenuItemConstructorOptions } from 'electron'
+import { MenuItemConstructorOptions } from '../../electron-compat'
 
 import Loading from '../loading'
 import { get, set } from './current'
@@ -61,8 +61,8 @@ class NamespaceWatcher {
       }
 
       this.namespaces = namespaces
-    } catch (err) {
-      this.debug('findAndSetCurrentNamespace failure', err.message)
+    } catch (_err) {
+      this.debug('findAndSetCurrentNamespace failure', _err.message)
     }
   }
 
@@ -170,7 +170,8 @@ class NamespaceWatcher {
 
         this.findAndSetCurrentNamespace(namespaces, currentNamespaceP)
       })
-    } catch (err) {}
+      // eslint-disable-next-line no-empty, @typescript-eslint/no-unused-vars
+    } catch (_err) {}
   }
 
   public invalidate() {

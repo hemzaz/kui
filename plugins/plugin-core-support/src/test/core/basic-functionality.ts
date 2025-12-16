@@ -20,7 +20,7 @@
  */
 
 import * as assert from 'assert'
-import { Application } from 'spectron'
+import { Application } from '@kui-shell/test'
 
 import { CLI, Common } from '@kui-shell/test'
 

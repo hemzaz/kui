@@ -161,14 +161,9 @@ export default class AskUI extends React.PureComponent<Props, State> {
       if (inBrowser()) {
         window.open(window.location.href)
       } else {
-        const { ipcRenderer } = await import('electron')
-        ipcRenderer.sendSync(
-          'synchronous-message',
-          JSON.stringify({
-            operation: 'new-window',
-            argv: ['madwizard', 'ui']
-          })
-        )
+        // Stubbed out for Tauri migration - Electron ipcRenderer removed
+        // Tauri uses different window management APIs
+        console.warn('New window requested but not implemented for Tauri')
       }
     } else {
       this.props.home()
@@ -324,7 +319,7 @@ export default class AskUI extends React.PureComponent<Props, State> {
   }
 
   /** PatternFly's <Select> requires an onToggle, but we want the Select to remain ever-open */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   private readonly _doNothing = () => {
     // Intentionally empty
   }
@@ -422,7 +417,7 @@ export default class AskUI extends React.PureComponent<Props, State> {
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   private checkboxes(ask: Ask<Prompts.MultiSelect>) {
     return this.select(ask, select => (
       <Form onSubmit={this._onFormSubmit} className="top-pad">

@@ -17,19 +17,9 @@
 import { width, height } from '@kui-shell/client/config.d/style.json'
 
 export async function openWindow(title: string, initialTabTitle: string, argv: (string | undefined)[]) {
-  const { ipcRenderer } = await import('electron')
-
-  ipcRenderer.send(
-    'synchronous-message',
-    JSON.stringify({
-      operation: 'new-window',
-      title,
-      initialTabTitle,
-      width,
-      height,
-      argv
-    })
-  )
+  // Stubbed out for Tauri migration
+  // Tauri uses different window management APIs
+  console.warn('openWindow called but not implemented for Tauri', { title, initialTabTitle, argv, width, height })
 }
 
 /** Delete the given profile */

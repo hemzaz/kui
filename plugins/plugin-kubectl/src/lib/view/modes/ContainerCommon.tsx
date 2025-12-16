@@ -76,7 +76,7 @@ export abstract class ContainerComponent<State extends ContainerState> extends R
           label: strings('Retry'),
           kind: 'view',
           icon: <Icons icon="Retry" onClick={() => this.showContainer(this.state.container)} />,
-          command: () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+          command: () => {}  
         } as Button
       ]
     } else {
@@ -168,7 +168,7 @@ export abstract class ContainerComponent<State extends ContainerState> extends R
         mode: 'container-list',
         label: 'Select a container',
         kind: 'view' as const,
-        command: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+        command: () => {},  
         icon: this.containerOptions()
       } as Button
     ]

@@ -17,7 +17,7 @@
 import { Entity } from '../models/entity'
 import { MessageWithUsageModel } from '../core/usage-error'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export function isHTML(message: Entity | MessageWithUsageModel | Node): message is HTMLElement {
   return !!message && !!(message as HTMLElement).nodeName
 }

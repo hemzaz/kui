@@ -31,7 +31,7 @@ import { SessionInitializer, registerSessionInitializer } from '../session/regis
 
 class PreloaderRegistrarImpl extends ImplForPlugins implements PreloadRegistrar {
   // why does eslint consider this to be a useless constructor??
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(plugin: string) {
     super(plugin)
   }

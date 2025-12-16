@@ -15,37 +15,18 @@
  */
 
 import { CreateWindowFunction } from '@kui-shell/core'
-import { bugs, version } from '@kui-shell/client/package.json'
-import { productName } from '@kui-shell/client/config.d/name.json'
-import { width, height } from '@kui-shell/client/config.d/style.json'
-
-import section from './section'
-import contexts from './contexts'
-import namespaces from './namespaces'
 import UpdateFunction from '../update'
-import storage from './resources/storage'
-import workloads from './resources/workloads'
-import networking from './resources/networking'
-import { bugIcon, powerOffIcon, productIcon } from '../icons'
 
-/** @return an Electron `Menu` model for our tray menu */
+/**
+ * Stubbed out for Tauri migration.
+ * Tray menu functionality is not currently supported in Tauri.
+ * Tauri has different APIs for system tray menus that would need separate implementation.
+ */
 export default async function buildContextMenu(
-  createWindow: CreateWindowFunction,
-  updateFn: UpdateFunction
-): Promise<import('electron').Menu> {
-  const { Menu } = await import('electron')
-
-  const contextMenu = Menu.buildFromTemplate([
-    ...section('Kubernetes Resources', [workloads(createWindow), networking(createWindow), storage(createWindow)]),
-    ...section('Kubernetes Contexts', contexts(createWindow, updateFn)),
-    ...section('Kubernetes Namespaces', namespaces(createWindow, updateFn)),
-    { type: 'separator' },
-    ...section(`${productName} ${version}`, [
-      { label: 'New Window', icon: productIcon, click: () => createWindow([], { width, height }) },
-      { label: 'Contact Us', icon: bugIcon, click: () => import('open').then(_ => _.default(bugs.url)) },
-      { label: `Quit ${productName}`, icon: powerOffIcon, role: 'quit' }
-    ])
-  ])
-
-  return contextMenu
+  _createWindow as __createWindow: CreateWindowFunction,
+  _updateFn as __updateFn: UpdateFunction
+): Promise<any> {
+  // No-op: Electron Menu removed for Tauri
+  console.warn('Tray menu buildContextMenu called but not implemented for Tauri')
+  return null
 }

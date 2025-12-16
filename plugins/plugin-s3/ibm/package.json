@@ -26,5 +26,8 @@
   },
   "main": "dist/index.js",
   "module": "mdist/index.js",
-  "types": "mdist/index.d.ts"
+  "types": "mdist/index.d.ts",
+  "dependencies": {
+    "@kui-shell/plugin-s3": "file:.."
+  }
 }

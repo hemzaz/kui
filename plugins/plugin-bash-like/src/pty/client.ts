@@ -21,10 +21,10 @@ import { v4 as uuid } from 'uuid'
 import { IDisposable, Terminal as XTerminal } from '@xterm/xterm'
 // import { webLinksInit } from '@xterm/xterm/lib/addons/webLinks/webLinks'
 
-// eslint-disable-next-line import/no-duplicates
+ 
 import type { Tab, REPL, Job, Abortable } from '@kui-shell/core'
 
-// eslint-disable-next-line import/no-duplicates
+ 
 import type { FlowControllable, XtermResponse, CodedError, ExecOptions } from '@kui-shell/core'
 
 import Options from './options'
@@ -345,7 +345,7 @@ class Resizer {
  *
  */
 async function initOnMessage(
-  terminal: KuiTerminal, // eslint-disable-line no-use-before-define
+  terminal: KuiTerminal,  
   xtermContainer: HTMLElement,
   ourUUID: string,
   resizer: Resizer,
@@ -365,7 +365,7 @@ async function initOnMessage(
 
   const { ExecType } = await import('@kui-shell/core/mdist/api/Command')
 
-  // eslint-disable-next-line no-use-before-define
+   
   const focus = (terminal: KuiTerminal) => {
     if (!terminal._kuiAlreadyFocused) {
       setTimeout(() => {

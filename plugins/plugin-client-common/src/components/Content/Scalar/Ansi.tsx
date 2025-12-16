@@ -62,7 +62,7 @@ function content(source: string) {
   } else {
     // adds support for the anchor extension that some terminals support
     // https://iterm2.com/documentation-escape-codes.html
-    // eslint-disable-next-line no-control-regex
+     
     const m = source.match(ansiRegex())
     if (m && m.length > 0) {
       let start = 0

@@ -15,28 +15,9 @@
  */
 
 /**
- * This is the logic that will execute in the *electron-renderer*
- * process for tray menu registration. This will be called by our,
- * `preload.ts` i.e. whenever a new electron window opens.
- *
- * We ask the *electron-main* process to handle things. We do this by
- * invoking the Kui `/exec/invoke` IPC API. See our
- * `electron-main.ts`, and note how it has an `initTray` method. Here,
- * we specify the plugin (`plugin-codeflare`), and the method to
- * invoke (`initTray`), and the parameters to pass to that method
- * invocation.
+ * Stubbed out for Tauri migration.
+ * Tray menu functionality is not currently supported in Tauri.
  */
-export default async function renderer(ipcRenderer: import('electron').IpcRenderer) {
-  if (ipcRenderer) {
-    ipcRenderer.send(
-      '/exec/invoke',
-      JSON.stringify({
-        module: 'plugin-kubectl-tray-menu',
-        main: 'initTray',
-        args: {
-          command: '/tray/init'
-        }
-      })
-    )
-  }
+export default async function renderer(_ipcRenderer?: unknown) {
+  // No-op: Electron IPC removed for Tauri
 }

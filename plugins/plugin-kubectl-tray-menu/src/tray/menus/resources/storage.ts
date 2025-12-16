@@ -15,9 +15,10 @@
  */
 
 import { CreateWindowFunction } from '@kui-shell/core'
+import { MenuItemConstructorOptions } from '../../electron-compat'
 import openWindowWith from './open'
 
-export default function storageMenu(createWindow: CreateWindowFunction): import('electron').MenuItemConstructorOptions {
+export default function storageMenu(createWindow: CreateWindowFunction): MenuItemConstructorOptions {
   return {
     label: 'Storage',
     submenu: [

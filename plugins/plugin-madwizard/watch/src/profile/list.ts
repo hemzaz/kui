@@ -28,7 +28,7 @@ export default class ProfileWatcher {
   /** Have we already performed the on-time init? */
   private _initDone = false
 
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(
     private readonly updateFn: UpdateFunction,
     private readonly profilesPath: string,

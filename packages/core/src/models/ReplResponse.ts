@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ResponseStructure {}
 
 export type IReplResponse =

@@ -25,14 +25,15 @@ import { isOffline } from '../api/Client'
 export { CapabilityRegistration as Registration } from '../models/plugin'
 
 /**
- * Are we running headless, in electron, or in a browser?
+ * Are we running headless, in electron, in tauri, or in a browser?
  *
  */
 export enum Media {
   Unknown,
   Headless,
   Electron,
-  Browser
+  Browser,
+  Tauri
 }
 
 /**
@@ -53,7 +54,7 @@ const state: State = new State()
 
 /**
  * Update the media, e.g. to indicate that we are running in a browser
- * context versus an Electron context.
+ * context versus an Electron or Tauri context.
  *
  */
 export const setMedia = (media: Media): void => {
@@ -71,8 +72,46 @@ export const setMedia = (media: Media): void => {
  */
 export const getMedia = () => state.media
 export const isHeadless = () => state.media === Media.Headless
-export const inElectron = () => state.media === Media.Electron
+
+/**
+ * Are we running in Tauri?
+ *
+ */
+export const inTauri = () => {
+  if (state.media === Media.Tauri) {
+    return true
+  }
+
+  // Check for Tauri runtime
+  interface WindowWithTauri extends Window {
+    __TAURI__?: unknown
+  }
+  if (typeof window !== 'undefined' && (window as WindowWithTauri).__TAURI__ !== undefined) {
+    setMedia(Media.Tauri)
+    return true
+  }
+
+  return false
+}
+
+/**
+ * Are we running in Electron?
+ * Note: Returns false when running in Tauri
+ *
+ */
+export const inElectron = () => {
+  if (inTauri()) {
+    return false
+  }
+  return state.media === Media.Electron
+}
+
 export const inBrowser = () => {
+  // Check Tauri first
+  if (inTauri()) {
+    return false
+  }
+
   if (state.media === Media.Browser) {
     return true
   }

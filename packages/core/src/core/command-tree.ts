@@ -651,7 +651,7 @@ export const read = async <T extends KResponse, O extends ParsedOptions>(
  *
  */
 export class ImplForPlugins implements CommandRegistrar {
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(protected readonly plugin: string) {}
 
   public catchall<T extends KResponse, O extends ParsedOptions>(

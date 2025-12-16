@@ -47,7 +47,7 @@ type Props = CommandProps & {
 
 /** Visualize the command executions from <Playground/> */
 export default class PlaygroundTerminal extends React.PureComponent<Props> {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   private readonly _noop = () => {}
 
   private readonly _flex1 = { default: 'flex_1' as const }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable react/prop-types */
+ 
 
 import React from 'react'
 import { dirname, isAbsolute, join } from 'path'

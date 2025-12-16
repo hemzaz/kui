@@ -107,15 +107,15 @@ async function loadNotebookFromFilepath(filepath: string, REPL: Tab['REPL']) {
 
 /** Work In Progress */
 const fakeFs: import('madwizard').MadWizardOptions['fs'] = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   mkdirp: async (path: string) => {},
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   readFile: (filepath: string, cb: (err: NodeJS.ErrnoException | null, data: Buffer) => void) => {
     cb(null, Buffer.from('{}'))
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   writeFileAtomic: (filepath: string, buffer: string | Buffer) => {}
 }
 

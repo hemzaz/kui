@@ -27,7 +27,7 @@ const debug = Debug('core-support/history/reverse-i-search')
 
 /** state of the reverse-i-search */
 export default class ActiveISearch {
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(
     private readonly input: Input,
     private readonly history: HistoryModel,

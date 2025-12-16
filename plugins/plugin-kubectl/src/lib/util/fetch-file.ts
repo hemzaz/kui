@@ -361,7 +361,7 @@ export async function fetchFilesVFS(
 
   const raw = await fetchFileString(args, paths.size === 0 ? filepaths.join(',') : Array.from(paths).join(','))
 
-  // eslint-disable-next-line array-callback-return
+   
   return raw.map((data, idx) => {
     if (data) {
       return { filepath: paths.size === 0 ? filepaths[idx] : Array.from(paths)[idx], data }

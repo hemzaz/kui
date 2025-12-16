@@ -63,7 +63,7 @@ function doSpawn(
           reject(new Error(`non-zero exit code: ${exitCode}`))
         }
       })
-    } catch (err) {
+    } catch (_err) {
       reject(err)
     }
   })
@@ -108,9 +108,9 @@ export const doExec = async (
         stdout = Promise.resolve(
           execOptions.onInit({
             abort: () => proc.kill(),
-            xon: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-            xoff: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
-            write: () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+            xon: () => {},  
+            xoff: () => {},  
+            write: () => {}  
           })
         )
       }
@@ -157,7 +157,7 @@ export const doExec = async (
             // caller expects JSON back
             try {
               resolve(JSON.parse(rawOut))
-            } catch (err) {
+            } catch (_err) {
               const error = new Error('unexpected non-JSON')
               error['value'] = rawOut
               reject(error)
@@ -189,12 +189,12 @@ export const doExec = async (
           const cleanErr = rawErr.replace(/(^\/[^/]+\/[^:]+: )(line \d+: )?/, '')
           try {
             handleNonZeroExitCode(cmdLine, exitCode, rawOut, cleanErr, execOptions)
-          } catch (err) {
+          } catch (_err) {
             reject(err)
           }
         }
       })
-    } catch (err) {
+    } catch (_err) {
       reject(err)
     }
   })

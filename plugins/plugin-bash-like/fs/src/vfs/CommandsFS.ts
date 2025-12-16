@@ -26,7 +26,7 @@ class CommandsFS extends TrieVFS<string> {
     super('/', commandsTrie as any)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   protected isLeaf(entry: Directory | Leaf<string>): entry is Leaf<string> {
     return super.isLeaf(entry) || !entry.isDirectory
   }
@@ -89,7 +89,7 @@ class CommandsFS extends TrieVFS<string> {
     }
   }
 
-  public async fslice(filename: string, offset: number, length: number): Promise<string> {
+  public async fslice(filename: string, _offset: number, _length: number): Promise<string> {
     // CommandsFS is virtual and doesn't support file slicing
     // Return empty string as commands are executed, not read
     return ''

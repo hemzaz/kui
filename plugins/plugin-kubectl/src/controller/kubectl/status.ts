@@ -334,7 +334,7 @@ class StatusWatcher implements Abortable, Watcher {
   private ptyJob: Abortable[] = []
   private initialBody: Row[]
 
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(
     private readonly args: Arguments<KubeOptions>,
     private readonly tab: Tab,

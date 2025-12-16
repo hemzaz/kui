@@ -15,7 +15,7 @@
  */
 
 import Debug from 'debug'
-import { MenuItemConstructorOptions } from 'electron'
+import { MenuItemConstructorOptions } from '../../electron-compat'
 import { CreateWindowFunction } from '@kui-shell/core'
 
 import Loading from '../loading'

@@ -38,6 +38,7 @@
     "@types/minio": "^7.0.18"
   },
   "dependencies": {
+    "@kui-shell/plugin-kubectl": "file:../plugin-kubectl",
     "@patternfly/react-table": "^4.113.0",
     "common-path-prefix": "^3.0.0",
     "ini": "^4.0.0",

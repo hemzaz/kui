@@ -15,7 +15,7 @@
  */
 
 // FIXME:
-/* eslint-disable react/prop-types */
+ 
 
 import React from 'react'
 import { decodeHTML } from 'entities/lib/decode.js'

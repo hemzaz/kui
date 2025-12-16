@@ -236,7 +236,7 @@ export default function enforceUsage<T extends KResponse, O extends ParsedOption
 
   if (execOptions && execOptions.failWithUsage && !usage) {
     debug('caller needs usage model, but none exists for this command', evaluator)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     return false
   }
 
@@ -263,7 +263,7 @@ export default function enforceUsage<T extends KResponse, O extends ParsedOption
         return M
       }, {})
 
-  interface ArgCount {
+  interface _ArgCount {
     [key: string]: number
   }
   const allFlags = {

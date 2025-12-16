@@ -15,7 +15,7 @@
  */
 
 /** DO NOT REMOVE; Content-Security-Policy enforcement */
-/* eslint-disable camelcase,prefer-const,@typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
 declare let _kuiNonce: string
 declare let __webpack_nonce__: string
 __webpack_nonce__ = _kuiNonce

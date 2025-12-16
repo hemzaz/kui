@@ -188,7 +188,7 @@ export class StdioChannelKuiSide extends EventEmitter implements Channel {
     debugK('StdioChannelKuiSide.init')
 
     // await onConnection(await disableBashSessions())(this)
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+     
     await onConnection(() => {})(this)
 
     // leftover helps us manage message chunking/fragmentation:

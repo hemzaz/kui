@@ -110,9 +110,8 @@ export default class ProfileStatusWatcher {
     process.on('SIGINT', onExit) // catch ctrl-c
     process.on('SIGTERM', onExit) // catch kill
 
-    // use the electron API to register our onExit handler
-    const { app } = await import('electron')
-    app.on('before-quit', onExit)
+    // Stubbed out for Tauri migration - Electron app.on('before-quit') removed
+    // Tauri uses different lifecycle hooks
 
     job.on('error', () => {
       Debug('madwizard')('Watcher error', profile)

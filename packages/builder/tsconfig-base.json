@@ -8,14 +8,15 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "target": "ES6",
+    "target": "ES2022",
     "skipLibCheck": true,
     "noEmitOnError": false,
     "sourceMap": true,
     "declaration": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "lib": ["dom", "esnext", "es6", "dom.iterable", "scripthost"],
-    "typeRoots": ["../../@types", "../../node_modules/@types"]
+    "lib": ["dom", "esnext", "dom.iterable", "scripthost"],
+    "typeRoots": ["../../@types", "../../node_modules/@types"],
+    "jsx": "react"
   }
 }

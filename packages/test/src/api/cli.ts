@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Application } from 'spectron'
+import { Application } from './spectron-compat'
 
 import * as Common from './common'
 import * as Selectors from './selectors'
@@ -157,7 +157,7 @@ export const waitForSession = async (ctx: Common.ISuite, noProxySessionWait = fa
         .$(`${Selectors.CURRENT_TAB}.kui--session-init-done`)
         .then(_ => _.waitForExist(waitTimeoutOption))
       await ctx.app.client.$(Selectors.WELCOME_BLOCK).then(_ => _.waitForDisplayed(waitTimeoutOption))
-    } catch (err) {
+    } catch (_err) {
       throw new Error('error waiting for proxy session init')
     }
   }
@@ -167,7 +167,7 @@ export const getTextContent = async (app: Application, selector: string) => {
   return app.client.execute(selector => {
     try {
       return document.querySelector(selector).textContent
-    } catch (err) {
+    } catch (_err) {
       console.error('error in getTextContent', err)
       // intentionally returning undefined
     }

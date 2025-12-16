@@ -15,7 +15,7 @@
  */
 
 // FIXME:
-/* eslint-disable react/prop-types */
+ 
 
 import React from 'react'
 import { Props as PopoverProps } from '../../spi/Popover'

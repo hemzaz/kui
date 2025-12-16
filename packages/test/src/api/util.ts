@@ -15,7 +15,7 @@
  */
 
 import * as assert from 'assert'
-import { Application } from 'spectron'
+import { Application } from './spectron-compat'
 import { v4 as uuid } from 'uuid'
 import { load } from 'js-yaml'
 

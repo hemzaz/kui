@@ -36,7 +36,7 @@ export default abstract class StreamingConsumer<
   P extends StreamingProps = StreamingProps,
   S extends StreamingState = StreamingState
 > extends React.PureComponent<P, S> {
-  protected readonly nope = () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+  protected readonly nope = () => {}  
   private _streamingOutput: Streamable[] = []
   private _streamingConsumer = this.streamingConsumer.bind(this)
 

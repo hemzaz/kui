@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable array-callback-return */
+ 
 
 import Debug from 'debug'
 import { minimatch } from 'minimatch'
@@ -111,7 +111,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         if (process.platform === 'linux') {
           this.client['traceOn'](require('fs').createWriteStream('/dev/null'))
         }
-      } catch (error) {
+      } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
         console.error('Error initializing minio client', error)
         this.error = error
         this.client = undefined
@@ -130,7 +130,7 @@ class S3VFSResponder extends S3VFS implements VFS {
     const { bucketName, fileName = '' } = this.split('')
     try {
       await this.client.statObject(bucketName, join(fileName, '.init'))
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       if (err.code === 'NotFound') {
         try {
           if (!(await this.existsBucket(bucketName))) {
@@ -141,7 +141,7 @@ class S3VFSResponder extends S3VFS implements VFS {
             join(fileName, '.init'),
             Readable.from('tmp mount successfully initialized')
           )
-        } catch (err) {
+        } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
           console.error(`Error initializing provider ${this.mountPath}`, err)
         }
       } else {
@@ -452,7 +452,7 @@ class S3VFSResponder extends S3VFS implements VFS {
       } else {
         return matches
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       throw new Error(err.message)
     }
   }
@@ -483,7 +483,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         debug('dirstat latency', end - start, filepath)
         return res
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       debug('Error in S3VFS.ls', err)
       throw err
     }
@@ -503,7 +503,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         await this.client.statObject(bucketName, fileName ? fileName + '/' : undefined)
         return true
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       if (!this.options.understandsFolders) {
         // sigh, minio fails with stat'ing a folder (check: AWS, too? COS seems to be ok)
         try {
@@ -524,7 +524,7 @@ class S3VFSResponder extends S3VFS implements VFS {
                   resolve(name.charAt(name.length - 1) === '/')
                 }
               })
-            } catch (err) {
+            } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
               reject(err)
             }
           })
@@ -808,7 +808,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         // copying out of an s3 bucket
         return this.fGetObject(args, srcFilepaths, dstFilepath)
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       const error: CodedError = new Error(err.message)
       error.code = err['httpstatuscode'] || err['code'] // missing types in @types/minio
       throw error
@@ -826,7 +826,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         stream.on('end', () => resolve(objects))
         stream.on('data', ({ name }) => objects.push(name))
       })
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       const error: CodedError = new Error(err.message)
       error.code = err['httpstatuscode'] || err['code'] // missing types in @types/minio
       throw error
@@ -900,7 +900,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         )
         return `Removed ${objects.length} objects`
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       throw new Error(err.message)
     }
   }
@@ -912,7 +912,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         ? await this.client.getPartialObject(bucketName, fileName, offset, length)
         : await this.client.getPartialObject(bucketName, fileName, offset)
       return stream
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       if (err.code === 'InvalidRange') {
         debug('file slice failed; reading the rest of the file', err)
         return this.client.getPartialObject(bucketName, fileName, offset)
@@ -952,7 +952,7 @@ class S3VFSResponder extends S3VFS implements VFS {
           } else {
             stream.pipe(destStream).on('error', reject).on('end', resolve)
           }
-        } catch (err) {
+        } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
           reject(err)
         }
       }
@@ -970,7 +970,7 @@ class S3VFSResponder extends S3VFS implements VFS {
       try {
         await this.pipe(filepath, offset, length, passthrough)
         resolve(data)
-      } catch (err) {
+      } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
         reject(err)
       }
     })
@@ -1014,7 +1014,7 @@ class S3VFSResponder extends S3VFS implements VFS {
               ? await this.readData(bucketName, fileName)
               : ''
         }
-      } catch (err) {
+      } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
         if (err.code === 'NotFound') {
           // folder?
           try {
@@ -1026,7 +1026,7 @@ class S3VFSResponder extends S3VFS implements VFS {
               size: 0,
               isDirectory: true
             }
-          } catch (err) {
+          } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
             debug('not a folder, either')
           }
         }
@@ -1046,7 +1046,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         stream.on('error', reject)
         stream.on('data', chunk => (data += chunk))
         stream.on('end', () => resolve(data))
-      } catch (err) {
+      } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
         reject(err)
       }
     })
@@ -1077,7 +1077,7 @@ class S3VFSResponder extends S3VFS implements VFS {
   private async makeBucket(bucketName: string): Promise<void> {
     try {
       await this.client.makeBucket(bucketName, '') // '': use default region
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // for some reason, the core repl does not like minio's error
       if (/Invalid bucket name/.test(err.message)) {
         if (bucketName.length <= 2) {
@@ -1115,7 +1115,7 @@ class S3VFSResponder extends S3VFS implements VFS {
           await this.client.removeObject(bucketName, fp)
         }
       }
-    } catch (err) {
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
       throw new Error(err.message)
     }
   }
@@ -1125,7 +1125,7 @@ export let waitForInitDone: Promise<void>
 
 export default function initS3Mounts() {
   const init = (resolveA?: () => void) => {
-    // eslint-disable-next-line promise/param-names
+     
     waitForInitDone = new Promise((resolveB, reject) => {
       setTimeout(() => {
         mount(async (repl: REPL) => {
@@ -1143,7 +1143,7 @@ export default function initS3Mounts() {
 
             resolveB()
             return vfses
-          } catch (err) {
+          } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
             console.error('Error initializing s3 vfs', err)
             reject(err)
           }

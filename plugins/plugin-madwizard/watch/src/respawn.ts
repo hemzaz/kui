@@ -19,23 +19,13 @@ import { encodeComponent } from '@kui-shell/core/mdist/api/Exec'
 import { main } from '@kui-shell/client/package.json'
 
 async function getAppPath() {
-  try {
-    const { app } = await import('electron')
-    if (app) {
-      const appPath = app.getAppPath()
-      if (appPath) {
-        return appPath
-      }
-    }
-  } catch (err) {
-    console.error('Error fetching app path', err)
-  }
-
+  // Stubbed out for Tauri migration - Electron app.getAppPath() removed
+  // Use process.cwd() or command line arg instead
   const appPath = process.argv.find(_ => /app-path/.test(_))
   if (appPath) {
     return appPath.replace(/^--app-path=/, '')
   } else {
-    return '.'
+    return process.cwd()
   }
 }
 

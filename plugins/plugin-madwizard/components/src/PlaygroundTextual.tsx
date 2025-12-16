@@ -29,7 +29,7 @@ import Terminal, { WatchInit } from './Terminal'
 class FakeStdin extends PassThrough {
   public isTTY = true
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   public setRawMode() {}
 }
 
@@ -62,7 +62,7 @@ export default class PlaygroundTextual extends Playground {
       this.stdin.write(data)
     },
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+     
     unwatch(): void {}
   })
 

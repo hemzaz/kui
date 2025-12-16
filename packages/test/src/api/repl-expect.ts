@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { Application } from 'spectron'
-import { ElementArray } from 'webdriverio'
+import { Application, ElementArray } from './spectron-compat'
 import * as assert from 'assert'
 
 import { ISuite } from './common'
@@ -276,7 +275,7 @@ export const okWithStringEventually =
       () => {
         try {
           return okWithString(expect, exact)(res)
-        } catch (err) {
+        } catch (_err) {
           // swallow
         }
       },
@@ -291,7 +290,7 @@ export const okWithPtyOutputEventually =
       () => {
         try {
           return okWithPtyOutput(expect, exact)(res)
-        } catch (err) {
+        } catch (_err) {
           // swallow
         }
       },

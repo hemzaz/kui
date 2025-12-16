@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable react/prop-types, react/display-name */
+ 
 
 import React from 'react'
 import Slugger from 'github-slugger'

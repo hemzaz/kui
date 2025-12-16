@@ -25,7 +25,7 @@ interface Param {
 }
 
 export class TestStringResponse {
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(public readonly param: Param) {}
 
   public string() {

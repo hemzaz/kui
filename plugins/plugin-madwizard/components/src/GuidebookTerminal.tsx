@@ -36,7 +36,7 @@ type State = Partial<Pick<BaseProps, 'cmdline' | 'env'>>
  *
  */
 export default class GuidebookTerminal extends React.PureComponent<Props, State> {
-  // eslint-disable-next-line no-template-curly-in-string
+   
   private readonly tasks = [{ label: 'Run a Job', argv: ['madwizard', '-p', '${SELECTED_PROFILE}'] }]
 
   public componentDidMount() {

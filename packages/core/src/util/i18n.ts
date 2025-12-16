@@ -36,7 +36,7 @@ export default (
   namespace = 'resources'
 ): ((key: string, ...parameters: (string | number)[]) => string) => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
     const defaultStrings: Record<string, string> = require(`@kui-shell/${plugin}/i18n/${namespace}_en_US.json`)
 
     const locale = getLocale()
@@ -44,13 +44,13 @@ export default (
     const i18n = (locale: string): Record<string, string> => {
       try {
         return locale && require(`@kui-shell/${plugin}/i18n/${namespace}_${locale.replace(/-/, '_')}.json`)
-      } catch (err) {
+      } catch (_err) {
         try {
           return (
             (locale && require(`@kui-shell/${plugin}/i18n/${namespace}_${locale.replace(/-.*$/, '')}.json`)) ||
             defaultStrings
           )
-        } catch (err) {
+        } catch (_err) {
           console.error('Could not find translation for given locale', plugin, locale)
           return defaultStrings
         }
@@ -71,7 +71,7 @@ export default (
             return str.replace(new RegExp(`\\{${idx}\\}`, 'g'), param.toString())
           }, str)
     }
-  } catch (err) {
+  } catch (_err) {
     return (x: string) => x
   }
 }

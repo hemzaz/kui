@@ -42,7 +42,7 @@ const buttons = [
   { mode: 'b3', command: (tab: Tab) => 'test string', kind: 'drilldown' as const },
   {
     mode: 'b4',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     command: (tab: Tab, resource: MyResource) => `test string --grumble ${resource.grumble}`,
     kind: 'drilldown' as const
   },

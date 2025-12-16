@@ -128,7 +128,7 @@ export default function copy(terminal: Terminal): XtermResponse['rows'] {
   const current = terminal.buffer.active.getNullCell()
 
   const nLines = lastFullLineIdx(terminal, current) + 1
-  let prevRow: XtermResponseCell[] = undefined // eslint-disable-line
+  let prevRow: XtermResponseCell[] = undefined  
   for (let ridx = 0; ridx < nLines; ridx++) {
     const line = terminal.buffer.active.getLine(ridx)
 

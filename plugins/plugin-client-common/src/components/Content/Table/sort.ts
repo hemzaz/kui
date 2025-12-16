@@ -60,7 +60,7 @@ export default function sortRow(rowA: Row, rowB: Row, key: string, cidx: number,
  * The logic here: don't bother sorting for 1-entry tables, or for
  * columns with all the same value.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export function isSortableCol(key: string, cidx: number, kuiBody: Table['body']) {
   if (kuiBody.length <= 1) {
     return false

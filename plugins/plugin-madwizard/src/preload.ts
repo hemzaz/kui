@@ -40,7 +40,7 @@ export default async function preloadMadwizard() {
     import('@kui-shell/plugin-core-support')
   ])
   const vfs = new NotebookVFS('/kui/madwizard')
-  vfs.mkdir({ argvNoOptions: ['mkdir', '/kui/madwizard/playground'] })
+  vfs.mkdir({ argvNoOptions: ['mkdir', '/kui/madwizard/playground'] }, '/kui/madwizard/playground')
   mount(vfs)
 
   vfs.cp(undefined, mainGuidebooks, '/kui/madwizard')

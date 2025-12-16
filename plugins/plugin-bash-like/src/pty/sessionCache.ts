@@ -44,7 +44,7 @@ export function getSessionForTab(tab: Tab): Promise<Channel> {
  * Set it
  *
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export function setChannelForTab(tab: Tab, channel: Promise<Channel>) {
   // debug('initializing pty channel: set')
   _singleChannel = channel

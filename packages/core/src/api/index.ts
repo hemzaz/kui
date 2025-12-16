@@ -31,3 +31,6 @@ export { Capabilities }
 
 import * as Client from './Client'
 export { Client }
+
+import * as Window from './Window'
+export { Window }

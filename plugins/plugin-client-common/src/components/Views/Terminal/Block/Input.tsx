@@ -196,7 +196,7 @@ export abstract class InputProvider<S extends State = State> extends React.PureC
   protected abstract input()
 
   /** rendered to the left of the input element */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   protected status() {}
 
   protected cancelReEdit() {

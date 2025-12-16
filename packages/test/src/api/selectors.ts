@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/camelcase */
 export const TOP_TAB = '.kui--tab-list > .kui--tab'
 export const TOP_TAB_N = (N: number) => `${TOP_TAB}:nth-child(${N})`
 export const TOP_TAB_N_CLICKABLE = (N: number) => `${TOP_TAB_N(N)} > a`
@@ -53,7 +52,7 @@ export const STATUS_STRIPE_BLOCK = '.kui--status-stripe .kui--input-stripe .repl
 export const STATUS_STRIPE_PROMPT = `${STATUS_STRIPE_BLOCK} input`
 export const OOPS = `${CURRENT_TAB} .repl .repl-block .oops`
 export const _SIDECAR = '.kui--sidecar'
-// eslint-disable-next-line @typescript-eslint/no-use-before-define
+ 
 export const SIDECAR_BASE = (N: number, splitIndex = 1) => `${PROMPT_BLOCK_N_FOR_SPLIT(N, splitIndex)} ${_SIDECAR}`
 export const SIDECAR = (N: number, splitIndex = 1) => `${SIDECAR_BASE(N, splitIndex)}.visible:not(.minimized)`
 export const SIDECAR_WITH_FAILURE = (N: number, splitIndex = 1) =>

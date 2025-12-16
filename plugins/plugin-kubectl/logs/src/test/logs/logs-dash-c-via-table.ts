@@ -15,7 +15,7 @@
  */
 
 import * as assert from 'assert'
-import { Application } from 'spectron'
+import { Application } from '@kui-shell/test'
 
 import { Common, CLI, Keys, ReplExpect, Selectors } from '@kui-shell/test'
 import { createNS, allocateNS, deleteNS, waitForGreen } from '@kui-shell/plugin-kubectl/tests/lib/k8s/utils'

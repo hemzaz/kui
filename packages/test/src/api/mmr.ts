@@ -15,7 +15,7 @@
  */
 
 import { ok } from 'assert'
-import { Application } from 'spectron'
+import { Application } from './spectron-compat'
 import { BadgeSpec, Util } from '@kui-shell/core'
 
 import * as Common from './common'
@@ -77,7 +77,7 @@ export class TestMMR {
    * @param { string } testName (optional) helps with filtering the Mocha Test Suites by description
    * @param { string } metadata is the metadata shown in Sidecar
    */
-  public constructor(public readonly param: TestParam) {} // eslint-disable-line no-useless-constructor
+  public constructor(public readonly param: TestParam) {}  
 
   private testClickResult = (cmdIdx: number, command: string, expect: string) => async (app: Application) => {
     await CLI.expectPriorInput(Selectors.PROMPT_N(cmdIdx), command)(app)

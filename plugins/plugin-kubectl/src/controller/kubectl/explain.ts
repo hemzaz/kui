@@ -81,7 +81,7 @@ export const doExplain = (command = 'kubectl') =>
       const match2 = !match && response.match(kvfd)
 
       if (match || match2) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+         
         const kind = match ? match[1] : match2[1]
         const version = match ? match[2] : match2[2]
         const resource = match && match[4]

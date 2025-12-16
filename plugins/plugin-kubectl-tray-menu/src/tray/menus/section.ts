@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { MenuItemConstructorOptions } from 'electron'
+import { MenuItemConstructorOptions } from '../electron-compat'
 
 /**
  * @return the given list of menu `items`, with a prepended "header"

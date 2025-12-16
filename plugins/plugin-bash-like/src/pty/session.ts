@@ -31,7 +31,7 @@ const debugStr = 'plugins/bash-like/pty/session'
  * Return the cached websocket for the given tab
  *
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export async function getChannelForTab(tab: Tab): Promise<Channel> {
   const { inBrowser } = await import('@kui-shell/core/mdist/api/Capabilities')
 

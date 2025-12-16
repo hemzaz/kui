@@ -15,7 +15,7 @@
  */
 
 // temporary with disabled popup test
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 
 import { Common, ReplExpect, Selectors, SidecarExpect, Util } from '@kui-shell/test'
 import {

@@ -36,7 +36,7 @@ interface Param {
 }
 
 export class TestNavResponse {
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(public readonly param: Param) {}
 
   public run() {

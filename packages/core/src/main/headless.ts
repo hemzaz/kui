@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable prefer-rest-params, prefer-spread */
+ 
 
 import Debug from 'debug'
 const debug = Debug('main/headless')
@@ -144,7 +144,7 @@ const failure = (quit: QuitFunction, execOptions?: ExecOptions) => async (err: C
       if (!process.env.KUI_REPL_MODE) {
         process.exit(exitCode > 128 ? exitCode - 256 : exitCode)
 
-        // eslint-disable-next-line no-unreachable
+         
         if (quit) {
           quit()
         }
@@ -339,9 +339,9 @@ export function initHeadless(argv: string[], force = false, isRunningHeadless = 
         app,
         {
           createWindow: async (
-            executeThisArgvPlease: string[],
-            subwindowPlease: boolean,
-            subwindowPrefs: ISubwindowPrefs
+            _executeThisArgvPlease: string[],
+            _subwindowPlease: boolean,
+            _subwindowPrefs: ISubwindowPrefs
           ) => {
             // craft a createWindow that has a first argument of true, which will indicate `noHeadless`
             // because this will be called for cases where we want a headless -> GUI transition

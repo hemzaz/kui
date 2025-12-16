@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-use-before-define */
+ 
 
 /**
  * The Read-Eval-Print Loop (REPL)
@@ -707,7 +707,7 @@ export const pexec = <T extends KResponse>(command: string, execOptions?: ExecOp
  * Execute a command in response to an in-view click
  *
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function click(command: string | (() => Promise<string>), evt: MouseEvent): Promise<void> {}
 
 /**

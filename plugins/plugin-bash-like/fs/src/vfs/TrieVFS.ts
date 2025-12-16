@@ -45,10 +45,12 @@ export abstract class TrieVFS<D, L extends Leaf<D> = Leaf<D>> implements VFS {
   public readonly isVirtual = true
   public readonly tags?: string[]
 
-  protected readonly prefix = new RegExp(`^${this.mountPath}\\/?`)
+  protected readonly prefix: RegExp
 
-  // eslint-disable-next-line no-useless-constructor
-  public constructor(public readonly mountPath = '/kui', protected readonly trie = new TrieSearch<Directory | L>()) {}
+   
+  public constructor(public readonly mountPath = '/kui', protected readonly trie = new TrieSearch<Directory | L>()) {
+    this.prefix = new RegExp(`^${this.mountPath}\\/?`)
+  }
 
   protected abstract loadAsString(leaf: L): string | Promise<string>
 
@@ -241,7 +243,7 @@ export abstract class TrieVFS<D, L extends Leaf<D> = Leaf<D>> implements VFS {
     return 'ok'
   }
 
-  public async fwrite(_, filepath: string, data: string | Buffer): Promise<void> {
+  public async fwrite(_, filepath: string, _data: string | Buffer): Promise<void> {
     const match = filepath.match(/([^/]+)\.([^.]+)$/)
     if (match) {
       const srcFilepath = `plugin://client/notebooks/${match[1]}.${match[2]}`

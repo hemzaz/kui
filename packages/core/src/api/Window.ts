@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Kubernetes Authors
+ * Copyright 2025 The Kubernetes Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-import { MenuItemConstructorOptions } from '../electron-compat'
-
-/** Menu item that indicates we are currently refreshing content */
-const Loading: MenuItemConstructorOptions = { label: 'Loading...', enabled: false }
-
-export default Loading
+// Window Management API
+export {
+  WindowPreferences,
+  createWindow,
+  openNewWindow,
+  enlargeWindow,
+  reduceWindow,
+  maximizeWindow,
+  unmaximizeWindow,
+  quitApplication,
+  getCurrentWindow,
+  getAllWindows,
+  setWindowTitle,
+  centerWindow,
+  setWindowSize,
+  focusWindow
+} from '../main/window'

@@ -43,17 +43,17 @@ export default async (registrar: PreloadRegistrar) => {
 
     // make some a fake VFS (using NotebookVFS as the impl) for testing tab completion
     const vfsfun = new NotebookVFS('/tmpo')
-    vfsfun.mkdir({ argvNoOptions: ['mkdir', '/tmpo/D1'] })
-    vfsfun.mkdir({ argvNoOptions: ['mkdir', '/tmpo/D2'] })
+    vfsfun.mkdir({ argvNoOptions: ['mkdir', '/tmpo/D1'] }, '/tmpo/D1')
+    vfsfun.mkdir({ argvNoOptions: ['mkdir', '/tmpo/D2'] }, '/tmpo/D2')
     mount(vfsfun)
 
     // nested (still fake) VFS mounts
     const vfsnest1 = new NotebookVFS('/kuifake/fake1')
-    vfsnest1.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake1/E1'] })
-    vfsnest1.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake1/E2'] })
+    vfsnest1.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake1/E1'] }, '/kuifake/fake1/E1')
+    vfsnest1.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake1/E2'] }, '/kuifake/fake1/E2')
     const vfsnest2 = new NotebookVFS('/kuifake/fake2')
-    vfsnest2.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake2/F1'] })
-    vfsnest2.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake2/F2'] })
+    vfsnest2.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake2/F1'] }, '/kuifake/fake2/F1')
+    vfsnest2.mkdir({ argvNoOptions: ['mkdir', '/kuifake/fake2/F2'] }, '/kuifake/fake2/F2')
     mount(vfsnest1)
     mount(vfsnest2)
 

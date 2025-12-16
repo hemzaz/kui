@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-dupe-class-members */
+ 
 
 import { EventEmitter } from 'events'
 

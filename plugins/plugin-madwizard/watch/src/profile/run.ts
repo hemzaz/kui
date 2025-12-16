@@ -50,13 +50,11 @@ export default class ProfileRunWatcher {
     private readonly profile: string,
     private readonly watcher = chokidar.watch(ProfileRunWatcher.path(profile) + '/*', { depth: 1, alwaysStat: true })
   ) {
-    // we need to close the chokidar watcher before exit, otherwise
-    // electron-main dies with SIGABRT
-    import('electron').then(_ =>
-      _.app.on('will-quit', async () => {
-        await this.watcher.close()
-      })
-    )
+    // Close the chokidar watcher before exit
+    // Stubbed out for Tauri migration - Electron app.on('will-quit') removed
+    process.on('exit', async () => {
+      await this.watcher.close()
+    })
   }
 
   private static path(profile: string) {

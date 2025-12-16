@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-empty-function */
+ 
 
 import React from 'react'
 import type { Tab, NavResponse } from '@kui-shell/core'

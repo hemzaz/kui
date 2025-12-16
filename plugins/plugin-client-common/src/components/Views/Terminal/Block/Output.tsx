@@ -122,7 +122,7 @@ export default class Output extends React.PureComponent<Props, State> {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   private async streamingConsumer(part: Streamable) {
     if (hasUUID(this.props.model)) {
       const tabUUID = this.props.uuid

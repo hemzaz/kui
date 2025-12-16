@@ -128,17 +128,17 @@ const buttons = [
   { mode: 'b0', command: 'test string', kind: 'drilldown' as const, confirm: true },
   { mode: 'b1', command: 'test string', kind: 'drilldown' as const },
   { mode: 'b2', command: () => 'test string', kind: 'drilldown' as const },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   { mode: 'b3', command: () => 'test string', kind: 'drilldown' as const },
   {
     mode: 'b4',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     command: () => `test string --grumble {resource.grumble}`,
     kind: 'drilldown' as const
   },
   {
     mode: 'b5',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     command: () => `some non-existant command`,
     kind: 'drilldown' as const,
     expectError: 127 as const

@@ -15,16 +15,13 @@
  */
 
 import { join } from 'path'
-import { app } from 'electron'
 
 import bug from '@kui-shell/client/icons/png/bugTemplate.png'
 import grid from '@kui-shell/client/icons/png/gridTemplate.png'
 import error from '@kui-shell/client/icons/png/errorTemplate.png'
 import powerOff from '@kui-shell/client/icons/png/powerOffTemplate.png'
 
-// these our are tray menu icons; the electron api specifies that if
-// the files are named fooTemplate, then it will take care of
-// rendering them as a "template icon" via underlying platform apis
+// these our are tray menu icons; template icons are handled by the platform
 // HOWTO (e.g. using imagemagick):
 // magick kui.png -alpha off -auto-threshold otsu z.png
 // convert z.png -resize 18x18 trayIconTemplate.png
@@ -39,7 +36,9 @@ import product2x from '@kui-shell/client/icons/png/productIconTemplate@2x.png'
 
 /** @return absolute path to icons directory */
 export function iconHome() {
-  const base = app.getAppPath()
+  // Tauri: Use process.cwd() or a fixed path relative to the app
+  // In Tauri, resources are bundled differently than Electron
+  const base = process.cwd()
   if (/dist\/headless$/.test(base)) {
     return base
   } else {

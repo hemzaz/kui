@@ -308,7 +308,7 @@ export default class PaginatedTable<P extends Props, S extends State> extends Re
   }
 
   /** E.g. last updated time for live tables */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   protected caption(): ToolbarProps['caption'] | void {}
 
   private grid(visibleRows: KuiRow[]) {

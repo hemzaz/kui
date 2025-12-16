@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-import { Capabilities } from '@kui-shell/core'
-
-/** [Renderer Process] Preloader to initialize tray menu */
+/**
+ * [Renderer Process] Preloader to initialize tray menu.
+ * Stubbed out for Tauri migration - tray menu not currently supported.
+ */
 export default async function initTray() {
-  if (Capabilities.inElectron() && !process.env.KUI_NO_TRAY_MENU) {
-    const { ipcRenderer } = await import('electron')
-    import('./renderer')
-      .then(_ => _.default(ipcRenderer))
-      .catch(err => {
-        console.error('Error initializing tray menu', err)
-      })
-
-    // rebroadcast renderer-side config change events to the main process
-    const { onKubectlConfigChangeEvents } = await import('@kui-shell/plugin-kubectl')
-    onKubectlConfigChangeEvents(async () => {
-      import('./events').then(_ => _.emitRefreshFromRenderer())
-    })
-  }
+  // No-op: Tray menu functionality removed for Tauri migration
+  // Tauri has different tray menu APIs that would need separate implementation
 }

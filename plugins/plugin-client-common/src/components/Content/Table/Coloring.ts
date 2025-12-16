@@ -26,7 +26,7 @@ export interface Coloring {
 }
 
 abstract class AbstractColoring implements Coloring {
-  // eslint-disable-next-line no-useless-constructor
+   
   protected constructor(private readonly thresholds) {}
 
   public nDurationBuckets() {

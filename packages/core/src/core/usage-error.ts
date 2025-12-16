@@ -697,7 +697,7 @@ const format = async (message: UsageLike, options: UsageOptions = new DefaultUsa
       // rows at a time: e.g. 5 rows, plus a bit (1px) for the
       // bottom border; the 3em part must .log-line's height in
       // ui.css; nRowsInViewport = true means disable inner scrolling
-      if (rows.length > nRowsInViewport && nRowsInViewport !== true) {
+      if (nRowsInViewport !== true && rows.length > nRowsInViewport) {
         const tableScrollable = div(undefined, ['scrollable', 'scrollable-auto'])
         const nRows =
           sections && (sections.length === 2 || (sections.length === 1 && scrollableDetailedExamples))

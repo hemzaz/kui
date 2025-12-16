@@ -19,6 +19,7 @@ export {
   hasProxy,
   inBrowser,
   inElectron,
+  inTauri,
   isHeadless,
   inProxy,
   assertLocalAccess,

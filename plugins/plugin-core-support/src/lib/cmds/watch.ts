@@ -44,7 +44,7 @@ class TableWatcher implements Abortable, Watcher {
   private timeout: ReturnType<typeof setInterval>
   private pusher: WatchPusher
 
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(
     private readonly args: Arguments,
     private readonly command: string,

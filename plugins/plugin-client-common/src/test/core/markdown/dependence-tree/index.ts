@@ -61,7 +61,7 @@ inputs.forEach(markdown => {
       const scanNode = async (tree: Tree, containerSelector: string) => {
         await checkNode(tree, containerSelector)
 
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+         
         await scanNodes(tree.children, containerSelector)
       }
 

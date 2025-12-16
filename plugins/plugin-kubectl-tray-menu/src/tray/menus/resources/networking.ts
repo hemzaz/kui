@@ -15,11 +15,12 @@
  */
 
 import { CreateWindowFunction } from '@kui-shell/core'
+import { MenuItemConstructorOptions } from '../../electron-compat'
 import openWindowWith from './open'
 
 export default function networkingMenu(
   createWindow: CreateWindowFunction
-): import('electron').MenuItemConstructorOptions {
+): MenuItemConstructorOptions {
   return {
     label: 'Networking',
     submenu: [

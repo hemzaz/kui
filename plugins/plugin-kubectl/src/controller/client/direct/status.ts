@@ -53,7 +53,7 @@ class MultiKindWatcher implements Abortable, Watcher {
   /** Number of sub-tables not done */
   private nNotDone = 0
 
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(
     private readonly drilldownCommand: string,
     private readonly args: Pick<Arguments<KubeOptions>, 'REPL' | 'execOptions' | 'parsedOptions'>,

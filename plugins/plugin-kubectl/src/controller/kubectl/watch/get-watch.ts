@@ -116,7 +116,7 @@ export class EventWatcher implements Abortable, Watcher {
   /** Timestamp when we started up */
   private now = Date.now()
 
-  // eslint-disable-next-line no-useless-constructor
+   
   public constructor(
     private readonly args: Arguments,
     private readonly command: string,

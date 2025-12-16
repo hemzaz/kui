@@ -96,7 +96,7 @@ export default tseslint.config(
       'dot-notation': 'off',
       'no-undef': 'off',
       'import/first': 'off',
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-member-accessibility': 'error',
       '@typescript-eslint/no-var-requires': 'off',
@@ -125,6 +125,24 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/explicit-member-accessibility': 'off',
       '@typescript-eslint/no-var-requires': 'off'
+    }
+  },
+
+  // Test files - relax some rules for compatibility
+  {
+    files: ['**/*.spec.ts', '**/*.spec.tsx', '**/test/**/*.ts', '**/test/**/*.tsx', 'packages/test/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'warn',
+      '@typescript-eslint/no-unused-expressions': 'warn'
+    }
+  },
+
+  // Compatibility/bridge files - allow any for type bridging
+  {
+    files: ['**/tauri-bridge.ts', '**/electron-compat.ts', '**/spectron-compat.ts', '**/*-compat.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn'
     }
   },
 
