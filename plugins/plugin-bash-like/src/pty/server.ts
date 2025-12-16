@@ -429,11 +429,12 @@ export const onConnection = (exitNow: ExitHandler, uid?: number, gid?: number) =
               // termios.setattr(shell['_fd'], { lflag: { ECHO: false } })
 
               // send all PTY data out to the websocket client
-              shell.on('data', (data: string) => {
+              // Cast shell to any to access 'on' method (node-pty IPty has EventEmitter methods)
+              ;(shell as any).on('data', (data: string) => {
                 ws.send(JSON.stringify({ type: 'data', data, uuid: msg.uuid }))
               })
 
-              shell.on('exit', (exitCode: number) => {
+              ;(shell as any).on('exit', (exitCode: number) => {
                 shell = undefined
                 if (msg.uuid) delete shells[msg.uuid]
                 ws.send(JSON.stringify({ type: 'exit', exitCode, uuid: msg.uuid }))

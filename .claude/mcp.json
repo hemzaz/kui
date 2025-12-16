@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "claude-flow": {
+      "command": "npx",
+      "args": ["-y", "claude-flow@alpha", "mcp"],
+      "env": {
+        "CLAUDE_FLOW_HOME": "/Users/elad/.claude-flow"
+      }
+    }
+  }
+}

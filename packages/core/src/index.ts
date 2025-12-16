@@ -86,7 +86,7 @@ export { isWatchable, Watchable, Watcher, WatchPusher } from './core/jobs/watcha
 export { Abortable, FlowControllable, Job, Resizable, isResizable, Suspendable, isSuspendable } from './core/jobs/job'
 
 import { Tab } from './webapp/tab'
- 
+
 import { getHistoryForTab } from './models/history'
 export function History(tab: string | Tab) {
   return getHistoryForTab(typeof tab === 'string' ? tab : tab.uuid)
@@ -249,8 +249,14 @@ export {
 export * from './api'
 
 // Electron - REMOVED: Migrated to Tauri
+// The following Electron-specific APIs have been removed for Tauri compatibility:
+// - tellMain: Use Tauri's invoke API for main process communication
+// - tellRendererToExecute: Use Tauri's emit/listen for renderer communication
+// These APIs are now no-op stubs in their respective modules to prevent compilation errors.
+// See src-tauri/ for Tauri backend implementations.
+//
 // export { tellMain } from './webapp/electron-events'
-// export { default as tellRendererToExecute } from './main/tell' // Electron-only, not needed for Tauri
+// export { default as tellRendererToExecute } from './main/tell'
 
 // main
 // export { main } from './main/main'
@@ -270,16 +276,17 @@ export {
 
 export { default as teeToFile } from './util/tee'
 
-// Client API these are deprecated, adn will be removed in kui
-// 12. Please use the Client.___ form instead
+// Client API - These are deprecated and will be removed in a future version.
+// Please use the Client.* form instead (e.g., Client.isOffline instead of isOfflineClient)
+// See packages/core/src/api/Client.ts for the preferred API.
 export {
-  /** @deprecated @see Client.isOffline */
+  /** @deprecated Use Client.isOffline instead */
   isOfflineClient,
-  /** @deprecated @see Client.isReadonly */
+  /** @deprecated Use Client.isReadOnly instead */
   isReadOnlyClient,
-  /** @deprecated @see Client.isExecutable */
+  /** @deprecated Use Client.isExecutable instead */
   isExecutableClient,
-  /** @deprecated @see Client.hideReplayOutput */
+  /** @deprecated Use Client.hideReplayOutput instead */
   hideReplayOutput
 } from './api/Client'
 

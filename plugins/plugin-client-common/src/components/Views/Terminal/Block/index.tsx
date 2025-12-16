@@ -200,7 +200,9 @@ export default class Block extends React.PureComponent<Props, State> {
           {...this.props}
           willFocusBlock={this.props.willFocusBlock}
           _block={this.state._block}
-          ref={c => (this._input = c)}
+          ref={c => {
+            this._input = c
+          }}
         >
           {this.props.children}
         </Input>

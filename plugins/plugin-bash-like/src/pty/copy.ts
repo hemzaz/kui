@@ -27,10 +27,22 @@ import { IBufferCell, IBufferLine, Terminal } from '@xterm/xterm'
 function createCell(cell: IBufferCell): XtermResponseCell {
   const { classList, style, textContent } = prepareCellForDomRenderer(cell)
 
+  // prepareCellForDomRenderer returns strings, but XtermResponseCell expects arrays/objects
+  const classListArray = classList ? classList.split(' ').filter(c => c) : undefined
+  const styleObj: Record<string, string> | undefined = style
+    ? style.split(';').reduce((acc, s) => {
+        const [key, value] = s.split(':').map(part => part.trim())
+        if (key && value) {
+          acc[key] = value
+        }
+        return acc
+      }, {} as Record<string, string>)
+    : undefined
+
   return {
     innerText: cell.getChars(),
-    classList,
-    style,
+    classList: classListArray,
+    style: styleObj,
     textContent
   }
 }

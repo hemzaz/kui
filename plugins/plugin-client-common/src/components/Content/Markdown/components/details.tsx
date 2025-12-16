@@ -46,19 +46,19 @@ export function tip(props: React.DetailsHTMLAttributes<HTMLElement> & { float?: 
  */
 export function details(props: React.DetailsHTMLAttributes<HTMLElement> & ReactMarkdownProps) {
   const summaryIdx = props.children
-    ? props.children.findIndex(_ => typeof _ === 'object' && _['type'] === 'summary')
+    ? (props.children as any[]).findIndex(_ => typeof _ === 'object' && _['type'] === 'summary')
     : -1
   if (summaryIdx < 0) {
     return <ExpandableSection {...tipProps(props.open)}>{props.children}</ExpandableSection>
   }
-  const _summary = props.children[summaryIdx]
+  const _summary = (props.children as any[])[summaryIdx]
   const summary =
-    _summary !== undefined && React.isValidElement(_summary) && Array.isArray(_summary.props.children)
-      ? _summary.props.children.toString()
+    _summary !== undefined && React.isValidElement(_summary) && Array.isArray((_summary.props as any).children)
+      ? (_summary.props as any).children.toString()
       : undefined
   return (
     <ExpandableSection showMore={summary} {...tipProps(false)}>
-      {props.children && props.children.slice(summaryIdx + 1)}
+      {props.children && (props.children as any[]).slice(summaryIdx + 1)}
     </ExpandableSection>
   )
 }

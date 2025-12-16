@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { tellRendererToExecute } from '@kui-shell/core'
+// NOTE: tellRendererToExecute has been removed in Tauri migration
+// This plugin is Electron-only and uses a deprecated API
+// Keeping a stub to prevent compilation errors
+const tellRendererToExecute = (command: string) => {
+  console.warn('tellRendererToExecute is deprecated (Electron-only), command not executed:', command)
+}
 
 /** Get current namespace */
 export async function get() {

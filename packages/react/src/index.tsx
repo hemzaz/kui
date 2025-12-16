@@ -47,7 +47,7 @@ function renderMain(
       title={title}
       initialTabTitle={initialTabTitle}
       quietExecCommand={quietExecCommand}
-    />
+    /> as React.ReactElement
   )
 }
 

@@ -420,7 +420,7 @@ export function isJob(resource: Pick<KubeResource, 'apiVersion' | 'kind'>): reso
  *
  */
 interface Deployment1 extends KubeResource {
-  apiVersion: 'extensions/v1beta1'
+  apiVersion: 'apps/v1'
   kind: 'Deployment'
 }
 
@@ -443,7 +443,7 @@ export function isDeployment(resource: KubeResource): resource is Deployment {
   return (
     isKubeResource(resource) &&
     resource.kind === 'Deployment' &&
-    (resource.apiVersion === 'extensions/v1beta1' || resource.apiVersion === 'apps/v1')
+    (resource.apiVersion === 'apps/v1' || resource.apiVersion === 'apps/v1')
   )
 }
 
@@ -452,7 +452,7 @@ export function isDeployment(resource: KubeResource): resource is Deployment {
  *
  */
 export interface ReplicaSet1 extends KubeResource {
-  apiVersion: 'extensions/v1beta1'
+  apiVersion: 'apps/v1'
   kind: 'ReplicaSet'
 }
 
@@ -470,7 +470,7 @@ export type ReplicaSet = ReplicaSet1 | ReplicaSet2
 export function isReplicaSet(resource: KubeResource): resource is ReplicaSet {
   return (
     isKubeResource(resource) &&
-    (resource.apiVersion === 'extensions/v1beta1' || resource.apiVersion === 'apps/v1') &&
+    (resource.apiVersion === 'apps/v1' || resource.apiVersion === 'apps/v1') &&
     resource.kind === 'ReplicaSet'
   )
 }

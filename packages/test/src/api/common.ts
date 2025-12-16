@@ -57,7 +57,8 @@ function codeCoverageDesired() {
  *
  */
 declare let __coverage__: Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
-async function writeCodeCoverage(app: Application) {
+// NOTE: Spectron Application type removed in Tauri migration
+async function writeCodeCoverage(app: any) {
   if (codeCoverageDesired() && app && app.client) {
     console.log('Writing code coverage data')
     await app.client.executeAsync(

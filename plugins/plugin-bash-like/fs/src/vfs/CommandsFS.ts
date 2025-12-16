@@ -23,7 +23,7 @@ import { TrieVFS, Leaf, Directory, BaseEntry } from './TrieVFS'
 
 class CommandsFS extends TrieVFS<string> {
   public constructor() {
-    super('/', commandsTrie)
+    super('/', commandsTrie as any)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,7 +36,7 @@ class CommandsFS extends TrieVFS<string> {
   }
 
   protected trieGet(filepath: string): BaseEntry[] {
-    return this.fillInParents(filepath, Array.from(new Set(this.trie.get(filepath))).map(this.direntry))
+    return this.fillInParents(filepath, Array.from(new Set(this.trie.get(filepath) as any)).map(this.direntry))
   }
 
   private parentsOf(mountPath: string, enclosing: string): BaseEntry[] {
@@ -87,6 +87,12 @@ class CommandsFS extends TrieVFS<string> {
     } else {
       return entries
     }
+  }
+
+  public async fslice(filename: string, offset: number, length: number): Promise<string> {
+    // CommandsFS is virtual and doesn't support file slicing
+    // Return empty string as commands are executed, not read
+    return ''
   }
 }
 

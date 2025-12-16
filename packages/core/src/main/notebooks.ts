@@ -19,11 +19,13 @@ import { NotebooksMenu, isMenu, isLeaf } from './load'
 // Stub type for compatibility
 interface MenuItemConstructorOptions {
   label?: string
-  submenu?: MenuItemConstructorOptions[]
+  submenu?: (MenuItemConstructorOptions | { type: 'separator' })[]
+  type?: string
+  click?: () => void
   [key: string]: unknown
 }
 
-interface OpenNotebookItem {
+interface OpenNotebookItem extends MenuItemConstructorOptions {
   label: string
   click: () => void
 }
@@ -60,13 +62,13 @@ export function clientNotebooksDefinitionToElectron(
       label: defn.label,
       submenu: defn.submenu.map(item => {
         if (isMenu(item)) {
-          return clientNotebooksDefinitionToElectron(item, notebook)
+          return clientNotebooksDefinitionToElectron(item, notebook) as MenuItemConstructorOptions
         } else if (isLeaf(item)) {
           // this is the only mogrifier
           return notebook(item.notebook, item.filepath)
         } else {
-          // separator, no change
-          return item
+          // separator, no change - cast to match expected type
+          return { type: 'separator' }
         }
       })
     }

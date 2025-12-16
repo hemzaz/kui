@@ -250,7 +250,12 @@ export default class InputStripe extends React.PureComponent<Props, State> {
 
   private underlay() {
     return (
-      <div className="kui--input-stripe-custom-underlay repl-input-like" ref={c => (this._focusElement = c)}>
+      <div
+        className="kui--input-stripe-custom-underlay repl-input-like"
+        ref={c => {
+          this._focusElement = c
+        }}
+      >
         {this.underlayFill()}
         {this.underlaySelection()}
         {this.underlayCaret()}

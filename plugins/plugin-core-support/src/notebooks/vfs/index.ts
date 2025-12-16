@@ -115,6 +115,18 @@ export class NotebookVFS extends TrieVFS.TrieVFS<NotebookLeaf['data']> implement
       throw new Error('Unsupported filepath for Notebook')
     }
   }
+
+  public async fslice(filename: string, offset: number, length: number): Promise<string> {
+    // NotebookVFS loads complete files from webpack bundles
+    // Slicing requires loading the entire notebook first
+    const entries = this.trie.get(filename)
+    if (entries && entries.length > 0) {
+      const entry = entries[0] as NotebookLeaf
+      const content = await this.loadAsString(entry)
+      return content.slice(offset, offset + length)
+    }
+    return ''
+  }
 }
 
 const vfs = new NotebookVFS()
