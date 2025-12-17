@@ -75,3 +75,8 @@ report.*.json
 
 # packages/builder/dist/electron currently generates this and does not remove it
 /kubectl-kui
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local

@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-// Export provider interfaces
-export * from './ai-provider'
+// Export types
+export * from './types'
 
-// Export provider implementations
-export * from './anthropic-provider'
-export * from './openai-provider'
-export * from './azure-provider'
-export * from './ollama-provider'
+// Export defaults and utilities
+export { DEFAULT_CONFIG, deepMerge, getNestedValue, setNestedValue } from './defaults'
 
-// Export provider factory
-export * from './provider-factory'
+// Export validation
+export { validateConfig, validatePartialConfig, sanitizeConfig } from './validator'
+
+// Export environment loader
+export { loadFromEnv, getEnvVarNames, generateEnvTemplate } from './env-loader'
+
+// Export configuration manager
+export { ConfigManager, getConfigManager, initializeConfig } from './config-manager'

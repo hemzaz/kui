@@ -118,7 +118,7 @@ async function aiDebugHandler(args: Arguments<DebugOptions>): Promise<string> {
       prompt,
       systemPrompt: TROUBLESHOOTING_PROMPT,
       clusterData: snapshot,
-      streaming: false
+      stream: false
     })
 
     return formatDebugResponse(resource, namespace, response.content, response.usage, response.cost)
@@ -186,13 +186,7 @@ function formatDebugResponse(
 ): string {
   const kind = resource.kind || 'pod'
 
-  const parts = [
-    `Debugging ${kind}/${resource.name} (namespace: ${namespace})`,
-    '='.repeat(60),
-    '',
-    analysis,
-    ''
-  ]
+  const parts = [`Debugging ${kind}/${resource.name} (namespace: ${namespace})`, '='.repeat(60), '', analysis, '']
 
   if (usage) {
     parts.push('---')

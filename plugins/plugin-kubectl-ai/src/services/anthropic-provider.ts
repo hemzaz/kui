@@ -53,7 +53,7 @@ export class AnthropicProvider extends BaseAIProvider {
   /**
    * Stream completion with real-time chunks
    */
-  public async *streamCompletion(request: AICompletionRequest): AsyncIterator<AIChunk> {
+  public async *streamCompletion(request: AICompletionRequest): AsyncIterable<AIChunk> {
     const startTime = Date.now()
 
     try {

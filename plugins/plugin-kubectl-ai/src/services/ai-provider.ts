@@ -23,7 +23,7 @@ export abstract class BaseAIProvider implements AIProvider {
   public abstract name: string
   public abstract models: string[]
 
-  public abstract streamCompletion(request: AICompletionRequest): AsyncIterator<AIChunk>
+  public abstract streamCompletion(request: AICompletionRequest): AsyncIterable<AIChunk>
   public abstract complete(request: AICompletionRequest): Promise<AIResponse>
   public abstract testConnection(): Promise<{ success: boolean; error?: string }>
   public abstract estimateCost(request: AICompletionRequest): number

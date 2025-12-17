@@ -26,13 +26,7 @@ import { BaseAIProvider } from './ai-provider'
  */
 export class AzureProvider extends BaseAIProvider {
   public name = 'azure'
-  public models = [
-    'gpt-4',
-    'gpt-4-32k',
-    'gpt-4-turbo',
-    'gpt-35-turbo',
-    'gpt-35-turbo-16k'
-  ]
+  public models = ['gpt-4', 'gpt-4-32k', 'gpt-4-turbo', 'gpt-35-turbo', 'gpt-35-turbo-16k']
 
   private client: AzureOpenAI
   private config: AIConfig
@@ -78,7 +72,7 @@ export class AzureProvider extends BaseAIProvider {
   /**
    * Stream completion with real-time chunks
    */
-  public async *streamCompletion(request: AICompletionRequest): AsyncIterator<AIChunk> {
+  public async *streamCompletion(request: AICompletionRequest): AsyncIterable<AIChunk> {
     const startTime = Date.now()
     let inputTokens = 0
     let outputTokens = 0

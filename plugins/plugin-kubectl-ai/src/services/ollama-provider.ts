@@ -88,7 +88,7 @@ export class OllamaProvider extends BaseAIProvider {
   /**
    * Stream completion with real-time chunks
    */
-  public async *streamCompletion(request: AICompletionRequest): AsyncIterator<AIChunk> {
+  public async *streamCompletion(request: AICompletionRequest): AsyncIterable<AIChunk> {
     const startTime = Date.now()
     let promptTokens = 0
     let completionTokens = 0

@@ -1,0 +1,440 @@
+/*
+ * Copyright 2024 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'variables';
+@import 'mixins';
+
+.kui--ai-message-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kui-ai-spacing-md);
+
+  .message-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--kui-ai-spacing-xs);
+
+    // Date separator
+    .message-date-separator {
+      display: flex;
+      align-items: center;
+      gap: var(--kui-ai-spacing-sm);
+      margin: var(--kui-ai-spacing-md) 0;
+      text-align: center;
+
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--kui-ai-border-secondary);
+      }
+
+      span {
+        color: var(--kui-ai-text-muted);
+        font-size: var(--kui-ai-font-size-sm);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  // Individual message
+  .message {
+    display: flex;
+    gap: var(--kui-ai-spacing-sm);
+    @include fade-in;
+
+    &.user {
+      flex-direction: row-reverse;
+
+      .message-content {
+        align-items: flex-end;
+      }
+
+      .message-bubble {
+        @include message-bubble(var(--kui-ai-message-user-bg), var(--kui-ai-message-user-text));
+        border-bottom-right-radius: var(--kui-ai-border-radius-sm);
+      }
+    }
+
+    &.assistant {
+      .message-bubble {
+        @include message-bubble(var(--kui-ai-message-assistant-bg), var(--kui-ai-message-assistant-text));
+        border-bottom-left-radius: var(--kui-ai-border-radius-sm);
+      }
+    }
+
+    &.system {
+      .message-bubble {
+        @include message-bubble(var(--kui-ai-message-system-bg), var(--kui-ai-message-system-text));
+        border-left: 3px solid var(--kui-ai-icon-warning);
+      }
+    }
+
+    &.error {
+      .message-bubble {
+        @include message-bubble(var(--kui-ai-message-error-bg), var(--kui-ai-message-error-text));
+        border-left: 3px solid var(--kui-ai-icon-error);
+      }
+    }
+
+    // Avatar
+    .message-avatar {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: var(--kui-ai-bg-tertiary);
+      color: var(--kui-ai-icon-primary);
+
+      &.assistant {
+        background: var(--kui-ai-icon-primary);
+        color: var(--kui-ai-text-inverse);
+      }
+
+      &.system {
+        background: var(--kui-ai-icon-warning);
+        color: var(--kui-ai-text-inverse);
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    // Content container
+    .message-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--kui-ai-spacing-xs);
+      min-width: 0; // Fix for flex overflow
+
+      .message-header {
+        display: flex;
+        align-items: center;
+        gap: var(--kui-ai-spacing-sm);
+
+        .message-author {
+          font-size: var(--kui-ai-font-size-sm);
+          font-weight: 600;
+          color: var(--kui-ai-text-primary);
+        }
+
+        .message-timestamp {
+          font-size: var(--kui-ai-font-size-sm);
+          color: var(--kui-ai-text-muted);
+        }
+      }
+
+      .message-bubble {
+        position: relative;
+
+        // Streaming cursor
+        &.streaming::after {
+          content: '▊';
+          animation: blink 1s infinite;
+          margin-left: 2px;
+        }
+
+        @keyframes blink {
+          0%,
+          50% {
+            opacity: 1;
+          }
+          51%,
+          100% {
+            opacity: 0;
+          }
+        }
+      }
+
+      .message-actions {
+        display: flex;
+        gap: var(--kui-ai-spacing-xs);
+        opacity: 0;
+        transition: opacity var(--kui-ai-transition-fast);
+
+        button {
+          @include icon-button;
+          font-size: var(--kui-ai-font-size-sm);
+          padding: var(--kui-ai-spacing-xs);
+
+          &:hover {
+            background: var(--kui-ai-bg-hover);
+          }
+        }
+      }
+
+      &:hover .message-actions {
+        opacity: 1;
+      }
+    }
+  }
+
+  // Markdown content styling
+  .message-markdown {
+    line-height: var(--kui-ai-line-height-normal);
+    font-size: var(--kui-ai-font-size-base);
+
+    // Headings
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: var(--kui-ai-spacing-md) 0 var(--kui-ai-spacing-sm);
+      font-weight: 600;
+      color: var(--kui-ai-text-primary);
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    h1 {
+      font-size: 1.5em;
+    }
+    h2 {
+      font-size: 1.3em;
+    }
+    h3 {
+      font-size: 1.1em;
+    }
+    h4,
+    h5,
+    h6 {
+      font-size: 1em;
+    }
+
+    // Paragraphs
+    p {
+      margin: var(--kui-ai-spacing-sm) 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    // Links
+    a {
+      color: var(--kui-ai-icon-primary);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--kui-ai-transition-fast);
+
+      &:hover {
+        border-bottom-color: var(--kui-ai-icon-primary);
+      }
+    }
+
+    // Lists
+    ul,
+    ol {
+      margin: var(--kui-ai-spacing-sm) 0;
+      padding-left: var(--kui-ai-spacing-lg);
+
+      li {
+        margin: var(--kui-ai-spacing-xs) 0;
+      }
+
+      ul,
+      ol {
+        margin: var(--kui-ai-spacing-xs) 0;
+      }
+    }
+
+    // Code blocks
+    pre {
+      margin: var(--kui-ai-spacing-sm) 0;
+      @include code-block;
+
+      code {
+        background: none;
+        border: none;
+        padding: 0;
+      }
+    }
+
+    // Inline code
+    code {
+      @include inline-code;
+    }
+
+    // Blockquotes
+    blockquote {
+      margin: var(--kui-ai-spacing-sm) 0;
+      padding-left: var(--kui-ai-spacing-md);
+      border-left: 3px solid var(--kui-ai-border-primary);
+      color: var(--kui-ai-text-secondary);
+      font-style: italic;
+    }
+
+    // Tables
+    table {
+      width: 100%;
+      margin: var(--kui-ai-spacing-sm) 0;
+      border-collapse: collapse;
+      font-size: var(--kui-ai-font-size-sm);
+
+      th,
+      td {
+        padding: var(--kui-ai-spacing-xs) var(--kui-ai-spacing-sm);
+        border: 1px solid var(--kui-ai-border-primary);
+        text-align: left;
+      }
+
+      th {
+        background: var(--kui-ai-bg-tertiary);
+        font-weight: 600;
+        color: var(--kui-ai-text-primary);
+      }
+
+      tr:nth-child(even) {
+        background: var(--kui-ai-bg-secondary);
+      }
+    }
+
+    // Horizontal rule
+    hr {
+      margin: var(--kui-ai-spacing-md) 0;
+      border: none;
+      border-top: 1px solid var(--kui-ai-border-primary);
+    }
+
+    // Images
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--kui-ai-border-radius-sm);
+      margin: var(--kui-ai-spacing-sm) 0;
+    }
+
+    // Task lists
+    input[type='checkbox'] {
+      margin-right: var(--kui-ai-spacing-xs);
+    }
+  }
+
+  // Typing indicator
+  .typing-indicator {
+    display: flex;
+    gap: var(--kui-ai-spacing-sm);
+
+    .message-avatar {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--kui-ai-icon-primary);
+      color: var(--kui-ai-text-inverse);
+    }
+
+    .typing-bubble {
+      background: var(--kui-ai-message-assistant-bg);
+      border-radius: var(--kui-ai-border-radius-lg);
+      padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+      display: flex;
+      gap: 4px;
+      align-items: center;
+
+      @include typing-indicator;
+    }
+  }
+
+  // Code block with copy button
+  .code-block-wrapper {
+    position: relative;
+    margin: var(--kui-ai-spacing-sm) 0;
+
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--kui-ai-spacing-xs) var(--kui-ai-spacing-sm);
+      background: var(--kui-ai-bg-tertiary);
+      border: 1px solid var(--kui-ai-code-border);
+      border-bottom: none;
+      border-radius: var(--kui-ai-border-radius-sm) var(--kui-ai-border-radius-sm) 0 0;
+
+      .language-label {
+        font-size: var(--kui-ai-font-size-sm);
+        color: var(--kui-ai-text-secondary);
+        font-weight: 500;
+      }
+
+      .copy-button {
+        @include icon-button;
+        font-size: var(--kui-ai-font-size-sm);
+
+        &.copied {
+          color: var(--kui-ai-icon-success);
+        }
+      }
+    }
+
+    pre {
+      margin: 0;
+      border-radius: 0 0 var(--kui-ai-border-radius-sm) var(--kui-ai-border-radius-sm);
+    }
+  }
+
+  // Loading skeleton
+  .message-skeleton {
+    display: flex;
+    gap: var(--kui-ai-spacing-sm);
+
+    .skeleton-avatar {
+      @include skeleton-loader(32px, 32px);
+      border-radius: 50%;
+    }
+
+    .skeleton-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--kui-ai-spacing-xs);
+
+      .skeleton-line {
+        @include skeleton-loader(1rem, 100%);
+
+        &.short {
+          width: 70%;
+        }
+
+        &.medium {
+          width: 85%;
+        }
+      }
+    }
+  }
+}

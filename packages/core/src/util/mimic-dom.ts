@@ -39,7 +39,7 @@ export default function () {
   global.window.requestAnimationFrame = function (callback: FrameRequestCallback) {
     const currTime = new Date().getTime()
     const timeToCall = Math.max(0, 16 - (currTime - lastAnimationFrame))
-    const id = setTimeout(() => callback(currTime + timeToCall), timeToCall) // eslint-disable-line n/no-callback-literal
+    const id = setTimeout(() => callback(currTime + timeToCall), timeToCall)
     lastAnimationFrame = currTime + timeToCall
     return id as unknown as number
   }

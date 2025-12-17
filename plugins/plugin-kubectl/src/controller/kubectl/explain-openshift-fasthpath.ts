@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/camelcase,@typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Explained } from './explain'
 

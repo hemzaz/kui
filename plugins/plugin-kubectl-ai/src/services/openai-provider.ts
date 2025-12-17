@@ -60,7 +60,7 @@ export class OpenAIProvider extends BaseAIProvider {
   /**
    * Stream completion with real-time chunks
    */
-  public async *streamCompletion(request: AICompletionRequest): AsyncIterator<AIChunk> {
+  public async *streamCompletion(request: AICompletionRequest): AsyncIterable<AIChunk> {
     const startTime = Date.now()
     let inputTokens = 0
     let outputTokens = 0

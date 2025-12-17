@@ -31,7 +31,7 @@ export interface AIProvider {
    * @param request - The completion request
    * @returns Async iterator of response chunks
    */
-  streamCompletion(request: AICompletionRequest): AsyncIterator<AIChunk>
+  streamCompletion(request: AICompletionRequest): AsyncIterable<AIChunk>
 
   /**
    * Send a prompt and get full response

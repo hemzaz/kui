@@ -1,0 +1,416 @@
+/*
+ * Copyright 2024 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'variables';
+@import 'mixins';
+
+.kui--ai-context-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--kui-ai-context-bg);
+  border: 1px solid var(--kui-ai-context-border);
+  border-radius: var(--kui-ai-border-radius-md);
+  overflow: hidden;
+  @include fade-in;
+
+  // Panel header
+  .context-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+    background: var(--kui-ai-context-header-bg);
+    border-bottom: 1px solid var(--kui-ai-context-border);
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: var(--kui-ai-spacing-sm);
+      font-size: var(--kui-ai-font-size-base);
+      font-weight: 600;
+      color: var(--kui-ai-text-primary);
+
+      .icon {
+        color: var(--kui-ai-icon-secondary);
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: var(--kui-ai-spacing-xs);
+
+      button {
+        @include icon-button;
+      }
+    }
+  }
+
+  // Panel content
+  .context-panel-content {
+    max-height: 300px;
+    overflow-y: auto;
+    @include custom-scrollbar;
+
+    &.empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--kui-ai-spacing-xl);
+      text-align: center;
+
+      .empty-icon {
+        font-size: 2rem;
+        color: var(--kui-ai-text-muted);
+        margin-bottom: var(--kui-ai-spacing-sm);
+        opacity: 0.5;
+      }
+
+      .empty-text {
+        color: var(--kui-ai-text-muted);
+        font-size: var(--kui-ai-font-size-sm);
+      }
+    }
+  }
+
+  // Context sections
+  .context-section {
+    @include collapsible-section;
+    border-bottom: 1px solid var(--kui-ai-border-secondary);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .collapsible-header {
+      padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: var(--kui-ai-spacing-sm);
+        flex: 1;
+        font-weight: 600;
+        font-size: var(--kui-ai-font-size-sm);
+        color: var(--kui-ai-text-primary);
+
+        .section-icon {
+          color: var(--kui-ai-icon-secondary);
+        }
+
+        .section-count {
+          @include badge;
+          background: var(--kui-ai-bg-tertiary);
+          color: var(--kui-ai-text-secondary);
+          margin-left: auto;
+        }
+      }
+
+      .toggle-icon {
+        color: var(--kui-ai-icon-secondary);
+      }
+    }
+
+    .collapsible-content {
+      padding: 0 var(--kui-ai-spacing-md) var(--kui-ai-spacing-sm);
+    }
+  }
+
+  // Context items
+  .context-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--kui-ai-spacing-xs);
+  }
+
+  .context-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--kui-ai-spacing-sm);
+    padding: var(--kui-ai-spacing-sm);
+    background: var(--kui-ai-bg-primary);
+    border: 1px solid var(--kui-ai-border-secondary);
+    border-radius: var(--kui-ai-border-radius-sm);
+    @include smooth-transition(background-color, border-color);
+
+    &:hover {
+      background: var(--kui-ai-bg-hover);
+      border-color: var(--kui-ai-border-primary);
+    }
+
+    &.selected {
+      background: var(--kui-ai-bg-hover);
+      border-color: var(--kui-ai-icon-primary);
+      box-shadow: 0 0 0 1px var(--kui-ai-icon-primary);
+    }
+
+    .item-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--kui-ai-icon-secondary);
+      font-size: 1rem;
+    }
+
+    .item-content {
+      flex: 1;
+      min-width: 0;
+
+      .item-title {
+        font-size: var(--kui-ai-font-size-sm);
+        font-weight: 500;
+        color: var(--kui-ai-text-primary);
+        margin-bottom: var(--kui-ai-spacing-xs);
+        @include truncate-text;
+      }
+
+      .item-description {
+        font-size: var(--kui-ai-font-size-sm);
+        color: var(--kui-ai-text-secondary);
+        @include truncate-multiline(2);
+      }
+
+      .item-metadata {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--kui-ai-spacing-xs);
+        margin-top: var(--kui-ai-spacing-xs);
+
+        .metadata-tag {
+          @include badge;
+          background: var(--kui-ai-bg-tertiary);
+          color: var(--kui-ai-text-secondary);
+          font-size: 0.75rem;
+        }
+      }
+    }
+
+    .item-actions {
+      display: flex;
+      gap: var(--kui-ai-spacing-xs);
+      opacity: 0;
+      transition: opacity var(--kui-ai-transition-fast);
+
+      button {
+        @include icon-button;
+        padding: var(--kui-ai-spacing-xs);
+        font-size: 0.875rem;
+      }
+    }
+
+    &:hover .item-actions {
+      opacity: 1;
+    }
+  }
+
+  // Resource context
+  .resource-context-item {
+    .resource-header {
+      display: flex;
+      align-items: center;
+      gap: var(--kui-ai-spacing-xs);
+      margin-bottom: var(--kui-ai-spacing-xs);
+
+      .resource-kind {
+        @include badge;
+        background: var(--kui-ai-icon-primary);
+        color: var(--kui-ai-text-inverse);
+        font-size: 0.75rem;
+      }
+
+      .resource-name {
+        font-weight: 600;
+        color: var(--kui-ai-text-primary);
+        font-size: var(--kui-ai-font-size-sm);
+      }
+    }
+
+    .resource-details {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--kui-ai-spacing-xs) var(--kui-ai-spacing-sm);
+      font-size: var(--kui-ai-font-size-sm);
+
+      .detail-label {
+        color: var(--kui-ai-text-secondary);
+        font-weight: 500;
+      }
+
+      .detail-value {
+        color: var(--kui-ai-text-primary);
+        @include truncate-text;
+
+        code {
+          @include inline-code;
+          font-size: 0.85em;
+        }
+      }
+    }
+  }
+
+  // Command context
+  .command-context-item {
+    .command-text {
+      font-family: var(--font-monospace);
+      font-size: var(--kui-ai-font-size-sm);
+      color: var(--kui-ai-text-primary);
+      background: var(--kui-ai-code-bg);
+      padding: var(--kui-ai-spacing-xs) var(--kui-ai-spacing-sm);
+      border-radius: var(--kui-ai-border-radius-sm);
+      margin-bottom: var(--kui-ai-spacing-xs);
+      word-break: break-all;
+    }
+
+    .command-timestamp {
+      font-size: 0.75rem;
+      color: var(--kui-ai-text-muted);
+    }
+  }
+
+  // Error context
+  .error-context-item {
+    border-left: 3px solid var(--kui-ai-icon-error);
+
+    .error-message {
+      font-size: var(--kui-ai-font-size-sm);
+      color: var(--kui-ai-icon-error);
+      font-weight: 500;
+      margin-bottom: var(--kui-ai-spacing-xs);
+    }
+
+    .error-details {
+      font-size: var(--kui-ai-font-size-sm);
+      color: var(--kui-ai-text-secondary);
+      font-family: var(--font-monospace);
+    }
+  }
+
+  // Panel footer
+  .context-panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+    border-top: 1px solid var(--kui-ai-context-border);
+    background: var(--kui-ai-context-header-bg);
+
+    .footer-info {
+      font-size: var(--kui-ai-font-size-sm);
+      color: var(--kui-ai-text-secondary);
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: var(--kui-ai-spacing-xs);
+
+      button {
+        @include button-base;
+        background: transparent;
+        color: var(--kui-ai-text-secondary);
+        padding: var(--kui-ai-spacing-xs) var(--kui-ai-spacing-sm);
+        font-size: var(--kui-ai-font-size-sm);
+
+        &:hover:not(:disabled) {
+          background: var(--kui-ai-bg-hover);
+          color: var(--kui-ai-text-primary);
+        }
+      }
+    }
+  }
+
+  // Add context button
+  .add-context-button {
+    margin: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+
+    button {
+      @include button-base;
+      width: 100%;
+      background: var(--kui-ai-button-secondary-bg);
+      color: var(--kui-ai-button-secondary-text);
+      border: 1px dashed var(--kui-ai-border-primary);
+
+      &:hover:not(:disabled) {
+        background: var(--kui-ai-button-secondary-hover);
+        border-style: solid;
+      }
+    }
+  }
+
+  // Context summary
+  .context-summary {
+    padding: var(--kui-ai-spacing-md);
+    background: var(--kui-ai-bg-secondary);
+    border-bottom: 1px solid var(--kui-ai-border-secondary);
+
+    .summary-title {
+      font-size: var(--kui-ai-font-size-sm);
+      font-weight: 600;
+      color: var(--kui-ai-text-primary);
+      margin-bottom: var(--kui-ai-spacing-xs);
+    }
+
+    .summary-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--kui-ai-spacing-sm);
+
+      .summary-item {
+        display: flex;
+        align-items: center;
+        gap: var(--kui-ai-spacing-xs);
+        font-size: var(--kui-ai-font-size-sm);
+        color: var(--kui-ai-text-secondary);
+
+        .icon {
+          color: var(--kui-ai-icon-secondary);
+        }
+
+        .count {
+          font-weight: 600;
+          color: var(--kui-ai-text-primary);
+        }
+      }
+    }
+  }
+
+  // Loading state
+  &.loading {
+    .context-panel-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--kui-ai-spacing-xl);
+
+      .loading-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid var(--kui-ai-border-primary);
+        border-top-color: var(--kui-ai-icon-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

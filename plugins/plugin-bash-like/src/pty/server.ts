@@ -76,7 +76,7 @@ const verifySession = (expectedCookie: SessionCookie) => {
       try {
         const actualSession: Session = JSON.parse(Buffer.from(sessionToken, 'base64').toString('utf-8'))
         if (actualSession.token === expectedCookie.session.token) {
-          cb(true) // eslint-disable-line n/no-callback-literal
+          cb(true)
           return
         } else {
           console.error('token found, but mismatched values', expectedCookie, actualSession)
@@ -88,7 +88,7 @@ const verifySession = (expectedCookie: SessionCookie) => {
 
     // intentional fall-through for invalid session
     console.error('invalid session for websocket upgrade', expectedCookie, cookies[expectedCookie.key], cookies)
-    cb(false, 401, 'Invalid authorization for websocket upgrade') // eslint-disable-line n/no-callback-literal
+    cb(false, 401, 'Invalid authorization for websocket upgrade')
   }
 }
 
@@ -97,33 +97,34 @@ const verifySession = (expectedCookie: SessionCookie) => {
  *
  */
 const getPort = (): Promise<number> =>
-  // eslint-disable-next-line no-async-promise-executor
-  new Promise(async (resolve, reject) => {
+  (async () => {
     const { createServer } = (await import('net')).default
 
-    const iter = () => {
-      const port = portRange
-      portRange += 1
+    return new Promise<number>((resolve, reject) => {
+      const iter = () => {
+        const port = portRange
+        portRange += 1
 
-      const server = createServer()
-      server.listen(port, () => {
-        server.once('close', function () {
-          resolve(port)
+        const server = createServer()
+        server.listen(port, () => {
+          server.once('close', function () {
+            resolve(port)
+          })
+          server.close()
         })
-        server.close()
-      })
 
-      server.on('error', (err: NodeJS.ErrnoException) => {
-        if (err.code === 'EADDRINUSE') {
-          iter()
-        } else {
-          reject(err)
-        }
-      })
-    }
+        server.on('error', (err: NodeJS.ErrnoException) => {
+          if (err.code === 'EADDRINUSE') {
+            iter()
+          } else {
+            reject(err)
+          }
+        })
+      }
 
-    iter()
-  })
+      iter()
+    })
+  })()
 
 // these bits are to avoid macOS garbage; those lines marked with //* here:
 // $ bash -i -l -c ls
@@ -145,7 +146,6 @@ const enableBashSessions = async () => {
 export const disableBashSessions = async (): Promise<ExitHandler> => {
   if (process.platform === 'darwin') {
     if (cacheHasBashSessionsDisable === undefined) {
-      // eslint-disable-next-line n/no-deprecated-api
       cacheHasBashSessionsDisable = await promisify(fs.exists)(BSD())
     }
 
@@ -211,11 +211,10 @@ export async function getShellOpts(): Promise<Shell> {
   const kuirc = (await import('./kuirc')).default
   const bashShellOpts = process.platform === 'win32' ? undefined : ['--rcfile', await kuirc, '-i', '-c', '--']
 
-  const proxyConfig: { enabled?: boolean; shellExe?: string; shellOpts?: string[] } = await import(
-    '@kui-shell/client/config.d/proxy.json'
-  ).catch(() => {
-    return undefined
-  })
+  const proxyConfig: { enabled?: boolean; shellExe?: string; shellOpts?: string[] } =
+    await import('@kui-shell/client/config.d/proxy.json').catch(() => {
+      return undefined
+    })
   const s = (proxyConfig && proxyConfig.shellExe) || ''
   const o = (proxyConfig && proxyConfig.shellOpts) || []
   const shellExe = s || (process.platform === 'win32' ? 'powershell.exe' : '/bin/bash')
@@ -397,8 +396,7 @@ export const onConnection = (exitNow: ExitHandler, uid?: number, gid?: number) =
         }
 
         case 'exec': {
-          // eslint-disable-next-line no-async-promise-executor
-          shells[msg.uuid] = new Promise(async (resolve, reject) => {
+          shells[msg.uuid] = (async () => {
             try {
               const env = Object.assign({}, process.env, msg.env, { KUI: 'true' })
               if (process.env.DEBUG && (!msg.env || !msg.env.DEBUG)) {
@@ -433,7 +431,6 @@ export const onConnection = (exitNow: ExitHandler, uid?: number, gid?: number) =
               ;(shell as any).on('data', (data: string) => {
                 ws.send(JSON.stringify({ type: 'data', data, uuid: msg.uuid }))
               })
-
               ;(shell as any).on('exit', (exitCode: number) => {
                 shell = undefined
                 if (msg.uuid) delete shells[msg.uuid]
@@ -442,12 +439,12 @@ export const onConnection = (exitNow: ExitHandler, uid?: number, gid?: number) =
               })
 
               ws.send(JSON.stringify({ type: 'state', state: 'ready', uuid: msg.uuid }))
-              resolve(shell)
+              return shell
             } catch (err) {
               console.error('could not exec', err)
-              reject(err)
+              throw err
             }
-          })
+          })()
 
           break
         }
@@ -520,8 +517,7 @@ export const main = async (
   } else {
     const { WebSocketServer } = await import('ws')
 
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async resolve => {
+    return (async () => {
       const idx = servers.length
       const cleanupCallback = await disableBashSessions()
       const exitNow = async (exitCode: number) => {
@@ -557,17 +553,19 @@ export const main = async (
         }
         server.on('upgrade', doUpgrade)
 
-        resolve({ wss, port: cachedPort, exitNow })
+        return { wss, port: cachedPort, exitNow }
       } else {
         cachedPort = await getPort()
         const server = createDefaultServer()
-        server.listen(cachedPort, async () => {
-          const wss = (cachedWss = new WebSocketServer({ server }))
-          servers.push({ wss: cachedWss, server })
-          resolve({ wss, port: cachedPort, exitNow })
+        return new Promise<{ wss: Server; port: number; exitNow: ExitHandler }>(resolve => {
+          server.listen(cachedPort, async () => {
+            const wss = (cachedWss = new WebSocketServer({ server }))
+            servers.push({ wss: cachedWss, server })
+            resolve({ wss, port: cachedPort, exitNow })
+          })
         })
       }
-    }).then(({ wss, port, exitNow }: { wss: Server; port: number; exitNow: ExitHandler }) => {
+    })().then(({ wss, port, exitNow }: { wss: Server; port: number; exitNow: ExitHandler }) => {
       if (!expectedCookie) {
         const debug = Debug(debugStr)
         debug('listening for connection')
@@ -594,8 +592,7 @@ export default (commandTree: Registrar) => {
   commandTree.listen(
     '/bash/websocket/stdio',
     () =>
-      // eslint-disable-next-line no-async-promise-executor
-      new Promise(async (resolve, reject) => {
+      (async () => {
         try {
           await new StdioChannelKuiSide().init((exitCode: number) => {
             const debug = Debug(debugStr)
@@ -604,9 +601,9 @@ export default (commandTree: Registrar) => {
             // resolve(true)
           })
         } catch (err) {
-          reject(err)
+          throw err
         }
-      }),
+      })(),
     { requiresLocal: true }
   )
 

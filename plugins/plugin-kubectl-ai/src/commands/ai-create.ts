@@ -84,7 +84,7 @@ async function aiCreateHandler(args: Arguments<CreateOptions>): Promise<string> 
     const response = await provider.complete({
       prompt,
       systemPrompt: MANIFEST_GENERATION_PROMPT,
-      streaming: false
+      stream: false
     })
 
     // Extract YAML from response (may be wrapped in markdown code blocks)
@@ -125,14 +125,7 @@ async function aiCreateHandler(args: Arguments<CreateOptions>): Promise<string> 
       }
     }
 
-    return formatCreateResponse(
-      description.trim(),
-      manifest,
-      parsedOptions,
-      applyResult,
-      response.usage,
-      response.cost
-    )
+    return formatCreateResponse(description.trim(), manifest, parsedOptions, applyResult, response.usage, response.cost)
   } catch (error) {
     const err = error as AIProviderError
     throw new UsageError({

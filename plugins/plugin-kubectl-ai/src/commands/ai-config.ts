@@ -16,6 +16,7 @@
 
 import { Arguments, Registrar, UsageError } from '@kui-shell/core'
 import type { AIConfig } from '../types/ai-types'
+import { loadConfig, saveConfig, resetConfig } from '../utils/config-loader'
 
 interface ConfigOptions {
   provider?: 'anthropic' | 'openai' | 'azure' | 'ollama' | 'custom'
@@ -28,60 +29,6 @@ interface ConfigOptions {
   caching?: boolean
   reset?: boolean
   show?: boolean
-}
-
-/**
- * Get default AI configuration
- */
-function getDefaultConfig(): AIConfig {
-  return {
-    provider: 'anthropic',
-    model: 'claude-3-5-sonnet-20241022',
-    maxTokens: 4096,
-    temperature: 0.7,
-    timeout: 60,
-    privacy: {
-      sendClusterMetadata: true,
-      sendResourceNames: true,
-      sendLogs: false,
-      sendPodNames: true
-    },
-    streaming: true,
-    caching: true,
-    cacheTTL: 300,
-    costAlerts: true
-  }
-}
-
-/**
- * Load configuration from environment or storage
- * TODO: Implement persistent storage
- */
-function loadConfig(): AIConfig {
-  // For now, return default config with env overrides
-  const config = getDefaultConfig()
-
-  if (process.env.AI_PROVIDER) {
-    config.provider = process.env.AI_PROVIDER as unknown as 'anthropic' | 'openai' | 'azure' | 'ollama' | 'custom'
-  }
-  if (process.env.AI_MODEL) {
-    config.model = process.env.AI_MODEL
-  }
-  if (process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY || process.env.OPENAI_API_KEY) {
-    config.apiKey =
-      process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY || process.env.OPENAI_API_KEY || undefined
-  }
-
-  return config
-}
-
-/**
- * Save configuration to storage
- * TODO: Implement persistent storage
- */
-function saveConfig(config: AIConfig): void {
-  // TODO: Implement config persistence
-  console.log('Config saved (not yet implemented):', config)
 }
 
 /**
@@ -138,12 +85,12 @@ async function aiConfigHandler(args: Arguments<ConfigOptions>): Promise<string> 
   const { parsedOptions } = args
 
   // Load current configuration
-  let config = loadConfig()
+  let config = await loadConfig()
 
   // Handle reset flag
   if (parsedOptions.reset) {
-    config = getDefaultConfig()
-    saveConfig(config)
+    config = resetConfig()
+    await saveConfig(config)
     return 'AI configuration reset to defaults\n\n' + formatConfig(config)
   }
 
@@ -210,7 +157,7 @@ async function aiConfigHandler(args: Arguments<ConfigOptions>): Promise<string> 
   }
 
   if (updated) {
-    saveConfig(config)
+    await saveConfig(config)
     return 'AI configuration updated successfully\n\n' + formatConfig(config)
   }
 

@@ -83,7 +83,7 @@ async function aiAskHandler(args: Arguments<AskOptions>): Promise<string | Xterm
     // Prepare completion request
     const request = {
       prompt: question.trim(),
-      streaming: parsedOptions.streaming || config.streaming
+      stream: parsedOptions.streaming || config.streaming
     }
 
     // Gather cluster context if requested
@@ -113,7 +113,7 @@ async function aiAskHandler(args: Arguments<AskOptions>): Promise<string | Xterm
     }
 
     // Handle streaming vs non-streaming
-    if (request.streaming) {
+    if (request.stream) {
       // For streaming, we'll accumulate chunks and return as string
       // In the future, we could use XtermResponse for true streaming
       let fullResponse = ''

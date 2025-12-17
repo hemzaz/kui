@@ -7,21 +7,23 @@ This guide helps AI assistants understand and work effectively with the Kui code
 Kui is a framework that enhances command-line interfaces with graphical elements. It transforms traditional ASCII terminal output into interactive, visual experiences. The primary use case is Kubernetes tooling, where `kubectl` commands are enhanced with sortable tables, clickable elements, and rich visualizations.
 
 **Key Facts:**
+
 - Built with TypeScript, React, and Rust (Tauri)
-- Formerly used Electron, now migrating to Tauri for better performance
+- Successfully migrated from Electron to Tauri (migration complete)
 - Monorepo structure with multiple packages and plugins
 - 2-3x faster than native `kubectl` for many operations
-- Supports desktop apps (Tauri/Electron) and web-based deployments
-- Tauri provides 10x smaller bundles and 50% less memory usage
+- Supports desktop apps (Tauri primary, Electron legacy) and web-based deployments
+- Tauri provides 10x smaller bundles, 50% less memory, and 4x faster startup
 
 ## Repository Structure
 
 ```
 kui/
-├── src-tauri/          # Rust backend (Tauri)
+├── src-tauri/          # Rust backend (Tauri) - PRIMARY RUNTIME
 │   ├── Cargo.toml     # Rust dependencies
 │   ├── tauri.conf.json # Tauri configuration
 │   ├── icons/         # Application icons
+│   ├── capabilities/  # Security capabilities
 │   └── src/           # Rust source code
 │       ├── main.rs    # Main entry point
 │       ├── commands.rs # Command handlers
@@ -30,6 +32,8 @@ kui/
 │       └── window.rs  # Window utilities
 ├── packages/           # Core framework components
 │   ├── core/          # Core APIs, REPL, command processing
+│   │   └── src/main/
+│   │       └── tauri-bridge.ts  # Unified IPC bridge
 │   ├── builder/       # Build tools for Electron apps (legacy)
 │   ├── react/         # React components and UI framework
 │   ├── webpack/       # Webpack configuration and loaders
@@ -42,6 +46,8 @@ kui/
 │   ├── plugin-*-themes/        # Theme providers
 │   └── [others]/              # Git, S3, Electron, etc.
 └── docs/              # API documentation
+    ├── TAURI-BRIDGE-USAGE.md   # IPC bridge documentation
+    └── MIGRATING_TO_TAURI.md   # User migration guide
 ```
 
 ## Core Architecture
@@ -81,20 +87,25 @@ Each plugin exports a `preload` function that receives a `Registrar` to register
 ### @kui-shell/core
 
 The foundation of Kui. Contains:
+
 - REPL (Read-Eval-Print-Loop) implementation
 - Command registration and routing
 - Event system
 - Plugin loading mechanism
 - Core response types (Table, Cell, Row)
+- **Tauri Bridge**: Unified IPC for Electron and Tauri
 
 **Important files:**
+
 - `src/repl/exec.ts` - Command execution
 - `src/core/command-tree.ts` - Command routing
 - `src/models/` - Core data models
+- `src/main/tauri-bridge.ts` - IPC abstraction layer
 
 ### @kui-shell/react
 
 React components for the UI:
+
 - Client shell and tab management
 - Card/Table renderers
 - Terminal (xterm.js) integration
@@ -103,6 +114,7 @@ React components for the UI:
 ### @kui-shell/plugin-kubectl
 
 The most feature-rich plugin, providing:
+
 - Enhanced kubectl command output
 - Resource drilldown and navigation
 - YAML/JSON editors with validation
@@ -116,40 +128,87 @@ The most feature-rich plugin, providing:
 ```bash
 npm ci                  # Install dependencies
 npm run compile         # Build TypeScript
-npm run link            # Link packages
+npm run link            # Link packages (compatibility command)
 ```
+
+### Prerequisites for Tauri Development
+
+**Rust Toolchain:**
+
+```bash
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Verify installation
+rustc --version
+cargo --version
+```
+
+**Platform Dependencies:**
+
+- **macOS**: Xcode Command Line Tools (`xcode-select --install`)
+- **Linux**: GTK3, WebKit2GTK, and development libraries (see TAURI_MIGRATION.md)
+- **Windows**: Microsoft Visual C++ Build Tools, WebView2 Runtime
 
 ### Development Mode
 
 ```bash
-npm run watch           # Watch mode for Electron
-npm run watch:browser   # Watch mode for browser
+# Tauri development (RECOMMENDED)
+npm run open            # Starts both webpack dev server and Tauri app
+
+# Or separately
+npm run watch:browser   # Terminal 1: Webpack dev server
+npm run tauri:dev      # Terminal 2: Tauri app
+
+# Browser-only mode (for frontend development)
+npm run watch:browser
+# Then open http://localhost:9080
 ```
 
 ### Building
 
-**Tauri (Recommended):**
+**Tauri (Primary):**
+
 ```bash
 npm run build:tauri:mac:amd64    # Mac Intel
 npm run build:tauri:mac:arm64    # Mac Apple Silicon
-npm run build:tauri:linux:amd64  # Linux
-npm run build:tauri:win32:amd64  # Windows
+npm run build:tauri:linux:amd64  # Linux x64
+npm run build:tauri:linux:arm64  # Linux ARM64
+npm run build:tauri:win32:amd64  # Windows x64
 ```
 
 **Electron (Legacy):**
+
 ```bash
 npm run build:electron:mac:amd64    # Mac Intel
 npm run build:electron:mac:arm64    # Mac Apple Silicon
-npm run build:electron:linux:amd64  # Linux
-npm run build:electron:win32:amd64  # Windows
+npm run build:electron:linux:amd64  # Linux x64
+npm run build:electron:win32:amd64  # Windows x64
 ```
+
+**Build Output:**
+
+- Tauri: `src-tauri/target/release/bundle/`
+- Electron: `dist/electron/Kui-*/`
 
 ### Testing
 
 ```bash
-npm run test            # Run full test suite
+# Full test suite
+npm run test
+
+# Tauri-specific tests
+npm run test:tauri:unit          # Unit tests
+npm run test:tauri:e2e           # End-to-end tests
+npm run test:tauri:integration   # Integration tests
+npm run test:tauri:performance   # Performance benchmarks
+npm run test:tauri:all           # All Tauri tests
+
+# Browser tests
+npm run test:browser
+
+# Legacy Electron tests
 npm run test1           # Run with PORT_OFFSET=0
-npm run test:browser    # Browser-specific tests
 ```
 
 ## Making Changes
@@ -162,6 +221,7 @@ npm run test:browser    # Browser-specific tests
 4. Add tests in plugin's test directory
 
 Example:
+
 ```typescript
 export default async (commandTree: Registrar) => {
   commandTree.listen(
@@ -183,12 +243,70 @@ export default async (commandTree: Registrar) => {
 
 1. Locate React component in `packages/react` or plugin
 2. Ensure TypeScript types are maintained
-3. Test in both Electron and browser contexts
+3. Test in both Tauri and browser contexts
 4. Verify theme compatibility
+
+### Working with IPC (Tauri Bridge)
+
+**IMPORTANT**: Always use the Tauri bridge for IPC communication. Never import Electron directly.
+
+**Correct:**
+
+```typescript
+import { getIpcRenderer } from '@kui-shell/core/src/main/tauri-bridge'
+
+const ipc = getIpcRenderer()
+const result = await ipc.invoke('my-channel', data)
+```
+
+**Incorrect:**
+
+```typescript
+const { ipcRenderer } = require('electron') // ❌ Don't do this
+```
+
+**Runtime Detection:**
+
+```typescript
+import { isTauriRuntime, isElectronRuntime } from '@kui-shell/core/src/main/tauri-bridge'
+
+if (isTauriRuntime()) {
+  // Tauri-specific code
+} else if (isElectronRuntime()) {
+  // Electron-specific code
+}
+```
+
+### Adding Tauri Backend Features
+
+When adding features that require native functionality:
+
+1. **Define Rust command** in `src-tauri/src/commands.rs`:
+
+```rust
+#[tauri::command]
+async fn my_command(param: String) -> Result<String, String> {
+    Ok(format!("Processed: {}", param))
+}
+```
+
+2. **Register command** in `src-tauri/src/main.rs`:
+
+```rust
+.invoke_handler(tauri::generate_handler![
+    my_command,
+    // ... other commands
+])
+```
+
+3. **Add TypeScript types** to bridge
+4. **Document** in `docs/TAURI-BRIDGE-USAGE.md`
+5. **Add tests**
 
 ### Working with Kubernetes Resources
 
 The kubectl plugin provides utilities for:
+
 - Resource fetching: `src/controller/kubectl/exec.ts`
 - Resource formatting: `src/view/modes/`
 - Resource navigation: `src/controller/kubectl/drilldown.ts`
@@ -229,13 +347,17 @@ For long-running operations:
 return {
   apiVersion: 'kui-shell/v1',
   kind: 'XtermResponse',
-  rows: [{
-    cells: [{
-      apiVersion: 'kui-shell/v1',
-      kind: 'XtermResponseCell',
-      ptyProcess: childProcess
-    }]
-  }]
+  rows: [
+    {
+      cells: [
+        {
+          apiVersion: 'kui-shell/v1',
+          kind: 'XtermResponseCell',
+          ptyProcess: childProcess
+        }
+      ]
+    }
+  ]
 }
 ```
 
@@ -246,13 +368,17 @@ return {
 3. **Exports**: Use explicit exports, avoid `export *`
 4. **Error handling**: Use `UsageError` for user-facing errors
 5. **Internationalization**: Use i18n strings where user-facing
+6. **IPC Communication**: Always use Tauri bridge, never import Electron directly
+7. **Runtime Detection**: Use bridge utilities for detecting Tauri vs Electron
+8. **Rust Code**: Follow Rust best practices, run `cargo fmt` and `cargo clippy`
 
 ## Testing Guidelines
 
 - Unit tests alongside source files
 - Integration tests in `tests/` directories
 - Browser tests use headless Chrome
-- Electron tests use spectron
+- Tauri tests use Playwright
+- Test both Tauri and browser modes when possible
 
 Test files follow pattern: `*.spec.ts` or located in `tests/` directories
 
@@ -265,45 +391,66 @@ Test files follow pattern: `*.spec.ts` or located in `tests/` directories
 - Tree-shaking enabled for production
 - Source maps in development
 
-### Tauri Packaging (New)
+### Tauri Packaging (Primary)
 
-- Backend: `src-tauri/` (Rust)
-- Configuration: `src-tauri/tauri.conf.json`
-- Icons: `src-tauri/icons/`
-- Build output: `src-tauri/target/release/bundle/`
-- Platform bundles: DMG (macOS), DEB/AppImage (Linux), MSI (Windows)
+- **Backend**: `src-tauri/` (Rust)
+- **Configuration**: `src-tauri/tauri.conf.json`
+- **Icons**: `src-tauri/icons/`
+- **Capabilities**: `src-tauri/capabilities/` (security permissions)
+- **Build output**: `src-tauri/target/release/bundle/`
+- **Platform bundles**: DMG (macOS), DEB/AppImage (Linux), MSI (Windows)
+- **Bundle size**: ~15 MB (10x smaller than Electron)
+- **Startup time**: ~0.5s (4x faster than Electron)
+- **Memory usage**: ~80 MB (50% less than Electron)
 
 ### Electron Packaging (Legacy)
 
-- Builder: `packages/builder/`
-- Icons and assets: Set via `seticon.js`
-- Platform-specific handling for PTY, native modules
-- Code signing for macOS
+- **Builder**: `packages/builder/`
+- **Icons and assets**: Set via `seticon.js`
+- **Platform-specific handling** for PTY, native modules
+- **Code signing** for macOS
+- **Status**: Maintained for compatibility, Tauri is recommended
 
 ## Tauri vs Electron
 
 ### Why Tauri?
 
 **Benefits:**
+
 - **10x smaller bundle size** (~15 MB vs ~150 MB)
 - **50% less memory usage** (~80 MB vs ~150 MB)
 - **4x faster startup** (~0.5s vs ~2s)
 - **Better security** (Rust memory safety, no Node.js in renderer)
 - **Modern architecture** (uses system webview)
+- **Active development** (strong community support)
 
 ### Migration Status
 
-Kui now supports both Electron (legacy) and Tauri (new):
+Migration is **COMPLETE**. Tauri is now the primary runtime:
 
 ```bash
 # Run with Tauri (recommended)
-npm run open:tauri
-
-# Run with Electron (legacy)
 npm run open
+
+# Run with Electron (legacy, for compatibility testing)
+npm run open:electron
 ```
 
-See `TAURI_MIGRATION.md` for detailed migration information.
+See `TAURI_MIGRATION.md` for technical details and `docs/MIGRATING_TO_TAURI.md` for user guide.
+
+### Feature Parity
+
+All Electron features have been implemented in Tauri:
+
+- ✅ Window management
+- ✅ Menu system (native menus on all platforms)
+- ✅ IPC communication (via Tauri bridge)
+- ✅ Clipboard operations
+- ✅ Screenshot capture
+- ✅ File dialogs
+- ✅ Shell command execution
+- ✅ External URL opening
+- ✅ All plugins working
 
 ## Performance Considerations
 
@@ -312,13 +459,20 @@ See `TAURI_MIGRATION.md` for detailed migration information.
 3. **Web workers**: For heavy computation
 4. **Streaming**: For large datasets
 5. **Caching**: Command output caching where appropriate
+6. **Rust backend**: Native performance for backend operations
+7. **System webview**: Shared with OS, no separate Chromium bundle
 
 ## Debugging
 
-### Electron DevTools
+### Tauri DevTools
 
 ```bash
-npm run watch    # Launches with DevTools
+# Enable Rust logging
+export RUST_LOG=debug
+npm run open
+
+# Frontend debugging (browser DevTools available in app)
+npm run open  # DevTools available via menu or Cmd+Shift+I
 ```
 
 ### Browser Mode
@@ -329,33 +483,46 @@ npm run watch:browser  # Accessible at localhost:9080
 
 ### Logs
 
-- Electron logs: Check console in DevTools
+- Tauri backend logs: Console output when `RUST_LOG=debug`
+- Tauri frontend logs: Browser DevTools in app
 - PTY issues: Enable debug mode in settings
 - Command execution: Use REPL debug commands
+- IPC debugging: `localStorage.debug = 'main/tauri-bridge'`
 
 ## Common Issues
 
 ### Build Failures
 
-- Clear dist: `npm run compile:clean`
-- Rebuild node modules: `npm run pty:rebuild`
-- Clear cache: Remove `node_modules` and reinstall
+- **Clear dist**: `npm run compile:clean`
+- **Rebuild node modules**: `npm run pty:rebuild`
+- **Clear cache**: Remove `node_modules` and reinstall
+- **Rust issues**: Run `cargo clean` in `src-tauri/`
+- **Missing dependencies**: See TAURI_MIGRATION.md for platform-specific requirements
 
 ### Test Failures
 
-- Port conflicts: Adjust `PORT_OFFSET`
-- Timing issues: Increase timeouts in test specs
-- Browser issues: Update Chrome/Electron version
+- **Port conflicts**: Adjust `PORT_OFFSET`
+- **Timing issues**: Increase timeouts in test specs
+- **Browser issues**: Update Chrome/Playwright version
+- **Tauri tests**: Ensure Rust toolchain is installed
 
 ### Module Resolution
 
 - Check `tsconfig.json` paths
 - Verify package.json exports
 - Ensure `npm run link` has been run
+- Check Tauri bridge imports are correct
+
+### Tauri-Specific Issues
+
+- **WebView errors**: Install platform webview (WebKit2GTK on Linux, WebView2 on Windows)
+- **Rust compilation errors**: Run `cargo clippy` for diagnostics
+- **IPC failures**: Check command is registered in `tauri::generate_handler![]`
+- **Menu not working**: Verify menu setup in `src-tauri/src/menu.rs`
 
 ## Git Workflow
 
-1. Branch from main
+1. Branch from master
 2. Make focused commits
 3. Run tests before pushing
 4. PR with clear description
@@ -364,30 +531,64 @@ npm run watch:browser  # Accessible at localhost:9080
 ## Resources
 
 - [API Documentation](docs/api/README.md)
+- [Tauri Bridge Usage](docs/TAURI-BRIDGE-USAGE.md)
+- [Tauri Migration Guide](TAURI_MIGRATION.md)
+- [User Migration Guide](docs/MIGRATING_TO_TAURI.md)
 - [Medium Blog](https://medium.com/the-graphical-terminal)
 - [Template Repository](https://github.com/kui-shell/KuiClientTemplate)
 - [Issues](https://github.com/IBM/kui/issues)
+- [Tauri Documentation](https://tauri.app)
+- [Rust Book](https://doc.rust-lang.org/book/)
 
 ## Quick Reference
 
 **File Search:**
+
 - Command handlers: `plugins/*/src/controller/`
 - UI components: `packages/react/src/` or `plugins/*/src/view/`
 - Tests: `*/tests/` or `*.spec.ts`
 - Types: `*/src/**/*.d.ts`
+- Tauri backend: `src-tauri/src/*.rs`
+- IPC bridge: `packages/core/src/main/tauri-bridge.ts`
 
 **Key Concepts:**
+
 - REPL = Read-Eval-Print-Loop (the command processor)
 - Tab = A workspace with command history
 - Block = A single command execution
 - Split = Side-by-side view layout
 - Mode = A view/tab within a response
+- Bridge = Unified IPC layer (Electron/Tauri compatibility)
+- Runtime = Execution environment (Tauri, Electron, or Browser)
 
 ## Contributing Philosophy
 
 Kui values:
-- **Performance**: Fast startup, fast command execution
+
+- **Performance**: Fast startup, fast command execution (Tauri helps achieve this)
 - **Extensibility**: Plugin-based architecture
-- **Flexibility**: Support both Electron and browser
+- **Flexibility**: Support Tauri (primary), Electron (legacy), and browser
 - **Polish**: Smooth animations, responsive UI
 - **Developer experience**: Clear APIs, good documentation
+- **Security**: Rust memory safety, secure IPC
+- **Modern stack**: TypeScript, React, Rust, Tauri
+
+## Best Practices for Tauri Development
+
+1. **Always use the Tauri bridge** for IPC - never import Electron directly
+2. **Test in both Tauri and browser modes** - ensure compatibility
+3. **Follow Rust conventions** - use `cargo fmt` and `cargo clippy`
+4. **Document IPC commands** - update TAURI-BRIDGE-USAGE.md
+5. **Consider security** - use Tauri's capability system properly
+6. **Optimize for performance** - leverage Rust backend for heavy operations
+7. **Handle errors gracefully** - use Result types in Rust
+8. **Keep bundles small** - avoid unnecessary dependencies
+9. **Test cross-platform** - verify on macOS, Linux, and Windows when possible
+10. **Update documentation** - keep docs in sync with code changes
+
+---
+
+**Primary Runtime**: Tauri ✅
+**Migration Status**: Complete ✅
+**Recommended for**: New development and production use
+**Last Updated**: 2025-12-17
