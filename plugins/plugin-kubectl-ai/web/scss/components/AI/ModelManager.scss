@@ -1,0 +1,365 @@
+/*
+ * Copyright 2025 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.kui-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+}
+
+.kui-modal-content {
+  background: var(--color-base02);
+  border: 1px solid var(--color-base03);
+  border-radius: 8px;
+  padding: 0;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.kui-model-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  min-width: 800px;
+}
+
+.kui-model-manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-base03);
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color-base07);
+  }
+
+  .kui-button-icon {
+    background: none;
+    border: none;
+    color: var(--color-base05);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--color-base03);
+      color: var(--color-base07);
+    }
+  }
+}
+
+.kui-model-manager-error {
+  padding: 0.75rem;
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  border-radius: 6px;
+  color: #ff3b30;
+}
+
+.kui-model-manager-success {
+  padding: 0.75rem;
+  background: rgba(52, 199, 89, 0.1);
+  border: 1px solid rgba(52, 199, 89, 0.3);
+  border-radius: 6px;
+  color: #34c759;
+}
+
+.kui-model-manager-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.kui-model-manager-provider-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+    color: var(--color-base06);
+  }
+
+  select {
+    padding: 0.5rem 1rem;
+    background: var(--color-base01);
+    border: 1px solid var(--color-base03);
+    border-radius: 6px;
+    color: var(--color-base07);
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--color-base04);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-base0C);
+      box-shadow: 0 0 0 3px rgba(102, 187, 235, 0.1);
+    }
+  }
+}
+
+.kui-model-manager-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.kui-button {
+  padding: 0.5rem 1rem;
+  background: var(--color-base03);
+  border: 1px solid var(--color-base04);
+  border-radius: 6px;
+  color: var(--color-base07);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--color-base04);
+    border-color: var(--color-base05);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.kui-button-primary {
+  background: var(--color-base0D);
+  border-color: var(--color-base0D);
+  color: white;
+
+  &:hover {
+    background: var(--color-base0E);
+    border-color: var(--color-base0E);
+  }
+}
+
+.kui-button-danger {
+  background: rgba(255, 59, 48, 0.1);
+  border-color: rgba(255, 59, 48, 0.3);
+  color: #ff3b30;
+
+  &:hover {
+    background: rgba(255, 59, 48, 0.2);
+    border-color: rgba(255, 59, 48, 0.5);
+  }
+}
+
+.kui-button-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
+}
+
+.kui-model-manager-list {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+
+    thead {
+      background: var(--color-base01);
+
+      th {
+        padding: 0.75rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--color-base06);
+        border-bottom: 2px solid var(--color-base03);
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid var(--color-base02);
+
+        &:hover {
+          background: var(--color-base01);
+        }
+      }
+
+      td {
+        padding: 0.75rem;
+        color: var(--color-base05);
+
+        code {
+          background: var(--color-base01);
+          padding: 0.125rem 0.375rem;
+          border-radius: 3px;
+          font-family: monospace;
+          font-size: 0.8125rem;
+          color: var(--color-base0C);
+        }
+      }
+    }
+  }
+}
+
+.kui-model-manager-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-base05);
+
+  p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+}
+
+.kui-model-manager-footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-base03);
+  font-size: 0.875rem;
+  color: var(--color-base05);
+
+  p {
+    margin: 0.5rem 0;
+  }
+
+  code {
+    background: var(--color-base01);
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    font-family: monospace;
+    color: var(--color-base0C);
+  }
+
+  strong {
+    color: var(--color-base06);
+  }
+}
+
+.kui-model-editor {
+  padding: 1.5rem;
+  background: var(--color-base01);
+  border: 1px solid var(--color-base03);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0 0 1rem 0;
+    color: var(--color-base07);
+  }
+}
+
+.kui-model-editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.kui-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+
+  label {
+    font-weight: 600;
+    color: var(--color-base06);
+    font-size: 0.875rem;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  textarea {
+    padding: 0.5rem 0.75rem;
+    background: var(--color-base02);
+    border: 1px solid var(--color-base03);
+    border-radius: 6px;
+    color: var(--color-base07);
+    font-size: 0.875rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-base0C);
+      box-shadow: 0 0 0 3px rgba(102, 187, 235, 0.1);
+    }
+
+    &::placeholder {
+      color: var(--color-base04);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  small {
+    color: var(--color-base04);
+    font-size: 0.75rem;
+  }
+
+  input[type='checkbox'] {
+    margin-right: 0.5rem;
+  }
+}
+
+.kui-model-editor-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.kui-ai-settings-label-with-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.kui-ai-settings-button-link {
+  background: none;
+  border: none;
+  color: var(--color-base0D);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--color-base03);
+    color: var(--color-base0E);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}

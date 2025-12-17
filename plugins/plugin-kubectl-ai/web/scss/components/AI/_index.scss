@@ -26,6 +26,9 @@
 @import 'MessageList';
 @import 'ContextPanel';
 @import 'AISettings';
+@import 'ModelManager';
+@import 'AIContextMenu';
+@import 'AITooltip';
 
 // Global AI plugin styles
 body[kui-theme-style] {
@@ -33,7 +36,9 @@ body[kui-theme-style] {
   .kui--ai-chat-sidebar,
   .kui--ai-message-list,
   .kui--ai-context-panel,
-  .kui--ai-settings {
+  .kui--ai-settings,
+  .kui-ai-context-menu,
+  .kui-ai-tooltip {
     font-family: var(--font-sans-serif);
   }
 
@@ -41,7 +46,8 @@ body[kui-theme-style] {
   .kui--ai-message-list code,
   .kui--ai-message-list pre,
   .kui--ai-context-panel code,
-  .kui--ai-settings textarea {
+  .kui--ai-settings textarea,
+  .kui-ai-tooltip code {
     font-family: var(--font-monospace);
   }
 
@@ -49,7 +55,9 @@ body[kui-theme-style] {
   .kui--ai-chat-sidebar,
   .kui--ai-message-list,
   .kui--ai-context-panel,
-  .kui--ai-settings {
+  .kui--ai-settings,
+  .kui-ai-context-menu,
+  .kui-ai-tooltip {
     * {
       scroll-behavior: smooth;
     }
@@ -60,7 +68,9 @@ body[kui-theme-style] {
 .kui--ai-chat-sidebar,
 .kui--ai-message-list,
 .kui--ai-context-panel,
-.kui--ai-settings {
+.kui--ai-settings,
+.kui-ai-context-menu,
+.kui-ai-tooltip {
   // Focus visible styles
   *:focus-visible {
     outline: 2px solid var(--kui-ai-icon-primary);

@@ -221,6 +221,29 @@ export const DEFAULT_AI_CONFIG: AIConfig = {
 }
 
 /**
+ * Model information with display metadata
+ */
+export interface ModelInfo {
+  id: string
+  name: string
+  description?: string
+  contextWindow?: number
+  recommended?: boolean
+}
+
+/**
+ * Model configuration for all providers
+ */
+export interface ModelConfiguration {
+  anthropic: ModelInfo[]
+  openai: ModelInfo[]
+  azure: ModelInfo[]
+  ollama: ModelInfo[]
+  lastUpdated?: string
+  version?: string
+}
+
+/**
  * AI Provider error types
  */
 export class AIProviderError extends Error {
