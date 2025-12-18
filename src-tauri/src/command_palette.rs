@@ -461,7 +461,7 @@ impl CommandPaletteDb {
                  LIMIT ?2"
                     .to_string(),
                 vec![
-                    &kind_filter.unwrap() as &dyn rusqlite::ToSql,
+                    kind_filter.as_ref().unwrap() as &dyn rusqlite::ToSql,
                     &limit as &dyn rusqlite::ToSql,
                 ],
             )
@@ -513,7 +513,7 @@ impl CommandPaletteDb {
                  LIMIT ?2"
                     .to_string(),
                 vec![
-                    &kind_filter.unwrap() as &dyn rusqlite::ToSql,
+                    kind_filter.as_ref().unwrap() as &dyn rusqlite::ToSql,
                     &limit as &dyn rusqlite::ToSql,
                 ],
             )

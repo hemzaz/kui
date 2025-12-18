@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! macOS screenshot capture functionality
-//!
-//! This module provides screenshot capture capabilities using native macOS APIs
-//! for optimal performance and reliability.
-
 // Allow deprecated cocoa APIs until migration to objc2 is complete
 #![allow(deprecated)]
 // Allow unexpected cfg conditions from objc macro
 #![allow(unexpected_cfgs)]
+
+//! macOS screenshot capture functionality
+//!
+//! This module provides screenshot capture capabilities using native macOS APIs
+//! for optimal performance and reliability.
 
 use image::{ImageBuffer, RgbaImage};
 use log::{debug, info};
