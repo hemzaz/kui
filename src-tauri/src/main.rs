@@ -19,8 +19,8 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Mutex;
 use tauri::{
-    AppHandle, Manager, PhysicalPosition, PhysicalSize, State, WebviewUrl, WebviewWindow,
-    WebviewWindowBuilder, Window, WindowEvent,
+    AppHandle, Manager, PhysicalSize, State, WebviewUrl, WebviewWindow, WebviewWindowBuilder,
+    Window, WindowEvent,
 };
 
 mod command_palette;
@@ -31,10 +31,7 @@ mod screenshot;
 mod window;
 
 use command_palette::*;
-use commands::*;
-use ipc::*;
-use screenshot::{ScreenRect, ScreenshotError};
-use window::*;
+use screenshot::ScreenRect;
 
 /// Application state to track open windows
 struct AppState {

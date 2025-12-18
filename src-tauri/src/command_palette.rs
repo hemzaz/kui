@@ -13,7 +13,7 @@
 // limitations under the License.
 
 use chrono::Utc;
-use log::{debug, error, info};
+use log::{debug, info};
 use rusqlite::{params, Connection, Result as SqlResult};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
@@ -452,30 +452,29 @@ impl CommandPaletteDb {
     ) -> SqlResult<Vec<ResourceSummary>> {
         let conn = self.conn.lock().unwrap();
 
-        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) =
-            if let Some(kind) = kind_filter {
-                (
-                    "SELECT kind, name, namespace, context, timestamp, access_count
+        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) = if kind_filter.is_some() {
+            (
+                "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  WHERE kind = ?1
                  ORDER BY timestamp DESC
                  LIMIT ?2"
-                        .to_string(),
-                    vec![
-                        &kind as &dyn rusqlite::ToSql,
-                        &limit as &dyn rusqlite::ToSql,
-                    ],
-                )
-            } else {
-                (
-                    "SELECT kind, name, namespace, context, timestamp, access_count
+                    .to_string(),
+                vec![
+                    kind_filter.unwrap() as &dyn rusqlite::ToSql,
+                    &limit as &dyn rusqlite::ToSql,
+                ],
+            )
+        } else {
+            (
+                "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  ORDER BY timestamp DESC
                  LIMIT ?1"
-                        .to_string(),
-                    vec![&limit as &dyn rusqlite::ToSql],
-                )
-            };
+                    .to_string(),
+                vec![&limit as &dyn rusqlite::ToSql],
+            )
+        };
 
         let mut stmt = conn.prepare(&query)?;
         let resource_iter = stmt.query_map(params_vec.as_slice(), |row| {
@@ -505,30 +504,29 @@ impl CommandPaletteDb {
     ) -> SqlResult<Vec<ResourceSummary>> {
         let conn = self.conn.lock().unwrap();
 
-        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) =
-            if let Some(kind) = kind_filter {
-                (
-                    "SELECT kind, name, namespace, context, timestamp, access_count
+        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) = if kind_filter.is_some() {
+            (
+                "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  WHERE kind = ?1
                  ORDER BY access_count DESC, timestamp DESC
                  LIMIT ?2"
-                        .to_string(),
-                    vec![
-                        &kind as &dyn rusqlite::ToSql,
-                        &limit as &dyn rusqlite::ToSql,
-                    ],
-                )
-            } else {
-                (
-                    "SELECT kind, name, namespace, context, timestamp, access_count
+                    .to_string(),
+                vec![
+                    kind_filter.unwrap() as &dyn rusqlite::ToSql,
+                    &limit as &dyn rusqlite::ToSql,
+                ],
+            )
+        } else {
+            (
+                "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  ORDER BY access_count DESC, timestamp DESC
                  LIMIT ?1"
-                        .to_string(),
-                    vec![&limit as &dyn rusqlite::ToSql],
-                )
-            };
+                    .to_string(),
+                vec![&limit as &dyn rusqlite::ToSql],
+            )
+        };
 
         let mut stmt = conn.prepare(&query)?;
         let resource_iter = stmt.query_map(params_vec.as_slice(), |row| {

@@ -26,7 +26,6 @@ use std::fmt;
 use cocoa::appkit::{NSPasteboard, NSPasteboardTypePNG};
 use cocoa::base::{id, nil};
 use cocoa::foundation::NSData;
-use core_graphics;
 use objc::{msg_send, sel, sel_impl};
 
 /// Error type for screenshot operations
@@ -148,52 +147,50 @@ fn encode_png(image: &RgbaImage) -> ScreenshotResult<Vec<u8>> {
 
 /// Capture screen region on macOS using CGImage APIs
 fn capture_macos(rect: ScreenRect) -> ScreenshotResult<RgbaImage> {
-    unsafe {
-        // Use Core Graphics to capture the screen region
-        let cg_rect = core_graphics::display::CGRect::new(
-            &core_graphics::geometry::CGPoint::new(rect.x as f64, rect.y as f64),
-            &core_graphics::geometry::CGSize::new(rect.width as f64, rect.height as f64),
-        );
+    // Use Core Graphics to capture the screen region
+    let cg_rect = core_graphics::display::CGRect::new(
+        &core_graphics::geometry::CGPoint::new(rect.x as f64, rect.y as f64),
+        &core_graphics::geometry::CGSize::new(rect.width as f64, rect.height as f64),
+    );
 
-        let image = core_graphics::display::CGDisplay::screenshot(
-            cg_rect,
-            core_graphics::display::kCGWindowListOptionOnScreenOnly,
-            core_graphics::display::kCGNullWindowID,
-            core_graphics::display::kCGWindowImageDefault,
-        )
-        .ok_or_else(|| ScreenshotError::CaptureFailed("CGDisplay screenshot failed".to_string()))?;
+    let image = core_graphics::display::CGDisplay::screenshot(
+        cg_rect,
+        core_graphics::display::kCGWindowListOptionOnScreenOnly,
+        core_graphics::display::kCGNullWindowID,
+        core_graphics::display::kCGWindowImageDefault,
+    )
+    .ok_or_else(|| ScreenshotError::CaptureFailed("CGDisplay screenshot failed".to_string()))?;
 
-        // Convert CGImage to RGBA buffer
-        let width = image.width() as u32;
-        let height = image.height() as u32;
-        let bytes_per_row = image.bytes_per_row();
-        let data = image.data();
-        let data_len = data.len() as usize;
+    // Convert CGImage to RGBA buffer
+    let width = image.width() as u32;
+    let height = image.height() as u32;
+    let bytes_per_row = image.bytes_per_row();
+    let data = image.data();
+    let data_len = data.len() as usize;
 
-        // CGImage typically uses BGRA format, convert to RGBA
-        let mut rgba_buffer: Vec<u8> = Vec::with_capacity((width * height * 4) as usize);
+    // CGImage typically uses BGRA format, convert to RGBA
+    let mut rgba_buffer: Vec<u8> = Vec::with_capacity((width * height * 4) as usize);
 
-        for y in 0..height {
-            for x in 0..width {
-                let offset = (y as usize * bytes_per_row) + (x as usize * 4);
-                if offset + 3 < data_len {
-                    let b = data[offset];
-                    let g = data[offset + 1];
-                    let r = data[offset + 2];
-                    let a = data[offset + 3];
+    for y in 0..height {
+        for x in 0..width {
+            let offset = (y as usize * bytes_per_row) + (x as usize * 4);
+            if offset + 3 < data_len {
+                let b = data[offset];
+                let g = data[offset + 1];
+                let r = data[offset + 2];
+                let a = data[offset + 3];
 
-                    rgba_buffer.push(r);
-                    rgba_buffer.push(g);
-                    rgba_buffer.push(b);
-                    rgba_buffer.push(a);
-                }
+                rgba_buffer.push(r);
+                rgba_buffer.push(g);
+                rgba_buffer.push(b);
+                rgba_buffer.push(a);
             }
         }
-
-        ImageBuffer::from_raw(width, height, rgba_buffer).ok_or_else(|| {
-            ScreenshotError::ProcessingFailed("Failed to create image buffer".to_string())
-        })
     }
+
+    ImageBuffer::from_raw(width, height, rgba_buffer).ok_or_else(|| {
+        ScreenshotError::ProcessingFailed("Failed to create image buffer".to_string())
+    })
 }
 
 /// Copy PNG bytes to macOS clipboard
