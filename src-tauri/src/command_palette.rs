@@ -110,13 +110,13 @@ impl CommandPaletteDb {
 
     /// Get the database file path
     fn get_db_path(app: &AppHandle) -> SqlResult<PathBuf> {
-        let app_data_dir = app
-            .path()
-            .app_data_dir()
-            .map_err(|e| rusqlite::Error::InvalidPath(format!("Failed to get app data dir: {}", e).into()))?;
+        let app_data_dir = app.path().app_data_dir().map_err(|e| {
+            rusqlite::Error::InvalidPath(format!("Failed to get app data dir: {}", e).into())
+        })?;
 
-        std::fs::create_dir_all(&app_data_dir)
-            .map_err(|e| rusqlite::Error::InvalidPath(format!("Failed to create app data dir: {}", e).into()))?;
+        std::fs::create_dir_all(&app_data_dir).map_err(|e| {
+            rusqlite::Error::InvalidPath(format!("Failed to create app data dir: {}", e).into())
+        })?;
 
         Ok(app_data_dir.join("command-palette.db"))
     }
@@ -445,27 +445,37 @@ impl CommandPaletteDb {
     }
 
     /// Get recent resources
-    pub fn get_recent_resources(&self, limit: usize, kind_filter: Option<&str>) -> SqlResult<Vec<ResourceSummary>> {
+    pub fn get_recent_resources(
+        &self,
+        limit: usize,
+        kind_filter: Option<&str>,
+    ) -> SqlResult<Vec<ResourceSummary>> {
         let conn = self.conn.lock().unwrap();
 
-        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) = if let Some(kind) = kind_filter {
-            (
-                "SELECT kind, name, namespace, context, timestamp, access_count
+        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) =
+            if let Some(kind) = kind_filter {
+                (
+                    "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  WHERE kind = ?1
                  ORDER BY timestamp DESC
-                 LIMIT ?2".to_string(),
-                vec![&kind as &dyn rusqlite::ToSql, &limit as &dyn rusqlite::ToSql],
-            )
-        } else {
-            (
-                "SELECT kind, name, namespace, context, timestamp, access_count
+                 LIMIT ?2"
+                        .to_string(),
+                    vec![
+                        &kind as &dyn rusqlite::ToSql,
+                        &limit as &dyn rusqlite::ToSql,
+                    ],
+                )
+            } else {
+                (
+                    "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  ORDER BY timestamp DESC
-                 LIMIT ?1".to_string(),
-                vec![&limit as &dyn rusqlite::ToSql],
-            )
-        };
+                 LIMIT ?1"
+                        .to_string(),
+                    vec![&limit as &dyn rusqlite::ToSql],
+                )
+            };
 
         let mut stmt = conn.prepare(&query)?;
         let resource_iter = stmt.query_map(params_vec.as_slice(), |row| {
@@ -488,27 +498,37 @@ impl CommandPaletteDb {
     }
 
     /// Get most accessed resources
-    pub fn get_top_resources(&self, limit: usize, kind_filter: Option<&str>) -> SqlResult<Vec<ResourceSummary>> {
+    pub fn get_top_resources(
+        &self,
+        limit: usize,
+        kind_filter: Option<&str>,
+    ) -> SqlResult<Vec<ResourceSummary>> {
         let conn = self.conn.lock().unwrap();
 
-        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) = if let Some(kind) = kind_filter {
-            (
-                "SELECT kind, name, namespace, context, timestamp, access_count
+        let (query, params_vec): (String, Vec<&dyn rusqlite::ToSql>) =
+            if let Some(kind) = kind_filter {
+                (
+                    "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  WHERE kind = ?1
                  ORDER BY access_count DESC, timestamp DESC
-                 LIMIT ?2".to_string(),
-                vec![&kind as &dyn rusqlite::ToSql, &limit as &dyn rusqlite::ToSql],
-            )
-        } else {
-            (
-                "SELECT kind, name, namespace, context, timestamp, access_count
+                 LIMIT ?2"
+                        .to_string(),
+                    vec![
+                        &kind as &dyn rusqlite::ToSql,
+                        &limit as &dyn rusqlite::ToSql,
+                    ],
+                )
+            } else {
+                (
+                    "SELECT kind, name, namespace, context, timestamp, access_count
                  FROM recent_resources
                  ORDER BY access_count DESC, timestamp DESC
-                 LIMIT ?1".to_string(),
-                vec![&limit as &dyn rusqlite::ToSql],
-            )
-        };
+                 LIMIT ?1"
+                        .to_string(),
+                    vec![&limit as &dyn rusqlite::ToSql],
+                )
+            };
 
         let mut stmt = conn.prepare(&query)?;
         let resource_iter = stmt.query_map(params_vec.as_slice(), |row| {
@@ -531,7 +551,11 @@ impl CommandPaletteDb {
     }
 
     /// Detect command patterns from history
-    pub fn detect_patterns(&self, min_sequence_length: usize, max_sequence_length: usize) -> SqlResult<Vec<CommandPattern>> {
+    pub fn detect_patterns(
+        &self,
+        min_sequence_length: usize,
+        max_sequence_length: usize,
+    ) -> SqlResult<Vec<CommandPattern>> {
         let conn = self.conn.lock().unwrap();
 
         // Get recent command sequences (last 1000 commands)
@@ -540,13 +564,11 @@ impl CommandPaletteDb {
              FROM command_invocations
              WHERE success = 1
              ORDER BY timestamp DESC
-             LIMIT 1000"
+             LIMIT 1000",
         )?;
 
         let commands: Vec<(String, String)> = stmt
-            .query_map([], |row| {
-                Ok((row.get(0)?, row.get(1)?))
-            })?
+            .query_map([], |row| Ok((row.get(0)?, row.get(1)?)))?
             .collect::<Result<Vec<_>, _>>()?;
 
         if commands.len() < min_sequence_length {
@@ -557,7 +579,8 @@ impl CommandPaletteDb {
         let commands: Vec<(String, String)> = commands.into_iter().rev().collect();
 
         // Find patterns by sliding window
-        let mut pattern_map: std::collections::HashMap<String, (Vec<String>, Vec<f64>, String)> = std::collections::HashMap::new();
+        let mut pattern_map: std::collections::HashMap<String, (Vec<String>, Vec<f64>, String)> =
+            std::collections::HashMap::new();
 
         for seq_len in min_sequence_length..=max_sequence_length {
             for i in 0..commands.len().saturating_sub(seq_len) {
@@ -572,7 +595,8 @@ impl CommandPaletteDb {
                 let time_diffs: Vec<f64> = (0..seq_len - 1)
                     .filter_map(|j| {
                         let t1 = chrono::DateTime::parse_from_rfc3339(&commands[i + j].1).ok()?;
-                        let t2 = chrono::DateTime::parse_from_rfc3339(&commands[i + j + 1].1).ok()?;
+                        let t2 =
+                            chrono::DateTime::parse_from_rfc3339(&commands[i + j + 1].1).ok()?;
                         Some((t2 - t1).num_seconds() as f64)
                     })
                     .collect();
@@ -599,13 +623,14 @@ impl CommandPaletteDb {
             }
 
             // Calculate confidence based on frequency and recency
-            let recency_factor = if let Ok(last_time) = chrono::DateTime::parse_from_rfc3339(&last_seen) {
-                let now = Utc::now().with_timezone(&chrono::FixedOffset::east_opt(0).unwrap());
-                let days_ago = (now - last_time).num_days() as f64;
-                (1.0 / (1.0 + days_ago / 30.0)).max(0.1)
-            } else {
-                0.5
-            };
+            let recency_factor =
+                if let Ok(last_time) = chrono::DateTime::parse_from_rfc3339(&last_seen) {
+                    let now = Utc::now().with_timezone(&chrono::FixedOffset::east_opt(0).unwrap());
+                    let days_ago = (now - last_time).num_days() as f64;
+                    (1.0 / (1.0 + days_ago / 30.0)).max(0.1)
+                } else {
+                    0.5
+                };
 
             // Normalize frequency (max 20 occurrences = 1.0)
             let frequency_factor = (frequency as f64 / 20.0).min(1.0);
@@ -649,7 +674,11 @@ impl CommandPaletteDb {
     }
 
     /// Get command patterns with minimum confidence
-    pub fn get_patterns(&self, min_confidence: f64, limit: usize) -> SqlResult<Vec<CommandPattern>> {
+    pub fn get_patterns(
+        &self,
+        min_confidence: f64,
+        limit: usize,
+    ) -> SqlResult<Vec<CommandPattern>> {
         let conn = self.conn.lock().unwrap();
 
         let mut stmt = conn.prepare(
@@ -662,8 +691,8 @@ impl CommandPaletteDb {
 
         let pattern_iter = stmt.query_map(params![min_confidence, limit], |row| {
             let sequence_json: String = row.get(1)?;
-            let command_sequence: Vec<String> = serde_json::from_str(&sequence_json)
-                .unwrap_or_default();
+            let command_sequence: Vec<String> =
+                serde_json::from_str(&sequence_json).unwrap_or_default();
 
             Ok(CommandPattern {
                 pattern_id: row.get(0)?,
@@ -684,23 +713,28 @@ impl CommandPaletteDb {
     }
 
     /// Get pattern-based suggestions for next command
-    pub fn get_pattern_suggestions(&self, last_commands: Vec<String>, limit: usize) -> SqlResult<Vec<PatternSuggestion>> {
+    pub fn get_pattern_suggestions(
+        &self,
+        last_commands: Vec<String>,
+        limit: usize,
+    ) -> SqlResult<Vec<PatternSuggestion>> {
         let conn = self.conn.lock().unwrap();
 
-        let mut suggestions: std::collections::HashMap<String, (f64, i64, String)> = std::collections::HashMap::new();
+        let mut suggestions: std::collections::HashMap<String, (f64, i64, String)> =
+            std::collections::HashMap::new();
 
         // Get all patterns
         let mut stmt = conn.prepare(
             "SELECT pattern_id, command_sequence, frequency, confidence
              FROM command_patterns
-             ORDER BY confidence DESC"
+             ORDER BY confidence DESC",
         )?;
 
         let patterns: Vec<(String, Vec<String>, i64, f64)> = stmt
             .query_map([], |row| {
                 let sequence_json: String = row.get(1)?;
-                let command_sequence: Vec<String> = serde_json::from_str(&sequence_json)
-                    .unwrap_or_default();
+                let command_sequence: Vec<String> =
+                    serde_json::from_str(&sequence_json).unwrap_or_default();
                 Ok((row.get(0)?, command_sequence, row.get(2)?, row.get(3)?))
             })?
             .collect::<Result<Vec<_>, _>>()?;
@@ -730,14 +764,14 @@ impl CommandPaletteDb {
         // Convert to suggestions and sort by confidence
         let mut result: Vec<PatternSuggestion> = suggestions
             .into_iter()
-            .map(|(next_command, (confidence, frequency, pattern_id))| {
-                PatternSuggestion {
+            .map(
+                |(next_command, (confidence, frequency, pattern_id))| PatternSuggestion {
                     next_command,
                     confidence,
                     pattern_frequency: frequency,
                     context: pattern_id,
-                }
-            })
+                },
+            )
             .collect();
 
         result.sort_by(|a, b| {
@@ -760,7 +794,7 @@ impl CommandPaletteDb {
              FROM command_invocations
              WHERE success = 1
              ORDER BY timestamp DESC
-             LIMIT ?1"
+             LIMIT ?1",
         )?;
 
         let history_iter = stmt.query_map([limit], |row| {
@@ -866,13 +900,8 @@ pub async fn record_resource_access(
 ) -> Result<(), String> {
     let db = CommandPaletteDb::new(&app).map_err(|e| format!("Database error: {}", e))?;
 
-    db.record_resource_access(
-        &kind,
-        &name,
-        namespace.as_deref(),
-        context.as_deref(),
-    )
-    .map_err(|e| format!("Failed to record resource access: {}", e))
+    db.record_resource_access(&kind, &name, namespace.as_deref(), context.as_deref())
+        .map_err(|e| format!("Failed to record resource access: {}", e))
 }
 
 /// Tauri command: Get recent resources

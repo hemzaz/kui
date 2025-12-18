@@ -12,15 +12,13 @@ if [ -d "src-tauri" ]; then
   echo "2. Checking Rust code quality..."
   cd src-tauri
 
-  # Check if cargo fmt would make changes (without modifying files)
-  echo "   - Running cargo fmt --check..."
-  if ! cargo fmt --check --quiet; then
-    echo "❌ Rust code formatting check failed!"
-    echo "Run 'cd src-tauri && cargo fmt' to fix formatting issues."
-    cd ..
-    exit 1
-  fi
-  echo "   ✅ Rust formatting is correct"
+  # Automatically format Rust code
+  echo "   - Running cargo fmt..."
+  cargo fmt --quiet
+
+  # Add formatted files back to staging
+  git add -u .
+  echo "   ✅ Rust code formatted"
 
   # Run Clippy for linting (allow warnings in pre-commit, but show them)
   echo "   - Running cargo clippy..."
