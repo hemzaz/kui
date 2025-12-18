@@ -36,6 +36,7 @@ use screenshot::ScreenRect;
 /// Application state to track open windows
 struct AppState {
     window_count: Mutex<usize>,
+    #[allow(dead_code)]
     fixed_windows: Mutex<HashMap<String, String>>,
 }
 
@@ -443,7 +444,7 @@ fn main() {
             menu::init();
 
             // Create application menu
-            let menu = menu::create_menu(&app.handle())?;
+            let menu = menu::create_menu(app.handle())?;
             app.set_menu(menu)?;
 
             // Setup menu event handler
@@ -453,7 +454,7 @@ fn main() {
 
             // Create the initial window
             let state = app.state::<AppState>();
-            create_window_internal(&app.handle(), &state, Some(vec!["shell".to_string()]), None)?;
+            create_window_internal(app.handle(), &state, Some(vec!["shell".to_string()]), None)?;
 
             Ok(())
         })

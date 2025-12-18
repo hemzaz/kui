@@ -14,6 +14,8 @@
 
 //! Tauri command handlers for Kui application
 
+#![allow(dead_code)]
+
 use log::debug;
 
 /// Additional command handlers can be defined here

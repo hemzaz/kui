@@ -14,6 +14,8 @@
 
 //! IPC (Inter-Process Communication) handlers for Kui
 
+#![allow(dead_code)]
+
 use log::debug;
 use serde::{Deserialize, Serialize};
 

@@ -14,6 +14,8 @@
 
 //! Window management utilities for Kui
 
+#![allow(dead_code)]
+
 use log::debug;
 use tauri::PhysicalPosition;
 

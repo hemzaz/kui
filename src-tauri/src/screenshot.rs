@@ -16,6 +16,8 @@
 #![allow(deprecated)]
 // Allow unexpected cfg conditions from objc macro
 #![allow(unexpected_cfgs)]
+// Allow enum variant names with same postfix
+#![allow(clippy::enum_variant_names)]
 
 //! macOS screenshot capture functionality
 //!

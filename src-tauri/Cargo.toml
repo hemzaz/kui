@@ -38,6 +38,9 @@ core-graphics = "0.24"
 default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
 
+[lints.rust]
+unexpected_cfgs = { level = "allow", check-cfg = ['cfg(cargo_clippy)'] }
+
 [profile.release]
 panic = "abort"
 codegen-units = 1
