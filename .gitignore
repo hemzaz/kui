@@ -92,3 +92,4 @@ performance-results.json
 
 # Playwright cache
 .cache/ms-playwright/
+.claude-flow/metrics/system-metrics.json
