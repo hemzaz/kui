@@ -66,6 +66,7 @@ import Scalar from '../../../Content/Scalar/' // !! DO NOT MAKE LAZY. See https:
 import KuiContext from '../../../Client/context'
 import { Maximizable } from '../../Sidecar/width'
 const Ansi = React.lazy(() => import('../../../Content/Scalar/Ansi'))
+const VirtualAnsi = React.lazy(() => import('../../../Content/Scalar/VirtualAnsi'))
 const ExpandableSection = React.lazy(() => import('../../../spi/ExpandableSection'))
 
 const strings = i18n('plugin-client-common')
@@ -246,11 +247,14 @@ export default class Output extends React.PureComponent<Props, State> {
 
       if (streamingOutput.every(_ => typeof _ === 'string')) {
         const combined = streamingOutput.join('')
+        const lineCount = combined.split('\n').length
+        const useVirtualAnsi = lineCount > 500 // Use VirtualAnsi for outputs with more than 500 lines
+
         return (
           combined.length > 0 && (
             <div className="repl-result-like result-vertical" data-stream>
               <React.Suspense fallback={<div />}>
-                <Ansi>{combined}</Ansi>
+                {useVirtualAnsi ? <VirtualAnsi>{combined}</VirtualAnsi> : <Ansi>{combined}</Ansi>}
               </React.Suspense>
             </div>
           )

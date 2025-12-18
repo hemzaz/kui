@@ -46,7 +46,7 @@ import {
 } from '@kui-shell/core/mdist/api/Response'
 
 import ScrollbackState, { ScrollbackOptions, Cleaner } from './ScrollbackState'
-import Block from './Block'
+import Block, { BlockHandle } from './Block'
 import getSize from './getSize'
 import { snapshot } from './Snapshot'
 import SplitHeader from './SplitHeader'
@@ -519,7 +519,7 @@ export default class ScrollableTerminal extends React.PureComponent<Props, State
     }
 
     /** Update the active block */
-    state.setActiveBlock = (c: Block) => {
+    state.setActiveBlock = (c: BlockHandle) => {
       if (c && c.props && c.props.model && isActive(c.props.model)) {
         const split = this.state.splits[this.findSplit(this.state, sbuuid)]
         split._activeBlock = c

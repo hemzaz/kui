@@ -1,11 +1,11 @@
 {
   "extends": "../../packages/builder/tsconfig-base.json",
   "include": ["src/**/*"],
+  "exclude": [],
   "compilerOptions": {
     "composite": true,
     "jsx": "react",
-    "outDir": "mdist",
-    "rootDir": "src"
+    "outDir": "mdist"
   },
   "references": [{ "path": "./notebook" }]
 }

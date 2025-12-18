@@ -26,12 +26,15 @@ import { BaseAIProvider } from './ai-provider'
 export class OpenAIProvider extends BaseAIProvider {
   public name = 'openai'
   public models = [
+    'gpt-5.2',
+    'o3',
+    'o3-mini',
+    'o1',
+    'o1-mini',
+    'gpt-4o',
     'gpt-4-turbo',
-    'gpt-4-turbo-2024-04-09',
-    'gpt-4-0125-preview',
     'gpt-4',
-    'gpt-3.5-turbo',
-    'gpt-3.5-turbo-0125'
+    'gpt-3.5-turbo'
   ]
 
   private client: OpenAI

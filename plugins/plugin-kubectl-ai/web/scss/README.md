@@ -18,7 +18,9 @@ web/scss/
         ├── AIChatSidebar.scss    # Chat sidebar interface
         ├── MessageList.scss      # Message bubbles and markdown
         ├── ContextPanel.scss     # Context display panel
-        └── AISettings.scss       # Settings form styling
+        ├── AISettings.scss       # Settings form styling
+        ├── AIContextMenu.scss    # Right-click context menu
+        └── AITooltip.scss        # Hover tooltip with AI insights
 ```
 
 ## Usage in Components
@@ -369,6 +371,70 @@ All components are responsive and mobile-friendly:
 5. **Accessibility**: Use semantic HTML and ARIA attributes
 
 ## Examples
+### AIContextMenu
+
+```tsx
+<div className="kui-ai-context-menu">
+  <div className="kui-ai-context-menu-header">
+    <div className="kui-ai-context-menu-resource">
+      <span className="kui-ai-context-menu-kind">Pod</span>
+      <span className="kui-ai-context-menu-name">my-app-123</span>
+      <span className="kui-ai-context-menu-namespace">in default</span>
+    </div>
+  </div>
+
+  <div className="kui-ai-context-menu-items">
+    <button className="kui-ai-context-menu-item">
+      <span className="kui-ai-context-menu-icon">🔍</span>
+      <span className="kui-ai-context-menu-label">Analyze with AI</span>
+    </button>
+    <button className="kui-ai-context-menu-item kui-ai-selected">
+      <span className="kui-ai-context-menu-icon">🔧</span>
+      <span className="kui-ai-context-menu-label">Troubleshoot Issues</span>
+      <span className="kui-ai-context-menu-shortcut">Ctrl+T</span>
+    </button>
+    <div className="kui-ai-context-menu-divider" />
+    <button className="kui-ai-context-menu-item kui-ai-disabled">
+      <span className="kui-ai-context-menu-icon">⭐</span>
+      <span className="kui-ai-context-menu-label">Premium Feature</span>
+    </button>
+  </div>
+</div>
+```
+
+### AITooltip
+
+```tsx
+<div className="kui-ai-tooltip">
+  {/* Loading state */}
+  <div className="kui-ai-tooltip-loading">
+    <div className="kui-ai-loading-indicator">
+      <span className="kui-ai-loading-dot"></span>
+      <span className="kui-ai-loading-dot"></span>
+      <span className="kui-ai-loading-dot"></span>
+    </div>
+    <span className="kui-ai-tooltip-loading-text">Loading insights...</span>
+  </div>
+
+  {/* Content state */}
+  <div className="kui-ai-tooltip-content kui-ai-severity-warning">
+    <div className="kui-ai-tooltip-header">
+      <span className="kui-ai-tooltip-icon">⚠️</span>
+      <div className="kui-ai-tooltip-summary">Pod is CrashLooping</div>
+    </div>
+    <div className="kui-ai-tooltip-details">
+      Container exits with code 137 (OOMKilled). Consider increasing memory limits.
+    </div>
+    <div className="kui-ai-tooltip-actions">
+      <button className="kui-ai-tooltip-action-button">View Logs</button>
+      <button className="kui-ai-tooltip-action-button">Increase Memory</button>
+    </div>
+  </div>
+
+  <button className="kui-ai-tooltip-close">✕</button>
+</div>
+```
+
 
 See the component files for complete examples:
 
@@ -376,6 +442,9 @@ See the component files for complete examples:
 - `/src/ui/MessageList.tsx` - Message list implementation
 - `/src/ui/ContextPanel.tsx` - Context panel implementation
 - `/src/ui/AISettings.tsx` - Settings implementation
+- `/src/ui/AIContextMenu.tsx` - Context menu implementation
+- `/src/ui/AITooltip.tsx` - Tooltip implementation
+- `/src/ui/INTEGRATION_GUIDE.md` - Integration guide for context menu and tooltip
 
 ## Resources
 

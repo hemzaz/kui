@@ -35,9 +35,11 @@ export default function prefetchTableRows(responses: CodeBlockResponse[], repl: 
                   try {
                     // great! this row has prefetchable content, let's try
                     // doing so now
-                    return Object.assign({}, row, {
-                      onclickPrefetch: await repl.pexec(row.onclick, { quiet: true, echo: false, noHistory: true })
-                    })
+                    if (typeof row.onclick === 'string') {
+                      return Object.assign({}, row, {
+                        onclickPrefetch: await repl.pexec(row.onclick, { quiet: true, echo: false, noHistory: true })
+                      })
+                    }
                   } catch (err) {
                     console.error('Error prefetching row drilldown', row, err)
                   }

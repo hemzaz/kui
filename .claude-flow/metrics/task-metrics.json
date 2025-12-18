@@ -1,26 +1,10 @@
 [
   {
-    "id": "cmd-start-1765894057842",
-    "type": "start",
+    "id": "cmd-swarm-1765938994177",
+    "type": "swarm",
     "success": true,
-    "duration": 0.9019159999999999,
-    "timestamp": 1765894057843,
-    "metadata": {}
-  },
-  {
-    "id": "cmd-status-1765894061577",
-    "type": "status",
-    "success": true,
-    "duration": 299.2935,
-    "timestamp": 1765894061876,
-    "metadata": {}
-  },
-  {
-    "id": "cmd-status-1765894263123",
-    "type": "status",
-    "success": true,
-    "duration": 270.16675,
-    "timestamp": 1765894263393,
+    "duration": 21.110834000000068,
+    "timestamp": 1765938994198,
     "metadata": {}
   }
 ]

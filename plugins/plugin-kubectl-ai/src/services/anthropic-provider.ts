@@ -25,7 +25,14 @@ import { BaseAIProvider } from './ai-provider'
  */
 export class AnthropicProvider extends BaseAIProvider {
   public name = 'anthropic'
-  public models = ['claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022', 'claude-3-opus-20240229']
+  public models = [
+    'claude-sonnet-4-5-20250929',
+    'claude-opus-4-5-20251101',
+    'claude-haiku-4-5-20251212',
+    'claude-3-5-sonnet-20241022',
+    'claude-3-5-haiku-20241022',
+    'claude-3-opus-20240229'
+  ]
 
   private client: Anthropic
   private config: AIConfig

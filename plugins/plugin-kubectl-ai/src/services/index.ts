@@ -25,3 +25,6 @@ export * from './ollama-provider'
 
 // Export provider factory
 export * from './provider-factory'
+
+// Export context menu service
+export * from './context-menu-service'

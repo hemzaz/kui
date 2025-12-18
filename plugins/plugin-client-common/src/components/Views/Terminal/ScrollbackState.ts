@@ -16,7 +16,8 @@
 
 import type { Tab as KuiTab, NewSplitRequest } from '@kui-shell/core'
 
-import Block from './Block'
+import Block, { BlockComponent } from './Block'
+import { BlockHandle } from './Block'
 import SplitPosition from './SplitPosition'
 import { BlockModel } from './Block/BlockModel'
 
@@ -57,7 +58,7 @@ type ScrollbackState = ScrollbackOptions &
     facade?: KuiTab
 
     /** grab a ref to the active block, to help us maintain focus */
-    _activeBlock?: Block
+    _activeBlock?: BlockHandle
 
     /** Has the user clicked to focus on a block? */
     focusedBlockIdx?: number
@@ -79,7 +80,7 @@ type ScrollbackState = ScrollbackOptions &
     onMouseDown: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void
     onFocus: (evt: React.FocusEvent) => void
     onOutputRender: () => void
-    setActiveBlock: (c: Block) => void
+    setActiveBlock: (c: BlockHandle) => void
     willFocusBlock: (evt: React.SyntheticEvent) => void
     willRemoveBlock: (evt: React.SyntheticEvent, idx?: number) => void
     willUpdateCommand: (idx: number, command: string) => void

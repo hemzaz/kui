@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-import { createContext } from 'react'
-import KuiConfiguration from './KuiConfiguration'
-import defaultKuiConfiguration from './DefaultKuiConfiguration'
+/**
+ * @deprecated This context is migrated to Zustand.
+ * Import from @kui-shell/core/store instead:
+ *   import { useKuiConfigStore } from '@kui-shell/core/store'
+ *
+ * For backward compatibility, this re-exports the bridge.
+ */
 
-export default createContext<KuiConfiguration>(defaultKuiConfiguration)
+import { KuiConfigContext } from '@kui-shell/core/mdist/store/context-bridge'
+
+export default KuiConfigContext

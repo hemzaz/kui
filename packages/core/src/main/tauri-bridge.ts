@@ -17,8 +17,8 @@
 /**
  * Tauri Bridge
  *
- * This module provides a compatibility layer between Electron and Tauri,
- * allowing Kui to work with either runtime with minimal code changes.
+ * This module provides the IPC communication layer for Kui's Tauri runtime.
+ * Simplified for macOS Apple Silicon (M1+) only.
  */
 
 import Debug from 'debug'
@@ -54,7 +54,7 @@ declare global {
 
 /**
  * IPC Renderer interface
- * Provides a unified API for both Electron and Tauri
+ * Provides the IPC API for Tauri
  */
 export interface IpcRenderer {
   send(channel: string, ...args: unknown[]): void
@@ -87,7 +87,7 @@ class TauriIpcRenderer implements IpcRenderer {
   public async invoke(channel: string, ...args: unknown[]): Promise<unknown> {
     debug('Tauri invoke:', channel, args)
 
-    // Map Electron IPC channels to Tauri commands
+    // Map IPC channels to Tauri commands
     switch (channel) {
       case '/exec/invoke':
         return window.__TAURI__!.core.invoke('exec_invoke', {
@@ -156,23 +156,30 @@ class TauriIpcRenderer implements IpcRenderer {
 }
 
 /**
- * Get the Tauri IPC renderer
+ * Get the IPC renderer for Tauri
+ * This is the main function that should be used throughout the codebase
  */
 export function getIpcRenderer(): IpcRenderer {
-  if (isTauri) {
-    debug('Using Tauri IPC renderer')
-    return new TauriIpcRenderer()
-  } else {
-    debug('No IPC renderer available')
-    throw new Error('Tauri runtime not detected')
+  if (!isTauri) {
+    throw new Error('Tauri runtime not detected. Kui now requires Tauri (Electron support removed).')
   }
+  debug('Using Tauri IPC renderer')
+  return new TauriIpcRenderer()
 }
 
 /**
- * Check if running in Tauri
+ * Check if running in Tauri (always true now)
  */
 export function isTauriRuntime(): boolean {
   return isTauri
+}
+
+/**
+ * Check if running in Electron (always false - Electron support removed)
+ * @deprecated Electron support has been removed
+ */
+export function isElectronRuntime(): boolean {
+  return false
 }
 
 /**

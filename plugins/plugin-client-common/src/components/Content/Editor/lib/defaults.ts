@@ -42,6 +42,59 @@ export default (options: Options): editor.IEditorConstructionOptions => ({
   fontFamily: 'var(--font-monospace)',
   fontSize: options.fontSize || getKuiFontSize(),
 
+  // Modern Monaco v0.52 Features
+  // Sticky scroll: keeps function/class context visible while scrolling
+  stickyScroll: {
+    enabled: !options.simple, // Enable in full editor mode
+    maxLineCount: 5, // Show up to 5 context lines
+    defaultModel: 'outlineModel', // Use outline for best context
+    scrollWithEditor: true // Scroll horizontally with editor
+  },
+
+  // Bracket pair colorization: color-code matching brackets
+  bracketPairColorization: {
+    enabled: !options.simple, // Enable in full editor mode
+    independentColorPoolPerBracketType: true // Different colors per bracket type
+  },
+
+  // Bracket pair guides: visual lines connecting bracket pairs
+  guides: {
+    bracketPairs: true, // Show vertical guides for bracket pairs
+    bracketPairsHorizontal: 'active', // Show horizontal guides for active pair
+    highlightActiveBracketPair: true // Highlight the active bracket pair
+  },
+
+  // Inlay hints: show parameter names and type hints inline
+  inlayHints: {
+    enabled: options.simple ? 'off' : 'onUnlessPressed', // Show hints, hide when Alt pressed
+    fontSize: Math.floor((options.fontSize || getKuiFontSize()) * 0.9), // 90% of editor font
+    fontFamily: 'var(--font-monospace)',
+    padding: true // Add padding around hints for better readability
+  },
+
+  // Inline suggestions: enhanced autocomplete with ghost text
+  inlineSuggest: {
+    enabled: !options.simple && !options.readOnly, // Enable in editable full mode
+    mode: 'subwordSmart', // Smart subword matching
+    showToolbar: 'onHover', // Show toolbar on hover
+    suppressSuggestions: false,
+    keepOnBlur: false // Clear suggestions when focus lost
+  },
+
+  // Smooth scrolling for better UX
+  smoothScrolling: true,
+
+  // Multi-cursor enhancements
+  multiCursorModifier: 'alt', // Alt+Click for multi-cursor
+  multiCursorPaste: 'spread', // Spread paste across cursors
+
+  // Enhanced find/replace
+  find: {
+    addExtraSpaceOnTop: true, // More space for find widget
+    autoFindInSelection: 'multiline', // Auto-scope to selection for multiline
+    seedSearchStringFromSelection: 'selection' // Use selection as search seed
+  },
+
   // don't show those little bits and borders in the scrollbar in "simple" mode
   overviewRulerBorder: options.simple,
   overviewRulerLanes: options.simple ? 0 : undefined,

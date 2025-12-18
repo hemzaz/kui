@@ -21,8 +21,19 @@ import { eventBus, eventChannelUnsafe } from '@kui-shell/core/mdist/api/Events'
 
 import getKuiFontSize from './lib/fonts'
 import defaultMonacoOptions, { Options as MonacoOptions } from './lib/defaults'
+import { registerAICompletionProvider } from './ai-completion'
+import { registerAIQuickFixProvider } from './ai-quick-fixes'
+import { addAIYAMLGeneratorAction } from './ai-yaml-generator'
 
 import '../../../../web/scss/components/Editor/Editor.scss'
+
+// Register AI providers (global, happens once)
+let aiProvidersRegistered = false
+if (!aiProvidersRegistered) {
+  aiProvidersRegistered = true
+  registerAICompletionProvider()
+  registerAIQuickFixProvider()
+}
 
 export type Props = Pick<MonacoOptions, 'fontSize'> &
   Monaco.IEditorConstructionOptions & {
@@ -186,6 +197,9 @@ export default class SimpleEditor extends React.Component<Props, State> {
       const editor = Monaco.create(state.wrapper.current, options)
 
       this.registerKeyboardShortcuts(editor)
+
+      // Add AI YAML generator action (Cmd/Ctrl+Shift+G)
+      addAIYAMLGeneratorAction(editor)
 
       const adjustHeight = !props.simple
         ? undefined

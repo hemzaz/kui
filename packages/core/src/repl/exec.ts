@@ -300,7 +300,7 @@ class InProcessExecutor implements Executor {
       )
     }
 
-    const parsedOptions = minimist(argv, allFlags) as any as O
+    const parsedOptions = minimist(argv, allFlags) as unknown as O
     const argvNoOptions: string[] = parsedOptions._
 
     return { argvNoOptions, parsedOptions }
@@ -373,8 +373,7 @@ class InProcessExecutor implements Executor {
           const options = Object.assign({}, evaluator.options, { title: desiredWindowTitle })
           return createWindow(argv, evaluator.options.fullscreen, options, true)
         })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return true as any as T
+        return true as unknown as T
       }
 
       const execUUID = execOptions.execUUID || uuid()
@@ -650,15 +649,14 @@ export const qexec = <T extends KResponse>(
     )
   ) as Promise<T>
 }
-export const qfexec = (
+export const qfexec = <T extends KResponse = KResponse>(
   command: string,
   block?: HTMLElement,
   nextBlock?: HTMLElement,
   execOptions?: ExecOptions
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any> => {
+): Promise<T> => {
   // context change ok, final exec in a chain of nested execs
-  return qexec(command, block, true, execOptions, nextBlock)
+  return qexec<T>(command, block, true, execOptions, nextBlock)
 }
 
 /**

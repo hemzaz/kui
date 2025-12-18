@@ -1,0 +1,211 @@
+/*
+ * Copyright 2024 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// AI Context Menu Styles
+// Right-click context menu for AI actions on Kubernetes resources
+
+.kui-ai-context-menu {
+  min-width: 200px;
+  max-width: 320px;
+  background: var(--kui-ai-bg-primary);
+  border: 1px solid var(--kui-ai-border-primary);
+  border-radius: var(--kui-ai-border-radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+              0 0 0 1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: kui-ai-menu-appear var(--kui-ai-transition-fast);
+
+  // Header section with resource info
+  .kui-ai-context-menu-header {
+    padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+    background: var(--kui-ai-bg-secondary);
+    border-bottom: 1px solid var(--kui-ai-border-primary);
+  }
+
+  .kui-ai-context-menu-resource {
+    display: flex;
+    flex-direction: column;
+    gap: var(--kui-ai-spacing-xs);
+    font-size: var(--kui-ai-font-size-sm);
+  }
+
+  .kui-ai-context-menu-kind {
+    font-weight: 600;
+    color: var(--kui-ai-icon-primary);
+    text-transform: capitalize;
+  }
+
+  .kui-ai-context-menu-name {
+    color: var(--kui-ai-text-primary);
+    font-family: var(--font-monospace);
+    font-size: var(--kui-ai-font-size-sm);
+  }
+
+  .kui-ai-context-menu-namespace {
+    color: var(--kui-ai-text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  // Menu items container
+  .kui-ai-context-menu-items {
+    padding: var(--kui-ai-spacing-xs) 0;
+  }
+
+  // Individual menu item
+  .kui-ai-context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--kui-ai-spacing-sm);
+    width: 100%;
+    padding: var(--kui-ai-spacing-sm) var(--kui-ai-spacing-md);
+    background: transparent;
+    border: none;
+    color: var(--kui-ai-text-primary);
+    font-size: var(--kui-ai-font-size-base);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--kui-ai-transition-fast);
+
+    &:hover:not(.kui-ai-disabled) {
+      background: var(--kui-ai-bg-hover);
+    }
+
+    &.kui-ai-selected {
+      background: var(--kui-ai-bg-hover);
+    }
+
+    &.kui-ai-disabled {
+      color: var(--kui-ai-text-muted);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    // Focus styles for keyboard navigation
+    &:focus-visible {
+      outline: 2px solid var(--kui-ai-icon-primary);
+      outline-offset: -2px;
+    }
+  }
+
+  .kui-ai-context-menu-icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .kui-ai-context-menu-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .kui-ai-context-menu-shortcut {
+    flex-shrink: 0;
+    font-size: var(--kui-ai-font-size-sm);
+    color: var(--kui-ai-text-muted);
+    font-family: var(--font-monospace);
+  }
+
+  // Divider between menu items
+  .kui-ai-context-menu-divider {
+    height: 1px;
+    margin: var(--kui-ai-spacing-xs) 0;
+    background: var(--kui-ai-border-secondary);
+  }
+
+  // Loading state
+  .kui-ai-context-menu-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--kui-ai-bg-primary), 0.95);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+  }
+}
+
+// Appear animation
+@keyframes kui-ai-menu-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Dark theme adjustments
+body[kui-theme-style='dark'] {
+  .kui-ai-context-menu {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .kui-ai-context-menu {
+    border-width: 2px;
+
+    .kui-ai-context-menu-item {
+      &:hover:not(.kui-ai-disabled) {
+        border: 2px solid var(--kui-ai-icon-primary);
+      }
+    }
+
+    .kui-ai-context-menu-divider {
+      height: 2px;
+    }
+  }
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .kui-ai-context-menu {
+    max-width: calc(100vw - 20px);
+
+    .kui-ai-context-menu-item {
+      padding: var(--kui-ai-spacing-md);
+      font-size: var(--kui-ai-font-size-lg);
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .kui-ai-context-menu {
+    animation: none;
+  }
+
+  @keyframes kui-ai-menu-appear {
+    from, to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

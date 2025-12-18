@@ -234,6 +234,41 @@ export class CacheManager {
   }
 
   /**
+   * Get value from cache (generic method)
+   *
+   * @param key - Cache key
+   * @returns Cached value if found, undefined otherwise
+   */
+  public get<T>(key: string): T | undefined {
+    return this.cache.get<T>(key)
+  }
+
+  /**
+   * Set value in cache (generic method)
+   *
+   * @param key - Cache key
+   * @param value - Value to cache
+   * @param ttl - Time-to-live in seconds (optional)
+   */
+  public set<T>(key: string, value: T, ttl?: number): void {
+    if (ttl !== undefined) {
+      this.cache.set(key, value, ttl)
+    } else {
+      this.cache.set(key, value)
+    }
+  }
+
+  /**
+   * Delete value from cache (generic method)
+   *
+   * @param key - Cache key
+   * @returns Number of deleted entries
+   */
+  public del(key: string): number {
+    return this.cache.del(key)
+  }
+
+  /**
    * Get TTL (time-to-live) for a specific key
    *
    * @param key - Cache key

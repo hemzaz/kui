@@ -14,6 +14,60 @@ Kui is a framework that enhances command-line interfaces with graphical elements
 - 2-3x faster than native `kubectl` for many operations
 - Supports desktop apps (Tauri primary, Electron legacy) and web-based deployments
 - Tauri provides 10x smaller bundles, 50% less memory, and 4x faster startup
+## Documentation Map
+
+Kui has comprehensive documentation organized by audience:
+
+### For End Users
+- **[User Guide](TAURI_USER_GUIDE.md)** - Complete guide for installing and using Kui
+  - Installation instructions (macOS, Windows, Linux)
+  - Getting started and first run
+  - Using Kui with Kubernetes
+  - Troubleshooting and FAQ
+
+- **[Migration Guide](docs/MIGRATING_TO_TAURI.md)** - Upgrading from Electron to Tauri
+  - What's changed (nothing user-facing!)
+  - Installation and upgrade process
+  - Performance improvements
+  - Troubleshooting migration issues
+
+### For Developers
+- **[Developer Guide](TAURI_DEVELOPER_GUIDE.md)** - Complete guide for contributing to Kui
+  - Development setup (all platforms)
+  - Architecture overview
+  - Building and testing
+  - Adding features and IPC commands
+  - Debugging and optimization
+  - Contributing guidelines
+
+- **[This File (CLAUDE.md)]** - Quick reference for AI assistants
+  - Project structure and key concepts
+  - Common development patterns
+  - Quick start for making changes
+
+### Technical Documentation
+- **[Tauri Migration](TAURI_MIGRATION.md)** - Technical details of the Tauri migration
+  - Architecture comparison (Electron vs Tauri)
+  - Implementation details
+  - Performance benchmarks
+  - Platform-specific considerations
+
+- **[Tauri Bridge Usage](docs/TAURI-BRIDGE-USAGE.md)** - IPC communication guide
+  - Using the unified IPC bridge
+  - Command patterns
+  - Event handling
+  - Error management
+
+- **[Dual Runtime Plugins](docs/DUAL-RUNTIME-PLUGINS.md)** - Plugin compatibility
+  - Supporting both Tauri and Electron
+  - Runtime detection
+  - Migration patterns for plugins
+
+### API and Features
+- **[API Documentation](docs/api/README.md)** - Complete API reference
+- **[Features Documentation](docs/features/)** - Feature-specific guides
+- **[Plugin Development](TAURI_DEVELOPER_GUIDE.md#adding-features)** - Creating plugins
+
 
 ## Repository Structure
 
@@ -29,7 +83,8 @@ kui/
 │       ├── commands.rs # Command handlers
 │       ├── ipc.rs     # IPC utilities
 │       ├── menu.rs    # Menu management
-│       └── window.rs  # Window utilities
+│       ├── window.rs  # Window utilities
+│       └── screenshot.rs # Screenshot functionality
 ├── packages/           # Core framework components
 │   ├── core/          # Core APIs, REPL, command processing
 │   │   └── src/main/
@@ -45,9 +100,12 @@ kui/
 │   ├── plugin-client-*/        # Client implementations
 │   ├── plugin-*-themes/        # Theme providers
 │   └── [others]/              # Git, S3, Electron, etc.
-└── docs/              # API documentation
+└── docs/              # API and technical documentation
     ├── TAURI-BRIDGE-USAGE.md   # IPC bridge documentation
-    └── MIGRATING_TO_TAURI.md   # User migration guide
+    ├── MIGRATING_TO_TAURI.md   # User migration guide
+    ├── DUAL-RUNTIME-PLUGINS.md # Plugin compatibility
+    ├── api/                     # API reference
+    └── features/                # Feature documentation
 ```
 
 ## Core Architecture
@@ -143,11 +201,13 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustc --version
 cargo --version
 ```
+For complete setup instructions, see [TAURI_DEVELOPER_GUIDE.md](TAURI_DEVELOPER_GUIDE.md#development-setup).
+
 
 **Platform Dependencies:**
 
 - **macOS**: Xcode Command Line Tools (`xcode-select --install`)
-- **Linux**: GTK3, WebKit2GTK, and development libraries (see TAURI_MIGRATION.md)
+- **Linux**: GTK3, WebKit2GTK, and development libraries (see [TAURI_MIGRATION.md](TAURI_MIGRATION.md))
 - **Windows**: Microsoft Visual C++ Build Tools, WebView2 Runtime
 
 ### Development Mode
@@ -263,6 +323,8 @@ const result = await ipc.invoke('my-channel', data)
 
 ```typescript
 const { ipcRenderer } = require('electron') // ❌ Don't do this
+For complete IPC documentation, see [docs/TAURI-BRIDGE-USAGE.md](docs/TAURI-BRIDGE-USAGE.md).
+
 ```
 
 **Runtime Detection:**
@@ -287,6 +349,8 @@ When adding features that require native functionality:
 #[tauri::command]
 async fn my_command(param: String) -> Result<String, String> {
     Ok(format!("Processed: {}", param))
+For complete backend development guide, see [TAURI_DEVELOPER_GUIDE.md](TAURI_DEVELOPER_GUIDE.md#adding-features).
+
 }
 ```
 
@@ -436,7 +500,7 @@ npm run open
 npm run open:electron
 ```
 
-See `TAURI_MIGRATION.md` for technical details and `docs/MIGRATING_TO_TAURI.md` for user guide.
+See [TAURI_MIGRATION.md](TAURI_MIGRATION.md) for technical details and [docs/MIGRATING_TO_TAURI.md](docs/MIGRATING_TO_TAURI.md) for user guide.
 
 ### Feature Parity
 
@@ -446,7 +510,7 @@ All Electron features have been implemented in Tauri:
 - ✅ Menu system (native menus on all platforms)
 - ✅ IPC communication (via Tauri bridge)
 - ✅ Clipboard operations
-- ✅ Screenshot capture
+- ✅ Screenshot capture (macOS/Linux full, Windows partial)
 - ✅ File dialogs
 - ✅ Shell command execution
 - ✅ External URL opening
@@ -497,7 +561,9 @@ npm run watch:browser  # Accessible at localhost:9080
 - **Rebuild node modules**: `npm run pty:rebuild`
 - **Clear cache**: Remove `node_modules` and reinstall
 - **Rust issues**: Run `cargo clean` in `src-tauri/`
-- **Missing dependencies**: See TAURI_MIGRATION.md for platform-specific requirements
+For detailed troubleshooting, see [TAURI_USER_GUIDE.md#troubleshooting](TAURI_USER_GUIDE.md#troubleshooting).
+
+- **Missing dependencies**: See [TAURI_MIGRATION.md](TAURI_MIGRATION.md) for platform-specific requirements
 
 ### Test Failures
 
@@ -530,15 +596,38 @@ npm run watch:browser  # Accessible at localhost:9080
 
 ## Resources
 
-- [API Documentation](docs/api/README.md)
-- [Tauri Bridge Usage](docs/TAURI-BRIDGE-USAGE.md)
-- [Tauri Migration Guide](TAURI_MIGRATION.md)
-- [User Migration Guide](docs/MIGRATING_TO_TAURI.md)
-- [Medium Blog](https://medium.com/the-graphical-terminal)
-- [Template Repository](https://github.com/kui-shell/KuiClientTemplate)
-- [Issues](https://github.com/IBM/kui/issues)
-- [Tauri Documentation](https://tauri.app)
-- [Rust Book](https://doc.rust-lang.org/book/)
+### Primary Documentation
+
+- **[User Guide](TAURI_USER_GUIDE.md)** - Complete guide for end users
+- **[Developer Guide](TAURI_DEVELOPER_GUIDE.md)** - Complete guide for developers
+- **[This File (CLAUDE.md)]** - Quick reference for AI assistants
+
+### Technical Documentation
+
+- **[Tauri Migration](TAURI_MIGRATION.md)** - Technical migration details
+- **[Tauri Bridge Usage](docs/TAURI-BRIDGE-USAGE.md)** - IPC communication
+- **[Dual Runtime Plugins](docs/DUAL-RUNTIME-PLUGINS.md)** - Plugin compatibility
+- **[API Documentation](docs/api/README.md)** - API reference
+
+### Migration and Guides
+
+- **[User Migration Guide](docs/MIGRATING_TO_TAURI.md)** - Upgrading from Electron
+- **[Features Documentation](docs/features/)** - Feature-specific guides
+- **[Medium Blog](https://medium.com/the-graphical-terminal)** - Articles and updates
+
+### External Resources
+
+- **[Tauri Documentation](https://tauri.app)** - Tauri framework
+- **[Rust Book](https://doc.rust-lang.org/book/)** - Learning Rust
+- **[TypeScript Handbook](https://www.typescriptlang.org/docs/)** - TypeScript docs
+- **[React Documentation](https://react.dev/)** - React framework
+
+### Repository Resources
+
+- **[GitHub Repository](https://github.com/kubernetes-sigs/kui)** - Source code
+- **[Issues](https://github.com/IBM/kui/issues)** - Bug reports and features
+- **[Discussions](https://github.com/IBM/kui/discussions)** - Questions and ideas
+- **[Template Repository](https://github.com/kui-shell/KuiClientTemplate)** - Custom CLI template
 
 ## Quick Reference
 
@@ -553,18 +642,45 @@ npm run watch:browser  # Accessible at localhost:9080
 
 **Key Concepts:**
 
-- REPL = Read-Eval-Print-Loop (the command processor)
-- Tab = A workspace with command history
-- Block = A single command execution
-- Split = Side-by-side view layout
-- Mode = A view/tab within a response
-- Bridge = Unified IPC layer (Electron/Tauri compatibility)
-- Runtime = Execution environment (Tauri, Electron, or Browser)
+- **REPL**: Read-Eval-Print-Loop (the command processor)
+- **Tab**: A workspace with command history
+- **Block**: A single command execution
+- **Split**: Side-by-side view layout
+- **Mode**: A view/tab within a response
+- **Bridge**: Unified IPC layer (Electron/Tauri compatibility)
+- **Runtime**: Execution environment (Tauri, Electron, or Browser)
+
+**Common Commands:**
+```bash
+# Development
+npm run open              # Start Tauri dev mode
+npm run watch:browser    # Start browser dev mode
+npm run compile          # Compile TypeScript
+
+# Building
+npm run build:tauri:mac:amd64   # Build for macOS Intel
+npm run build:tauri:mac:arm64   # Build for macOS Apple Silicon
+npm run build:tauri:linux:amd64 # Build for Linux
+
+# Testing
+npm run test              # All tests
+npm run test:tauri:all   # All Tauri tests
+npm run lint             # Lint code
+
+# Rust
+cd src-tauri
+cargo check              # Check compilation
+cargo build --release   # Release build
+cargo test              # Run tests
+cargo fmt               # Format code
+cargo clippy            # Lint code
+```
 
 ## Contributing Philosophy
 
 Kui values:
 
+**Documentation Status**: Complete and comprehensive ✅
 - **Performance**: Fast startup, fast command execution (Tauri helps achieve this)
 - **Extensibility**: Plugin-based architecture
 - **Flexibility**: Support Tauri (primary), Electron (legacy), and browser
@@ -578,7 +694,7 @@ Kui values:
 1. **Always use the Tauri bridge** for IPC - never import Electron directly
 2. **Test in both Tauri and browser modes** - ensure compatibility
 3. **Follow Rust conventions** - use `cargo fmt` and `cargo clippy`
-4. **Document IPC commands** - update TAURI-BRIDGE-USAGE.md
+4. **Document IPC commands** - update docs/TAURI-BRIDGE-USAGE.md
 5. **Consider security** - use Tauri's capability system properly
 6. **Optimize for performance** - leverage Rust backend for heavy operations
 7. **Handle errors gracefully** - use Result types in Rust

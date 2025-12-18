@@ -1,0 +1,828 @@
+
+> kui-shell@13.1.0 lint
+> eslint '**/*.{js,ts,tsx}'
+
+
+/Users/elad/PROJ/kui/packages/core/src/api/Client.ts
+   27:70  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   37:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+   50:35  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   57:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+   70:37  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   77:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+   89:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   91:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+  129:24  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  135:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+  147:7   error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  149:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+  157:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  158:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/commands/context.ts
+  19:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  20:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/config/config-manager.ts
+   46:3  error  Missing accessibility modifier on method definition constructor       @typescript-eslint/explicit-member-accessibility
+   66:3  error  Missing accessibility modifier on method definition load              @typescript-eslint/explicit-member-accessibility
+  189:3  error  Missing accessibility modifier on method definition save              @typescript-eslint/explicit-member-accessibility
+  235:3  error  Missing accessibility modifier on method definition getConfig         @typescript-eslint/explicit-member-accessibility
+  242:3  error  Missing accessibility modifier on method definition get               @typescript-eslint/explicit-member-accessibility
+  249:3  error  Missing accessibility modifier on method definition set               @typescript-eslint/explicit-member-accessibility
+  286:3  error  Missing accessibility modifier on method definition update            @typescript-eslint/explicit-member-accessibility
+  326:3  error  Missing accessibility modifier on method definition reset             @typescript-eslint/explicit-member-accessibility
+  341:3  error  Missing accessibility modifier on method definition getSource         @typescript-eslint/explicit-member-accessibility
+  348:3  error  Missing accessibility modifier on method definition watch             @typescript-eslint/explicit-member-accessibility
+  397:3  error  Missing accessibility modifier on method definition disableFileWatch  @typescript-eslint/explicit-member-accessibility
+  428:3  error  Missing accessibility modifier on method definition getSanitized      @typescript-eslint/explicit-member-accessibility
+  435:3  error  Missing accessibility modifier on method definition export            @typescript-eslint/explicit-member-accessibility
+  442:3  error  Missing accessibility modifier on method definition import            @typescript-eslint/explicit-member-accessibility
+
+/Users/elad/PROJ/kui/packages/core/src/config/example.ts
+  110:9  error  'aiConfig' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/core/command-tree.ts
+  189:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  588:92  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/core/events.ts
+   87:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  183:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  192:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  400:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/core/fuzz-testing.ts
+  44:16  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/packages/core/src/main/headless-pretty-print.ts
+  397:11  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/packages/core/src/main/load.ts
+  58:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  59:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/main/main.ts
+  24:10  error  'getPrefsFromEnv' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/models/SubwindowPrefs.ts
+  19:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  19:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/models/command.ts
+  138:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/models/entity.ts
+   86:44  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  111:55  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  145:32  error  A `require()` style import is forbidden                                     @typescript-eslint/no-require-imports
+  177:6   error  'Complete' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  261:3   error  'RowType' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/models/errors.ts
+  33:23  error  'Code' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  38:23  error  'Code' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  43:28  error  'Code' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/models/mmr/content-types.ts
+  42:76  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/models/tab-state.ts
+   57:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  117:79  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/plugins/plugins.ts
+  50:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/packages/core/src/plugins/preloader.ts
+   79:15  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  118:19  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/packages/core/src/repl/enforce-usage.ts
+  21:18  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/packages/core/src/repl/types.ts
+  29:29  error  'O' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/util/i18n.ts
+  40:52  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  46:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  47:16  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+  50:24  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  53:18  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+  74:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/util/mimic-dom.ts
+   34:10  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   35:8   error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   42:78  error  Definition for rule 'n/no-callback-literal' was not found  n/no-callback-literal
+   51:38  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   52:40  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   65:10  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   72:10  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   90:20  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   92:22  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   92:37  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+   94:25  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+  100:25  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+  106:8   error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/webapp/tab.ts
+   28:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  135:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/webapp/themes/default.ts
+  30:20  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  31:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/core/src/webapp/themes/persistence.ts
+  27:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/core/src/webapp/util/bytes.ts
+  33:12  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/proxy/app/routes/exec.js
+  160:20  error  'err' is defined but never used  no-unused-vars
+
+/Users/elad/PROJ/kui/packages/test/src/api/NavResponse.ts
+  152:24  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  153:30  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/packages/test/src/api/cli.ts
+  160:14  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/test/src/api/common.ts
+   27:13  warning  A `require()` style import is forbidden                                  @typescript-eslint/no-require-imports
+   42:8   warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+   62:39  warning  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+   80:21  warning  A `require()` style import is forbidden                                  @typescript-eslint/no-require-imports
+   92:34  warning  A `require()` style import is forbidden                                  @typescript-eslint/no-require-imports
+   98:34  warning  A `require()` style import is forbidden                                  @typescript-eslint/no-require-imports
+   99:9   warning  A `require()` style import is forbidden                                  @typescript-eslint/no-require-imports
+  130:26  error    'popup' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/test/src/api/repl-expect.ts
+   81:17  error    Unexpected constant truthiness on the left-hand side of a `||` expression  no-constant-binary-expression
+  111:45  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  158:27  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+  278:18  error    'err' is defined but never used                                            @typescript-eslint/no-unused-vars
+  293:18  error    'err' is defined but never used                                            @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/packages/test/src/api/spectron-compat.ts
+  32:28  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  33:32  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  36:18  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  42:41  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  42:51  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  42:66  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  42:84  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  43:46  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  43:56  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  43:71  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  43:89  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  46:70  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  53:46  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  54:48  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  58:18  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  93:15  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  96:26  error    'args' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  96:32  warning  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/test/src/api/util.ts
+  248:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/packages/webpack/headless-webpack.config.js
+  141:12  error  'err' is defined but never used  no-unused-vars
+
+/Users/elad/PROJ/kui/packages/webpack/webpack.config.js
+  272:12  error  'err' is defined but never used  no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/fs/src/lib/cd.ts
+  103:16  error  'err2' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/fs/src/lib/glob.ts
+  182:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/fs/src/vfs/CommandsFS.ts
+  26:32  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  39:87  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  92:23  error  'filename' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/fs/src/vfs/TrieVFS.ts
+  230:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  242:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  252:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  261:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/fs/src/vfs/controller/client-side.ts
+  51:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+  65:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+  79:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/fs/src/vfs/posix.ts
+  31:25  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  37:25  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  43:25  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/src/lib/cmds/bash-like.ts
+  160:22  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/src/lib/cmds/catchall.ts
+   76:16  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+  164:35  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/src/lib/util/json.ts
+  29:14  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/src/preload.ts
+  21:46  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/src/pty/server.ts
+   79:20  error  Definition for rule 'n/no-callback-literal' was not found  n/no-callback-literal
+   91:67  error  Definition for rule 'n/no-callback-literal' was not found  n/no-callback-literal
+  149:7   error  Definition for rule 'n/no-deprecated-api' was not found    n/no-deprecated-api
+  433:26  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+  437:26  error  Unexpected any. Specify a different type                   @typescript-eslint/no-explicit-any
+  599:9   error  Unnecessary try/catch wrapper                              no-useless-catch
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/src/tab-state/index.ts
+  26:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-bash-like/src/test/bash-like/pty-many-lines.ts
+  77:18  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+  97:18  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Client/Kui.tsx
+  152:23  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  173:14  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+  229:29  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Client/StatusStripe/GitHubIcon.tsx
+  24:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  25:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Client/UserSettings.ts
+  78:23  error  'K' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Editor/RevertFileButton.tsx
+  49:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Editor/SaveFileButton.tsx
+  47:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Editor/SimpleEditor.tsx
+  203:7  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  210:9  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/KuiFrontmatter.ts
+  78:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/Imports.tsx
+  274:18  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/Wizard/Footer.tsx
+  64:11  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:11  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  66:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/code/dump.ts
+  18:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  26:3   error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/code/encoding.ts
+  26:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/code/filter.ts
+  19:22   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  31:39   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:40   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  48:38   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:41   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:100  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/details.tsx
+  49:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  54:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:98  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/guide/Guide.tsx
+  418:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/img.tsx
+  45:13  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  47:13  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/components/tabbed.tsx
+  187:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/frontmatter-parser.tsx
+  19:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  21:25  error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Markdown/frontmatter.tsx
+  57:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/MiniProgressStepper.tsx
+  93:18  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/ProgressStepper.tsx
+  196:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  200:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  208:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  211:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Content/Table/SequenceDiagram.tsx
+  107:12  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Views/Sidecar/TopNavSidecarV2.tsx
+  86:71  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Views/Terminal/Block/Input.tsx
+  414:5  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  423:5  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  430:5  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  495:5  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  501:5  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  518:5  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Views/Terminal/Block/Inputv2.tsx
+   76:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   76:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   76:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  192:18  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Views/Terminal/ClipboardTransfer.ts
+   32:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   44:12  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  121:14  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/Views/Terminal/ScrollableTerminal.tsx
+  221:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/spi/Icons/index.tsx
+  81:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/spi/Modal/model.ts
+  30:32  error  The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/spi/TextArea/model.ts
+  25:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  26:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-client-common/src/components/spi/Tooltip/model.ts
+  81:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-core-support/src/lib/cmds/history/history.ts
+  32:12  error  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-core-support/src/test/core-support/card.ts
+  73:24  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-core-support/src/test/core-support2/history.ts
+  87:80  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-core-support/src/test/core-support2/tab-navigation.ts
+  48:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/examples/context-menu-usage.ts
+  115:3   error  Missing accessibility modifier on method definition handleMouseEnter                @typescript-eslint/explicit-member-accessibility
+  144:3   error  Missing accessibility modifier on method definition handleMouseLeave                @typescript-eslint/explicit-member-accessibility
+  158:3   error  Missing accessibility modifier on method definition handleRightClick                @typescript-eslint/explicit-member-accessibility
+  186:58  error  Unexpected any. Specify a different type                                            @typescript-eslint/no-explicit-any
+  201:3   error  Missing accessibility modifier on method definition getCachedInsight                @typescript-eslint/explicit-member-accessibility
+  213:3   error  Missing accessibility modifier on method definition setCachedInsight                @typescript-eslint/explicit-member-accessibility
+  222:3   error  Missing accessibility modifier on method definition clear                           @typescript-eslint/explicit-member-accessibility
+  309:9   error  'insight' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/src/prompts/system-prompts.ts
+   803:112  error  Unnecessary escape character: \(  no-useless-escape
+   803:135  error  Unnecessary escape character: \(  no-useless-escape
+   806:102  error  Unnecessary escape character: \(  no-useless-escape
+   806:125  error  Unnecessary escape character: \(  no-useless-escape
+   809:84   error  Unnecessary escape character: \(  no-useless-escape
+   809:107  error  Unnecessary escape character: \(  no-useless-escape
+  1069:102  error  Unnecessary escape character: \(  no-useless-escape
+  1069:125  error  Unnecessary escape character: \(  no-useless-escape
+  1079:74   error  Unnecessary escape character: \|  no-useless-escape
+  1082:129  error  Unnecessary escape character: \(  no-useless-escape
+  1082:152  error  Unnecessary escape character: \(  no-useless-escape
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/src/ui/AIContextMenu.tsx
+  196:27  error  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/src/ui/ContextPanel.tsx
+   24:10   error  'getPriorityClass' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  107:101  error  Unexpected any. Specify a different type                                            @typescript-eslint/no-explicit-any
+  108:47   error  Unexpected any. Specify a different type                                            @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/src/ui/DemoExample.tsx
+  50:3  error  Missing accessibility modifier on method definition analyzeResource     @typescript-eslint/explicit-member-accessibility
+  55:3  error  Missing accessibility modifier on method definition troubleshootIssues  @typescript-eslint/explicit-member-accessibility
+  63:3  error  Missing accessibility modifier on method definition getInsights         @typescript-eslint/explicit-member-accessibility
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/src/utils/resource-context-extractor.ts
+  300:14  error  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/helpers/test-utils.ts
+  194:3   error  Missing accessibility modifier on method definition addResponse                   @typescript-eslint/explicit-member-accessibility
+  199:3   error  Missing accessibility modifier on method definition addError                      @typescript-eslint/explicit-member-accessibility
+  204:3   error  Missing accessibility modifier on method definition exec                          @typescript-eslint/explicit-member-accessibility
+  223:3   error  Missing accessibility modifier on method definition clear                         @typescript-eslint/explicit-member-accessibility
+  231:47  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  231:57  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  232:16  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  234:33  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  295:44  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  299:62  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  302:23  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  314:51  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  334:30  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  336:5   error  'label' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  345:51  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+  372:30  error  Unexpected any. Specify a different type                                          @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/integration/ai-ask.spec.ts
+   28:20  warning  Unexpected any. Specify a different type                                                                                 @typescript-eslint/no-explicit-any
+   76:25  error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type  @typescript-eslint/no-unsafe-function-type
+  185:25  error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type  @typescript-eslint/no-unsafe-function-type
+  233:25  error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type  @typescript-eslint/no-unsafe-function-type
+  291:25  error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type  @typescript-eslint/no-unsafe-function-type
+  365:25  error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type  @typescript-eslint/no-unsafe-function-type
+  451:25  error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type  @typescript-eslint/no-unsafe-function-type
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/integration/context-menu-integration.spec.ts
+   23:3   error    'waitFor' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+   33:23  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+   66:13  error    'resourceData' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  103:13  error    'podData' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  104:13  error    'podDesc' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  105:13  error    'podLogs' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  237:13  error    'response' is assigned a value but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  409:37  warning  Unexpected any. Specify a different type                                                 @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/services/ai-provider.spec.ts
+   26:3   error    Missing accessibility modifier on class property name                 @typescript-eslint/explicit-member-accessibility
+   27:3   error    Missing accessibility modifier on class property models               @typescript-eslint/explicit-member-accessibility
+   29:3   error    Missing accessibility modifier on method definition streamCompletion  @typescript-eslint/explicit-member-accessibility
+   43:3   error    Missing accessibility modifier on method definition complete          @typescript-eslint/explicit-member-accessibility
+   58:3   error    Missing accessibility modifier on method definition testConnection    @typescript-eslint/explicit-member-accessibility
+   62:3   error    Missing accessibility modifier on method definition estimateCost      @typescript-eslint/explicit-member-accessibility
+   92:35  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  100:35  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  108:38  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  109:38  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  115:35  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  121:35  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  128:41  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  136:41  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  144:41  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  151:41  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  353:21  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+  368:21  warning  Unexpected any. Specify a different type                              @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/services/cluster-data-collector.spec.ts
+   38:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   41:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   44:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   47:86   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   50:90   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   53:93   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   56:92   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   59:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   61:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   79:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   82:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   85:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   88:86   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   90:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  101:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  107:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  110:91   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  112:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  135:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:91   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  144:88   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  165:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  168:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  171:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  174:91   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  177:86   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  179:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  210:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  213:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  216:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  218:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  231:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  234:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  237:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  239:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  249:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  252:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  255:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  258:91   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  279:16   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  281:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  300:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  303:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  306:106  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  308:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  318:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  321:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  324:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  326:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  336:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  339:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  342:83   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  344:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  354:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  357:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  360:81   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  362:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  372:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  375:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  378:73   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  380:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  390:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  393:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  396:79   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  398:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  410:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  413:87   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  416:96   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  419:86   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  422:90   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  425:93   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  428:92   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  431:89   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  433:63   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/services/insight-generator.spec.ts
+   19:3   error    'createMockAIResponse' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   21:3   error    'performanceHelpers' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+   33:23  warning  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+   36:3   error    Missing accessibility modifier on method definition constructor                         @typescript-eslint/explicit-member-accessibility
+   36:27  warning  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+   41:3   error    Missing accessibility modifier on method definition generateInsight                     @typescript-eslint/explicit-member-accessibility
+   44:19  warning  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+   71:81  warning  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+   89:3   error    Missing accessibility modifier on method definition clearCache                          @typescript-eslint/explicit-member-accessibility
+   93:3   error    Missing accessibility modifier on method definition getCacheSize                        @typescript-eslint/explicit-member-accessibility
+  100:23  warning  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/setup.ts
+   54:5   error  Missing accessibility modifier on method definition constructor  @typescript-eslint/explicit-member-accessibility
+   54:53  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  111:41  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  163:13  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/ui/ContextMenu.spec.tsx
+   18:46  error  'within' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   21:10  error  'performanceHelpers' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   29:28  error  'resourceName' is missing in props validation                                         react/prop-types
+   29:42  error  'resourceType' is missing in props validation                                         react/prop-types
+   29:56  error  'onAskAI' is missing in props validation                                              react/prop-types
+   29:65  error  'onDebug' is missing in props validation                                              react/prop-types
+   29:74  error  'onExplain' is missing in props validation                                            react/prop-types
+   40:5   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   43:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   47:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   50:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   53:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   80:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   95:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  109:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  121:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  137:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  156:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  176:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  198:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  219:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  241:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  263:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  287:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  313:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  337:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  366:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  396:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  422:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  452:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  473:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  493:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  513:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  536:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  561:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  582:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  596:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  620:15  error  'container' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  621:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  622:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  629:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  645:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  646:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  653:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-ai/tests/ui/ResourceTooltip.spec.tsx
+   21:10  error  'performanceHelpers' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   30:32  error  'resourceName' is missing in props validation                                         react/prop-types
+   30:46  error  'resourceType' is missing in props validation                                         react/prop-types
+   30:60  error  'onLoadInsight' is missing in props validation                                        react/prop-types
+   30:75  error  'delay' is missing in props validation                                                react/prop-types
+   62:5   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   63:7   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   71:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   72:23  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   73:21  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   74:23  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+   99:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  112:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  124:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  134:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  148:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  174:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  202:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  232:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  254:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  276:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  298:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  330:15  error  'result' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  332:11  error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  355:15  error  'rerender' is assigned a value but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  356:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  391:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  432:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  458:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  491:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  524:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  548:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  571:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  593:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  618:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  642:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  675:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  700:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  725:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  750:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  774:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+  807:9   error  'React' must be in scope when using JSX                                               react/react-in-jsx-scope
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-core/src/resource.ts
+  106:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  371:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  382:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  631:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  773:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl-tray-menu/src/tray/menus/index.ts
+  28:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/logs/src/test/logs/helpers.ts
+  112:14  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/controller/cli.ts
+  29:32  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  31:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/controller/client/direct/custom-columns.ts
+  83:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/controller/client/direct/errors.ts
+  40:12  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/controller/client/direct/get.ts
+  221:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/controller/client/direct/watch.ts
+  322:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/controller/kubectl/explain-openshift-fasthpath.ts
+  17:1  error  Definition for rule '@typescript-eslint/camelcase' was not found  @typescript-eslint/camelcase
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/controller/kubectl/status.ts
+  297:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/lib/util/util.ts
+  41:12  error  'err' is defined but never used                                                                                        @typescript-eslint/no-unused-vars
+  92:14  error  This branch can never execute. Its condition is a duplicate or covered by previous conditions in the if-else-if chain  no-dupe-else-if
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/lib/view/formatTable.ts
+  446:84  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  800:22  error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+  802:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/lib/view/modes/Annotations.ts
+  22:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:14  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/lib/view/modes/Summary/impl/Namespace.ts
+  50:12  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/lib/view/modes/Summary/impl/Node.ts
+  48:12  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/tab-state.ts
+  35:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/test/k8s1/config-map.ts
+  59:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/test/k8s2/get-pod.ts
+  203:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/test/k8s2/get-pods-with-watch.ts
+  245:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/test/k8s2/kubectl-exec-vi.ts
+  144:18  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/src/test/k8s4/job.ts
+  55:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+  64:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/tests/lib/k8s/utils.js
+   47:12  error  'err' is defined but never used  no-unused-vars
+   69:12  error  'err' is defined but never used  no-unused-vars
+   75:12  error  'err' is defined but never used  no-unused-vars
+  280:14  error  'err' is defined but never used  no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-kubectl/view-utilization/src/components/ClusterUtilization.tsx
+  26:14  error  The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/components/src/Ask.tsx
+  131:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  139:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/components/src/AskingTerminal.tsx
+  36:12  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/components/src/Plan.tsx
+  261:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/components/src/Playground.tsx
+  37:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/components/src/PlaygroundTextual.tsx
+  57:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/components/src/ProfileExplorer.tsx
+  467:14  error  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  649:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  650:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/components/src/Terminal.tsx
+  32:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-madwizard/do/src/doMadwizard.ts
+  130:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  131:12  error  'err' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/elad/PROJ/kui/plugins/plugin-proxy-support/src/lib/proxy-executor.ts
+  284:38  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-s3/ibm/src/controller/local.ts
+  26:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-s3/ibm/src/model/Config.ts
+  27:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  31:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  41:76  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  52:69  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-s3/ibm/src/plugin.ts
+  30:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-s3/src/providers/aws.ts
+  58:35  error  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  62:6   error  'ValidConfig' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  65:32  error  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+  66:33  error  Unexpected any. Specify a different type                                       @typescript-eslint/no-explicit-any
+
+/Users/elad/PROJ/kui/plugins/plugin-s3/src/test/s3/util.ts
+  24:16  warning  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/elad/PROJ/kui/plugins/plugin-s3/src/vfs/index.ts
+  112:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  936:9   error  Unnecessary try/catch wrapper            no-useless-catch
+  974:7   error  Unnecessary try/catch wrapper            no-useless-catch
+
+✖ 539 problems (408 errors, 131 warnings)
+

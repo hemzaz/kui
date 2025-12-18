@@ -25,6 +25,7 @@
     "*.scss"
   ],
   "devDependencies": {
+    "@types/dagre": "^0.7.52",
     "@types/resize-observer-browser": "^0.1.7",
     "@types/tmp": "^0.2.3",
     "@types/turndown": "^5.0.1",
@@ -38,11 +39,13 @@
     "@patternfly/react-table": "^4.113.0",
     "anser": "^2.1.1",
     "ansi-regex": "^6.0.1",
+    "dagre": "^0.8.5",
     "entities": "^4.4.0",
     "madwizard": "^9.0.2",
-    "monaco-editor": "^0.37.1",
-    "monaco-editor-webpack-plugin": "^7.0.1",
+    "monaco-editor": "^0.52.0",
+    "monaco-editor-webpack-plugin": "^7.1.1",
     "react-markdown": "^8.0.6",
+    "reactflow": "^11.11.4",
     "rehype-raw": "^6.1.1",
     "rehype-slug": "^5.1.0",
     "remark-collapse": "^0.1.2",

@@ -1,0 +1,256 @@
+/*
+ * Copyright 2025 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.kui-command-palette-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  z-index: 10000;
+}
+
+.kui-command-palette-container {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kui-command-palette-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 0;
+
+  .item-icon-wrapper {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .item-icon {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.category-icon {
+        font-size: 14px;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .item-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .item-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-01);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-description {
+      font-size: 12px;
+      color: var(--color-text-02);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ai-reason {
+      font-size: 11px;
+      color: var(--color-text-02);
+      font-style: italic;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0.8;
+    }
+  }
+
+  // AI suggestion badge
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 3px;
+    white-space: nowrap;
+
+    &.ai {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    &.pattern {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    &.hybrid {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+
+    .confidence {
+      opacity: 0.9;
+      font-size: 9px;
+    }
+  }
+
+  // Highlight AI-suggested commands
+  &.ai-suggested {
+    border-left: 3px solid transparent;
+    border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) 1;
+    padding-left: 5px;
+  }
+
+  .item-metadata {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+
+    .item-keybinding {
+      .key-binding {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+
+        .key {
+          display: inline-block;
+          padding: 2px 6px;
+          font-size: 11px;
+          font-family: var(--font-monospace);
+          background: var(--color-base03);
+          border: 1px solid var(--color-base02);
+          border-radius: 3px;
+          color: var(--color-text-02);
+        }
+
+        .key-separator {
+          color: var(--color-text-02);
+          font-size: 10px;
+        }
+      }
+    }
+
+    .item-category {
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: white;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .item-hit-count {
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      background: var(--color-base04);
+      color: var(--color-text-02);
+      border-radius: 3px;
+      font-family: var(--font-monospace);
+    }
+  }
+}
+
+// Fuzzy search highlighting
+.fuzzy-highlight {
+  .fuzzy-match {
+    background: rgba(255, 199, 6, 0.3);
+    color: inherit;
+    font-weight: 600;
+    padding: 0 1px;
+    border-radius: 2px;
+  }
+}
+
+// Dark mode
+[kui-theme="dark"] {
+  .kui-command-palette-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .kui-command-palette-item {
+    .item-content {
+      .item-name {
+        color: #cccccc;
+      }
+
+      .item-description {
+        color: #858585;
+      }
+    }
+
+    .item-metadata {
+      .key-binding .key {
+        background: #2d2d2d;
+        border-color: #3c3c3c;
+        color: #cccccc;
+      }
+
+      .item-hit-count {
+        background: #2d2d2d;
+        color: #858585;
+      }
+    }
+  }
+
+  // Fuzzy highlighting in dark mode
+  .fuzzy-highlight {
+    .fuzzy-match {
+      background: rgba(255, 199, 6, 0.4);
+      color: #ffeb3b;
+    }
+  }
+}

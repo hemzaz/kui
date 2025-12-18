@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React, { useState, useRef, useCallback, useImperativeHandle, forwardRef, memo } from 'react'
 
 import { eventBus } from '@kui-shell/core/mdist/api/Events'
 import { Tab as KuiTab } from '@kui-shell/core/mdist/api/Tab'
@@ -89,173 +89,187 @@ type Props = InputOptions &
   }> &
   BlockViewTraits
 
-interface State {
-  // needed temporarily to make pty/client happy
-  _block?: HTMLElement
-
-  /** Is the Input element focused? */
-  isFocused: boolean
-
-  /** Does a child want to us to be maximized? */
-  isMaximized: boolean
+export interface BlockHandle {
+  doFocus: () => void
+  inputValue: () => string | undefined
+  state: {
+    _block: HTMLElement | null
+  }
+  props: {
+    model: BlockModel
+  }
 }
 
-export default class Block extends React.PureComponent<Props, State> {
-  /** grab a ref to the Input to help with maintaining focus */
-  private _input: Input
+const Block = forwardRef<BlockHandle, Props>((props, ref) => {
+  const [blockElement, setBlockElement] = useState<HTMLElement | null>(null)
+  const [isFocused, setIsFocused] = useState(false)
+  const [maximizedState, setMaximizedState] = useState(false)
+  const inputRef = useRef<Input>(null)
 
-  public constructor(props: Props) {
-    super(props)
-    this.state = {
-      isFocused: false,
-      isMaximized: false
+  // Expose public methods and state via ref for compatibility with class component usage
+  useImperativeHandle(ref, () => ({
+    doFocus: () => {
+      inputRef.current?.doFocus()
+    },
+    inputValue: () => {
+      return inputRef.current?.value()
+    },
+    state: {
+      _block: blockElement
+    },
+    props: {
+      model: props.model
     }
-  }
+  }), [blockElement, props.model])
 
-  /** Owner wants us to focus on the current prompt */
-  public doFocus() {
-    if (this._input) {
-      this._input.doFocus()
-    }
-  }
-
-  public inputValue() {
-    return this._input && this._input.value()
-  }
-
-  /** Child wants to maximize/restore */
-  private willChangeSize(width: Width) {
-    this.setState({
-      isMaximized: width === Width.Maximized
-    })
+  // Handler for size changes
+  const handleChangeSize = useCallback((width: Width) => {
+    setMaximizedState(width === Width.Maximized)
     setTimeout(() => {
-      eventBus.emitTabLayoutChange(this.props.tab.uuid)
-      if (this.state._block) {
-        this.state._block.scrollIntoView(true)
+      eventBus.emitTabLayoutChange(props.tab.uuid)
+      if (blockElement) {
+        blockElement.scrollIntoView(true)
       }
     })
-  }
+  }, [blockElement, props.tab.uuid])
 
-  private readonly _willChangeSize = this.willChangeSize.bind(this)
-
-  private onOutputRender() {
-    if (this.props.onOutputRender) {
-      this.props.onOutputRender()
+  // Handler for output render
+  const handleOutputRender = useCallback(() => {
+    if (props.onOutputRender) {
+      props.onOutputRender()
     }
+  }, [props.onOutputRender])
 
-    // oof: this is for bottom input clients... but it messes up
-    // notebooks, constantly scrolling to bottom...
-    /* if (this.props.noActiveInput && this.state._block) {
-      this.state._block.scrollIntoView()
-    } */
-  }
-
-  private readonly _onOutputRender = this.onOutputRender.bind(this)
-
-  private output() {
-    if (isActive(this.props.model) || isFinished(this.props.model) || isProcessing(this.props.model)) {
+  // Render output component
+  const renderOutput = useCallback(() => {
+    if (isActive(props.model) || isFinished(props.model) || isProcessing(props.model)) {
       return (
         <Output
-          key={isEmpty(this.props.model) ? undefined : this.props.model.execUUID}
-          uuid={this.props.uuid}
-          tab={this.props.tab}
-          idx={this.props.idx}
-          model={this.props.model}
-          splitPosition={this.props.splitPosition}
-          willRemove={this.props.willRemove}
-          willChangeSize={this._willChangeSize}
-          onRender={this._onOutputRender}
-          willUpdateCommand={this.props.willUpdateCommand}
-          isWidthConstrained={this.props.isWidthConstrained}
-          willFocusBlock={this.props.willFocusBlock}
+          key={isEmpty(props.model) ? undefined : props.model.execUUID}
+          uuid={props.uuid}
+          tab={props.tab}
+          idx={props.idx}
+          model={props.model}
+          splitPosition={props.splitPosition}
+          willRemove={props.willRemove}
+          willChangeSize={handleChangeSize}
+          onRender={handleOutputRender}
+          willUpdateCommand={props.willUpdateCommand}
+          isWidthConstrained={props.isWidthConstrained}
+          willFocusBlock={props.willFocusBlock}
         />
       )
     }
-  }
+    return null
+  }, [
+    props.model,
+    props.uuid,
+    props.tab,
+    props.idx,
+    props.splitPosition,
+    props.willRemove,
+    props.willUpdateCommand,
+    props.isWidthConstrained,
+    props.willFocusBlock,
+    handleChangeSize,
+    handleOutputRender
+  ])
 
-  private customInput() {
-    if (this.props.children && React.isValidElement(this.props.children)) {
+  // Render custom input if provided
+  const renderCustomInput = useCallback(() => {
+    if (props.children && React.isValidElement(props.children)) {
       return React.cloneElement(
-        this.props.children as React.ReactElement<Pick<Props, 'idx' | 'tab' | 'uuid'> & { block: State['_block'] }>,
+        props.children as React.ReactElement<Pick<Props, 'idx' | 'tab' | 'uuid'> & { block: HTMLElement }>,
         {
-          idx: this.props.idx,
-          tab: this.props.tab,
-          uuid: this.props.uuid,
-          block: this.state._block
+          idx: props.idx,
+          tab: props.tab,
+          uuid: props.uuid,
+          block: blockElement
         }
       )
     }
+    return null
+  }, [props.children, props.idx, props.tab, props.uuid, blockElement])
+
+  // Render input component
+  const renderInput = useCallback(() => {
+    const customInput = renderCustomInput()
+    if (customInput) {
+      return customInput
+    }
+
+    if (!blockElement) {
+      return null
+    }
+
+    return (
+      <Input
+        key={props.uuid}
+        uuid={props.uuid}
+        tab={props.tab}
+        model={props.model}
+        isExperimental={props.isExperimental}
+        {...props}
+        willFocusBlock={props.willFocusBlock}
+        _block={blockElement}
+        ref={inputRef}
+      >
+        {props.children}
+      </Input>
+    )
+  }, [blockElement, props, renderCustomInput])
+
+  // Don't render if noActiveInput and block is active
+  if (props.noActiveInput && isActive(props.model)) {
+    return null
   }
 
-  private input() {
-    return (
-      this.customInput() ||
-      (this.state._block && (
-        <Input
-          key={this.props.uuid}
-          uuid={this.props.uuid}
-          tab={this.props.tab}
-          model={this.props.model}
-          isExperimental={this.props.isExperimental}
-          {...this.props}
-          willFocusBlock={this.props.willFocusBlock}
-          _block={this.state._block}
-          ref={c => {
-            this._input = c
-          }}
+  const hideOut = hideOutput(props.model)
+  const output = renderOutput()
+  const input = renderInput()
+
+  return (
+    <MutabilityContext.Consumer>
+      {value => (
+        <li
+          className={'repl-block ' + (hideOut ? '' : props.model.state.toString())}
+          data-is-executable={value.executable || undefined}
+          data-is-editable={value.editable || undefined}
+          data-is-maximized={maximizedState || isMaximized(props.model) || undefined}
+          data-is-output-only={isOutputOnly(props.model) || undefined}
+          data-is-empty={isEmpty(props.model) || undefined}
+          data-announcement={isAnnouncement(props.model) || undefined}
+          data-uuid={hasUUID(props.model) && props.model.execUUID}
+          data-scrollback-uuid={props.uuid}
+          data-input-count={props.idx}
+          data-is-focused={props.isFocused || undefined}
+          data-is-replay={isReplay(props.model) || undefined}
+          ref={setBlockElement}
+          tabIndex={isActive(props.model) ? -1 : 1}
+          onClick={props.willFocusBlock}
+          onFocus={props.onFocus}
         >
-          {this.props.children}
-        </Input>
-      ))
-    )
-  }
-
-  /**
-   * For Active or Empty blocks, just show the <Input/>, otherwise
-   * wrap the <Input/>-<Output/> pair.
-   *
-   */
-  public render() {
-    const hideOut = hideOutput(this.props.model)
-
-    return (
-      (!this.props.noActiveInput || !isActive(this.props.model)) && (
-        <MutabilityContext.Consumer>
-          {value => (
-            <li
-              className={'repl-block ' + (hideOut ? '' : this.props.model.state.toString())}
-              data-is-executable={value.executable || undefined}
-              data-is-editable={value.editable || undefined}
-              data-is-maximized={this.state.isMaximized || isMaximized(this.props.model) || undefined}
-              data-is-output-only={isOutputOnly(this.props.model) || undefined}
-              data-is-empty={isEmpty(this.props.model) || undefined}
-              data-announcement={isAnnouncement(this.props.model) || undefined}
-              data-uuid={hasUUID(this.props.model) && this.props.model.execUUID}
-              data-scrollback-uuid={this.props.uuid}
-              data-input-count={this.props.idx}
-              data-is-focused={this.props.isFocused || undefined}
-              data-is-replay={isReplay(this.props.model) || undefined}
-              ref={c => this.setState({ _block: c })}
-              tabIndex={isActive(this.props.model) ? -1 : 1}
-              onClick={this.props.willFocusBlock}
-              onFocus={this.props.onFocus}
-            >
-              <React.Fragment>
-                {isAnnouncement(this.props.model) || isOutputOnly(this.props.model) ? (
-                  this.output()
-                ) : /* isActive(this.props.model) || */ isEmpty(this.props.model) ? (
-                  this.input()
-                ) : (
-                  <React.Fragment>
-                    {this.input()}
-                    {!hideOut && this.output()}
-                  </React.Fragment>
-                )}
-              </React.Fragment>
-            </li>
+          {isAnnouncement(props.model) || isOutputOnly(props.model) ? (
+            output
+          ) : isEmpty(props.model) ? (
+            input
+          ) : (
+            <>
+              {input}
+              {!hideOut && output}
+            </>
           )}
-        </MutabilityContext.Consumer>
-      )
-    )
-  }
-}
+        </li>
+      )}
+    </MutabilityContext.Consumer>
+  )
+})
+
+Block.displayName = 'Block'
+
+const MemoizedBlock = memo(Block)
+
+// Export both the component and its types for compatibility
+export default MemoizedBlock
+export type BlockComponent = React.ElementRef<typeof MemoizedBlock>
+// BlockHandle is already exported via the interface declaration above

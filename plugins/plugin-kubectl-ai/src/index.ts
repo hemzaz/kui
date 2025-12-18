@@ -22,8 +22,23 @@ export { default as preload } from './preload'
 
 // Export types for use by other plugins
 export * from './types/ai-types'
+export * from './types/cluster-types'
 
-// TODO: Export services and collectors once implemented
-// export * from './services/provider-factory'
-// export { CacheManager } from './cache/cache-manager'
-// export { ClusterDataCollector } from './context/cluster-data-collector'
+// Export services
+export { ProviderFactory } from './services/provider-factory'
+export { AnthropicProvider } from './services/anthropic-provider'
+export { OpenAIProvider } from './services/openai-provider'
+export { AzureProvider } from './services/azure-provider'
+export { OllamaProvider } from './services/ollama-provider'
+
+// Export context collector
+export { ClusterDataCollector } from './context/cluster-data-collector'
+
+// Export cache manager
+export { CacheManager } from './cache/cache-manager'
+
+// Export UI components
+export * from './ui'
+
+// Export config loader
+export { loadConfig, saveConfig } from './utils/config-loader'

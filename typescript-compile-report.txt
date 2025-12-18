@@ -1,0 +1,26 @@
+
+> kui-shell@13.1.0 compile
+> npm run compile:source && npx kui-prescan
+
+
+> kui-shell@13.1.0 compile:source
+> npm run compile:source:es6
+
+
+> kui-shell@13.1.0 compile:source:es6
+> (tsc -p packages/core/tsconfig.json || true) && (tsc -p packages/test/tsconfig.json || true) && (tsc -p packages/react/tsconfig.json || true) && (tsc -p plugins/plugin-bash-like/fs/tsconfig.json || true) && (tsc -p plugins/plugin-bash-like/tsconfig.json || true) && (tsc -p plugins/plugin-client-common/notebook/tsconfig.json || true) && (tsc -p plugins/plugin-client-common/tsconfig.json || true) && (tsc -p plugins/plugin-core-support/tsconfig.json || true) && (tsc -p plugins/plugin-client-default/tsconfig.json || true) && (tsc -p plugins/plugin-kubectl/components/tsconfig.json || true) && (tsc --build tsconfig.json || true)
+
+plugins/plugin-bash-like/src/pty/server.ts(567,23): error TS2740: Type 'Server<typeof WebSocket, typeof IncomingMessage>' is missing the following properties from type 'Server<typeof IncomingMessage, typeof ServerResponse>': closeAllConnections, closeIdleConnections, addContext, getTicketKeys, and 18 more.
+plugins/plugin-bash-like/src/pty/server.ts(598,7): error TS2322: Type 'Promise<void>' is not assignable to type 'KResponse<any> | Promise<KResponse<any>>'.
+  Type 'Promise<void>' is not assignable to type 'Promise<KResponse<any>>'.
+    Type 'void' is not assignable to type 'KResponse<any>'.
+plugins/plugin-bash-like/src/pty/server.ts(567,23): error TS2740: Type 'Server<typeof WebSocket, typeof IncomingMessage>' is missing the following properties from type 'Server<typeof IncomingMessage, typeof ServerResponse>': closeAllConnections, closeIdleConnections, addContext, getTicketKeys, and 18 more.
+plugins/plugin-bash-like/src/pty/server.ts(598,7): error TS2322: Type 'Promise<void>' is not assignable to type 'KResponse<any> | Promise<KResponse<any>>'.
+  Type 'Promise<void>' is not assignable to type 'Promise<KResponse<any>>'.
+    Type 'void' is not assignable to type 'KResponse<any>'.
+plugins/plugin-kubectl-ai/src/ui/DemoExample.tsx(317,21): error TS2322: Type 'MutableRefObject<HTMLElement>' is not assignable to type 'LegacyRef<HTMLTableDataCellElement>'.
+  Type 'MutableRefObject<HTMLElement>' is not assignable to type 'RefObject<HTMLTableDataCellElement>'.
+    Types of property 'current' are incompatible.
+      Type 'HTMLElement' is missing the following properties from type 'HTMLTableDataCellElement': abbr, align, axis, bgColor, and 11 more.
+compiling plugin registry /Users/elad/PROJ/kui to default location
+Deferring prescan

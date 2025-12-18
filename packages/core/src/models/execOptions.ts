@@ -19,6 +19,8 @@ import { Tab } from '../webapp/tab'
 import { Stream, Streamable, StreamableFactory } from './streamable'
 import { Block } from '../webapp/models/block'
 import { Job } from '../core/jobs/job'
+import type { Writable } from 'stream'
+import type { Entity } from './entity'
 
 export interface ExecOptions {
   /** force execution in a given tab? */
@@ -27,13 +29,13 @@ export interface ExecOptions {
   /** execution UUID */
   execUUID?: string
 
-  /** pass through uninterpreted data */
-  data?: boolean | number | string | Buffer | Record<string, any>
+  /** pass through uninterpreted data - can be primitives, objects, streams, or entities */
+  data?: boolean | number | string | Buffer | Writable | Entity | Record<string, unknown>
 
   /** pass watch state variables to subcommands being watched  */
   watch?: {
     iteration: number
-    accumulator: Record<string, any>
+    accumulator: Record<string, unknown>
   }
 
   /** cwd? */
@@ -51,11 +53,13 @@ export interface ExecOptions {
 
   leaveBottomStripeAlone?: boolean
 
-  filter?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  /** Filter function for resource selection */
+  filter?: <T>(resource: T) => boolean
   contextChangeOK?: boolean
-  credentials?: Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
+  credentials?: Record<string, unknown>
 
-  custom?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  /** Custom user-defined options passed through to command handlers */
+  custom?: Record<string, unknown>
   rawResponse?: boolean
   isDrilldown?: boolean
   block?: Block
@@ -91,8 +95,8 @@ export interface ExecOptions {
 
   createErrorStream?: StreamableFactory
   createOutputStream?: StreamableFactory
-  stdout?: (str: Streamable) => any // eslint-disable-line @typescript-eslint/no-explicit-any
-  stderr?: (str: string) => any // eslint-disable-line @typescript-eslint/no-explicit-any
+  stdout?: (str: Streamable) => void | Promise<void>
+  stderr?: (str: string) => void | Promise<void>
   pipeStdin?: boolean
 
   /** on job init, pass the job, and get back a stdout; i.e. just before the PTY is brought up */
@@ -104,8 +108,11 @@ export interface ExecOptions {
   /** on job exit, pass the exitCode */
   onExit?: (exitCode: number) => void
 
-  parameters?: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  entity?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  /** Command parameters for internal use */
+  parameters?: Record<string, unknown>
+
+  /** Entity associated with the command execution */
+  entity?: Record<string, unknown>
 
   /** Masquerade as if we executed this command line */
   masquerade?: string

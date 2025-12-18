@@ -20,7 +20,7 @@ import { eventBus } from '@kui-shell/core/mdist/api/Events'
 import { Tab as KuiTab } from '@kui-shell/core/mdist/api/Tab'
 
 import KuiContext from './context'
-import Block from '../Views/Terminal/Block'
+import Block, { BlockHandle } from '../Views/Terminal/Block'
 import KuiConfiguration from './KuiConfiguration'
 import { InputOptions } from '../Views/Terminal/Block/Input'
 import BlockModel, { Active } from '../Views/Terminal/Block/BlockModel'
@@ -43,7 +43,7 @@ interface State {
 }
 
 export default class InputStripe extends React.PureComponent<Props, State> {
-  private _blockRef = React.createRef<Block>()
+  private _blockRef = React.createRef<BlockHandle>()
 
   public constructor(props: Props) {
     super(props)

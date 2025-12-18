@@ -68,7 +68,7 @@ export default function (registrar: Registrar) {
     if (Buffer.isBuffer(execOptions.data)) {
       throw new Error('Unsupported replay content')
     } else {
-      return execOptions.data
+      return execOptions.data as KResponse
     }
   })
 

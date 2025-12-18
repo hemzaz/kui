@@ -1,0 +1,154 @@
+/*
+ * Copyright 2025 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.kui-picker {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
+  &-input-wrapper {
+    padding: 12px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  &-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    background: var(--color-input-background);
+    border: 1px solid var(--color-input-border);
+    border-radius: 4px;
+    color: var(--color-text-01);
+    outline: none;
+    font-family: var(--font-monospace);
+
+    &:focus {
+      border-color: var(--color-brand-01);
+      box-shadow: 0 0 0 2px var(--color-focus-ring);
+    }
+
+    &::placeholder {
+      color: var(--color-text-02);
+    }
+  }
+
+  &-results {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  &-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.1s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: var(--color-hover-background);
+    }
+
+    &.selected {
+      background: var(--color-selection-background);
+      color: var(--color-text-01);
+    }
+  }
+
+  &-no-matches {
+    padding: 24px 12px;
+    text-align: center;
+    color: var(--color-text-02);
+    font-size: 14px;
+  }
+
+  &-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-background-subtle);
+    font-size: 12px;
+    color: var(--color-text-02);
+  }
+
+  &-help-text {
+    font-family: var(--font-monospace);
+  }
+
+  &-match-count {
+    font-weight: 500;
+  }
+}
+
+// Dark mode overrides
+[kui-theme="dark"] {
+  .kui-picker {
+    background: #1e1e1e;
+    border-color: #3c3c3c;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+    &-input {
+      background: #2d2d2d;
+      border-color: #3c3c3c;
+      color: #cccccc;
+
+      &:focus {
+        border-color: #007acc;
+        box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3);
+      }
+
+      &::placeholder {
+        color: #6a6a6a;
+      }
+    }
+
+    &-item {
+      border-color: #2d2d2d;
+
+      &:hover {
+        background: #2d2d2d;
+      }
+
+      &.selected {
+        background: #094771;
+      }
+    }
+
+    &-no-matches {
+      color: #858585;
+    }
+
+    &-footer {
+      background: #252526;
+      border-color: #3c3c3c;
+      color: #858585;
+    }
+  }
+}

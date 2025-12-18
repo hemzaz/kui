@@ -24,11 +24,10 @@ import { exec } from 'child_process'
  *
  */
 function prefetchEnv() {
-  // eslint-disable-next-line no-async-promise-executor
-  return new Promise<void>(async (resolve, reject) => {
+  return (async () => {
     if (process.env.TERM || process.platform === 'win32') {
       debug('skipping prefetchEnv')
-      return resolve()
+      return
     }
 
     debug('prefetchEnv')
@@ -36,31 +35,33 @@ function prefetchEnv() {
     const shell = await getLoginShell()
     debug('prefetchEnv got shell', shell)
 
-    exec(`${shell} -l -c printenv`, async (err, stdout, stderr) => {
-      try {
-        if (stderr) {
-          debug(stderr)
-        }
-        if (err) {
-          debug('error in prefetchEnv 1', err)
-          reject(err)
-        } else {
-          const { default: propertiesParser } = await import('properties-parser')
-          const env = propertiesParser.parse(stdout.toString())
-          debug('got env', env)
-          for (const key in env) {
-            if (key !== '_') {
-              process.env[key] = env[key]
-            }
+    return new Promise<void>((resolve, reject) => {
+      exec(`${shell} -l -c printenv`, async (err, stdout, stderr) => {
+        try {
+          if (stderr) {
+            debug(stderr)
           }
-          resolve()
+          if (err) {
+            debug('error in prefetchEnv 1', err)
+            reject(err)
+          } else {
+            const { default: propertiesParser } = await import('properties-parser')
+            const env = propertiesParser.parse(stdout.toString())
+            debug('got env', env)
+            for (const key in env) {
+              if (key !== '_') {
+                process.env[key] = env[key]
+              }
+            }
+            resolve()
+          }
+        } catch (err) {
+          console.error('error in prefetchEnv 2', err)
+          reject(err)
         }
-      } catch (err) {
-        console.error('error in prefetchEnv 2', err)
-        reject(err)
-      }
+      })
     })
-  })
+  })()
 }
 
 /**
@@ -68,32 +69,33 @@ function prefetchEnv() {
  *
  */
 function prefetchHome() {
-  // eslint-disable-next-line no-async-promise-executor
-  return new Promise<void>(async (resolve, reject) => {
+  return (async () => {
     if (process.env.HOME) {
       debug('skipping prefetchHome')
-      return resolve()
+      return
     }
 
-    exec('eval echo ~', (err, stdout, stderr) => {
-      try {
-        if (stderr) {
-          debug(stderr)
+    return new Promise<void>((resolve, reject) => {
+      exec('eval echo ~', (err, stdout, stderr) => {
+        try {
+          if (stderr) {
+            debug(stderr)
+          }
+          if (err) {
+            debug('Error retrieving HOME', err)
+          } else {
+            const HOME = stdout.toString()
+            debug('got HOME', HOME)
+            process.env._HOME = HOME
+          }
+        } catch (err) {
+          reject(err)
+        } finally {
+          resolve()
         }
-        if (err) {
-          debug('Error retrieving HOME', err)
-        } else {
-          const HOME = stdout.toString()
-          debug('got HOME', HOME)
-          process.env._HOME = HOME
-        }
-      } catch (err) {
-        reject(err)
-      } finally {
-        resolve()
-      }
+      })
     })
-  })
+  })()
 }
 
 /**

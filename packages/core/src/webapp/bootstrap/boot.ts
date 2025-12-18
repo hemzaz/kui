@@ -52,11 +52,12 @@ const domReady = (inSandbox: boolean, client?: Client) => async () => {
     )
 
     // ELECTRON REMOVED: Skip electron-events initialization
+    // Initialize Tauri menu listeners if running in Tauri
     waitForThese.push(
       // document.body.classList.contains('in-electron')
       //   ? import(/* webpackChunkName: "electron" */ /* webpackMode: "lazy" */ '../electron-events').then(_ => _.init())
       //   : Promise.resolve()
-      Promise.resolve()
+      import('../../main/tauri-menu-integration').then(_ => _.default()).catch(() => Promise.resolve())
     )
 
     waitForThese.push(waitForThese[1].then(() => initializer).then(_ => _.init()))

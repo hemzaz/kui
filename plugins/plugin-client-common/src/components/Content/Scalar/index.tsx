@@ -39,6 +39,7 @@ import {
 } from '@kui-shell/core/mdist/api/Response'
 
 const Ansi = React.lazy(() => import('./Ansi'))
+const VirtualAnsi = React.lazy(() => import('./VirtualAnsi'))
 const Commentary = React.lazy(() => import('../Commentary'))
 import HTMLDom from './HTMLDom' // !! DO NOT MAKE LAZY. See https://github.com/IBM/kui/issues/6758
 const XtermDom = React.lazy(() => import('./XtermDom'))
@@ -138,7 +139,15 @@ export default class Scalar extends React.PureComponent<Props, State> {
 
       // Markdown interprets escapes, so we need to double-escape
       if (message[0] === '\u001b') {
-        return <Ansi onRender={this._onRender}>{message}</Ansi>
+        // Use VirtualAnsi for large outputs (more than 500 lines)
+        const lineCount = message.split('\n').length
+        const useVirtualAnsi = lineCount > 500
+
+        return useVirtualAnsi ? (
+          <VirtualAnsi onRender={this._onRender}>{message}</VirtualAnsi>
+        ) : (
+          <Ansi onRender={this._onRender}>{message}</Ansi>
+        )
       } else {
         return (
           <Markdown

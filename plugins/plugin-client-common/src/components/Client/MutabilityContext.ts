@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import React from 'react'
+/**
+ * @deprecated This module is migrated to Zustand.
+ * Import from @kui-shell/core/store instead:
+ *   import { useMutabilityStore } from '@kui-shell/core/store'
+ *
+ * For backward compatibility, this re-exports the bridge.
+ */
+
 import { isOfflineClient, isReadOnlyClient } from '@kui-shell/core/mdist/api/Client'
 
 export interface MutabilityState {
@@ -54,5 +61,8 @@ export function toggleReadOnlyBit(state: MutabilityState): MutabilityState {
   return setReadOnlyBit(state, !state.editable)
 }
 
-/** Context variable to keep track of tab content viewing mode: edit or read only */
-export const MutabilityContext = React.createContext(defaultState)
+/**
+ * @deprecated Use useMutabilityStore() from @kui-shell/core/store instead
+ * This is kept for backward compatibility during migration
+ */
+export { MutabilityContext, useMutability } from '@kui-shell/core/mdist/store/context-bridge'

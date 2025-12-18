@@ -15,7 +15,7 @@
 //! Window management utilities for Kui
 
 use log::debug;
-use tauri::{PhysicalPosition, PhysicalSize};
+use tauri::PhysicalPosition;
 
 /// Default window dimensions
 pub const DEFAULT_WIDTH: u32 = 1280;

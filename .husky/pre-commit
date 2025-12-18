@@ -1,4 +1,45 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+echo "Running pre-commit checks..."
+
+# Run lint-staged for TypeScript/JavaScript files
+echo "1. Checking TypeScript/JavaScript formatting and linting..."
 npx lint-staged
+
+# Check Rust formatting and linting in Tauri project
+if [ -d "src-tauri" ]; then
+  echo "2. Checking Rust code quality..."
+  cd src-tauri
+
+  # Check if cargo fmt would make changes (without modifying files)
+  echo "   - Running cargo fmt --check..."
+  if ! cargo fmt --check --quiet; then
+    echo "❌ Rust code formatting check failed!"
+    echo "Run 'cd src-tauri && cargo fmt' to fix formatting issues."
+    cd ..
+    exit 1
+  fi
+  echo "   ✅ Rust formatting is correct"
+
+  # Run Clippy for linting (allow warnings in pre-commit, but show them)
+  echo "   - Running cargo clippy..."
+  if ! cargo clippy --all-targets --all-features -- -D warnings 2>&1 | tee /tmp/clippy-output.txt; then
+    echo "❌ Clippy found issues that must be fixed!"
+    echo ""
+    echo "Common fixes:"
+    echo "  - Remove unused imports: cargo fix --allow-dirty"
+    echo "  - Fix specific warnings: See output above"
+    echo "  - Temporarily allow: #[allow(clippy::lint_name)]"
+    echo ""
+    cd ..
+    exit 1
+  fi
+  echo "   ✅ Clippy checks passed"
+
+  cd ..
+else
+  echo "⚠️  src-tauri directory not found, skipping Rust checks"
+fi
+
+echo "✅ All pre-commit checks passed!"

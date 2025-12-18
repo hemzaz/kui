@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- 
+
 
 import Debug from 'debug'
 import { minimatch } from 'minimatch'
@@ -130,7 +130,7 @@ class S3VFSResponder extends S3VFS implements VFS {
     const { bucketName, fileName = '' } = this.split('')
     try {
       await this.client.statObject(bucketName, join(fileName, '.init'))
-    } catch (err) {  
+    } catch (err) {
       if (err.code === 'NotFound') {
         try {
           if (!(await this.existsBucket(bucketName))) {
@@ -141,7 +141,7 @@ class S3VFSResponder extends S3VFS implements VFS {
             join(fileName, '.init'),
             Readable.from('tmp mount successfully initialized')
           )
-        } catch (err) {  
+        } catch (err) {
           console.error(`Error initializing provider ${this.mountPath}`, err)
         }
       } else {
@@ -483,7 +483,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         debug('dirstat latency', end - start, filepath)
         return res
       }
-    } catch (err) {  
+    } catch (err) {
       debug('Error in S3VFS.ls', err)
       throw err
     }
@@ -507,27 +507,29 @@ class S3VFSResponder extends S3VFS implements VFS {
       if (!this.options.understandsFolders) {
         // sigh, minio fails with stat'ing a folder (check: AWS, too? COS seems to be ok)
         try {
-          return await new Promise((resolve, reject) => {
-            try {
-              const stream = this.client.listObjects(bucketName, fileName)
-              stream.on('error', err => {
-                console.error(err)
-                resolve(false)
-              })
-              stream.on('end', () => {
-                // if we get here, then the list gave back nothing
-                resolve(false)
-              })
-              stream.on('data', data => {
-                const name = data.name || data.prefix
-                if (name) {
-                  resolve(name.charAt(name.length - 1) === '/')
-                }
-              })
-            } catch (err) {  
-              reject(err)
-            }
-          })
+          return await (async () => {
+            return new Promise<boolean>((resolve, reject) => {
+              try {
+                const stream = this.client.listObjects(bucketName, fileName)
+                stream.on('error', err => {
+                  console.error(err)
+                  resolve(false)
+                })
+                stream.on('end', () => {
+                  // if we get here, then the list gave back nothing
+                  resolve(false)
+                })
+                stream.on('data', data => {
+                  const name = data.name || data.prefix
+                  if (name) {
+                    resolve(name.charAt(name.length - 1) === '/')
+                  }
+                })
+              } catch (err) {
+                reject(err)
+              }
+            })
+          })()
         } catch (err2) {
           console.error(err2)
         }
@@ -808,7 +810,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         // copying out of an s3 bucket
         return this.fGetObject(args, srcFilepaths, dstFilepath)
       }
-    } catch (err) {  
+    } catch (err) {
       const error: CodedError = new Error(err.message)
       error.code = err['httpstatuscode'] || err['code'] // missing types in @types/minio
       throw error
@@ -826,7 +828,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         stream.on('end', () => resolve(objects))
         stream.on('data', ({ name }) => objects.push(name))
       })
-    } catch (err) {  
+    } catch (err) {
       const error: CodedError = new Error(err.message)
       error.code = err['httpstatuscode'] || err['code'] // missing types in @types/minio
       throw error
@@ -912,7 +914,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         ? await this.client.getPartialObject(bucketName, fileName, offset, length)
         : await this.client.getPartialObject(bucketName, fileName, offset)
       return stream
-    } catch (err) {  
+    } catch (err) {
       if (err.code === 'InvalidRange') {
         debug('file slice failed; reading the rest of the file', err)
         return this.client.getPartialObject(bucketName, fileName, offset)
@@ -927,53 +929,55 @@ class S3VFSResponder extends S3VFS implements VFS {
     const { createGunzip } = await import('zlib')
     await this.initDone
     const { bucketName, fileName } = this.split(filepath)
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
+    return (async () => {
       if (!fileName) {
-        reject(new Error('s3 pipe: no filename provided'))
+        throw new Error('s3 pipe: no filename provided')
       } else {
         try {
           const stream = await this.getPartialObject(bucketName, fileName, offset, length)
 
-          if (filepath.endsWith('.gz')) {
-            stream
-              .pipe(createGunzip())
-              .on('error', (err: CodedError<string>) => {
-                if (err.code === 'Z_BUF_ERROR') {
-                  // this may happen when reading a part of a gzip file
-                  resolve()
-                } else {
-                  reject(err)
-                }
-              })
-              .pipe(destStream)
-              .on('error', reject)
-              .on('end', resolve)
-          } else {
-            stream.pipe(destStream).on('error', reject).on('end', resolve)
-          }
-        } catch (err) {  
-          reject(err)
+          return new Promise<void>((resolve, reject) => {
+            if (filepath.endsWith('.gz')) {
+              stream
+                .pipe(createGunzip())
+                .on('error', (err: CodedError<string>) => {
+                  if (err.code === 'Z_BUF_ERROR') {
+                    // this may happen when reading a part of a gzip file
+                    resolve()
+                  } else {
+                    reject(err)
+                  }
+                })
+                .pipe(destStream)
+                .on('error', reject)
+                .on('end', resolve)
+            } else {
+              stream.pipe(destStream).on('error', reject).on('end', resolve)
+            }
+          })
+        } catch (err) {
+          throw err
         }
       }
-    })
+    })()
   }
 
   /** Fetch content slice */
   public async fslice(filepath: string, offset: number, length: number): Promise<string> {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
+    return (async () => {
       let data = ''
       const passthrough = new PassThrough()
-      passthrough.on('error', reject)
+      passthrough.on('error', (err) => {
+        throw err
+      })
       passthrough.on('data', d => (data += d.toString()))
       try {
         await this.pipe(filepath, offset, length, passthrough)
-        resolve(data)
-      } catch (err) {  
-        reject(err)
+        return data
+      } catch (err) {
+        throw err
       }
-    })
+    })()
   }
 
   /** Fetch contents */
@@ -1014,7 +1018,7 @@ class S3VFSResponder extends S3VFS implements VFS {
               ? await this.readData(bucketName, fileName)
               : ''
         }
-      } catch (err) {  
+      } catch (err) {
         if (err.code === 'NotFound') {
           // folder?
           try {
@@ -1046,7 +1050,7 @@ class S3VFSResponder extends S3VFS implements VFS {
         stream.on('error', reject)
         stream.on('data', chunk => (data += chunk))
         stream.on('end', () => resolve(data))
-      } catch (err) {  
+      } catch (err) {
         reject(err)
       }
     })
@@ -1125,7 +1129,7 @@ export let waitForInitDone: Promise<void>
 
 export default function initS3Mounts() {
   const init = (resolveA?: () => void) => {
-     
+
     waitForInitDone = new Promise((resolveB, reject) => {
       setTimeout(() => {
         mount(async (repl: REPL) => {

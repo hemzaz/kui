@@ -260,8 +260,216 @@ Current coverage targets (enforced by jest.config.js):
 - Install type definitions: `npm install -D @types/jest`
 - Check tsconfig.json includes test files
 
+## Feature #3: Context Menu Integration Tests
+
+### Overview
+
+Comprehensive test suite for Context Menu and Tooltip functionality with AI-powered insights.
+
+### New Test Files
+
+```
+tests/
+├── ui/                              # Component unit tests (NEW)
+│   ├── ContextMenu.spec.tsx        # Context menu component (40+ tests)
+│   └── ResourceTooltip.spec.tsx    # Tooltip component (45+ tests)
+├── services/
+│   └── insight-generator.spec.ts   # AI insight generation (50+ tests)
+└── integration/
+    └── context-menu-integration.spec.ts  # E2E tests (30+ tests)
+```
+
+### Test Coverage
+
+**ContextMenu.spec.tsx** (40+ tests)
+- ✅ Rendering and initialization
+- ✅ Right-click interactions
+- ✅ Menu positioning at cursor
+- ✅ Action handlers (Ask AI, Debug, Explain)
+- ✅ Menu closing (outside click, Escape, after action)
+- ✅ Keyboard navigation (Tab, Arrow keys, Enter)
+- ✅ Accessibility (ARIA, screen readers)
+- ✅ Multiple instances
+- ✅ Edge cases (long names, special characters)
+
+**ResourceTooltip.spec.tsx** (45+ tests)
+- ✅ Rendering and visibility
+- ✅ Hover interactions with delay
+- ✅ **Performance requirement: < 1s** (CRITICAL)
+- ✅ Loading states
+- ✅ Error handling (timeout, network, rate limit)
+- ✅ Caching and debouncing
+- ✅ Accessibility (keyboard, screen readers)
+- ✅ Positioning and viewport overflow
+
+**insight-generator.spec.ts** (50+ tests)
+- ✅ Insight generation for all resource types
+- ✅ Prompt construction and optimization
+- ✅ Response extraction and formatting
+- ✅ Caching with TTL and deduplication
+- ✅ **Performance requirement: < 1s** (CRITICAL)
+- ✅ Error handling
+- ✅ Batch processing
+- ✅ Token usage limits
+
+**context-menu-integration.spec.ts** (30+ tests)
+- ✅ End-to-end Ask AI flow
+- ✅ End-to-end Debug flow
+- ✅ End-to-end Explain flow
+- ✅ Tooltip integration
+- ✅ Cluster context integration
+- ✅ Multiple resources
+- ✅ Performance under load
+- ✅ User experience flows
+
+### Running Feature #3 Tests
+
+```bash
+# All Feature #3 tests
+npm test -- --testPathPattern="(ContextMenu|ResourceTooltip|insight-generator|context-menu-integration)"
+
+# UI component tests only
+npm test -- --testPathPattern="tests/ui"
+
+# Context menu tests
+npm test -- ContextMenu.spec.tsx
+
+# Tooltip tests
+npm test -- ResourceTooltip.spec.tsx
+
+# Insight generator tests
+npm test -- insight-generator.spec.ts
+
+# Integration tests
+npm test -- context-menu-integration.spec.ts
+```
+
+### Performance Testing
+
+Critical requirement: Tooltip must display insight within 1 second.
+
+```bash
+# Run performance-specific tests
+npm test -- -t "performance requirement"
+
+# Run with real timers for accurate measurement
+npm test -- --testTimeout=5000 ResourceTooltip.spec.tsx
+```
+
+**Performance Tests:**
+- `should load insight within 1 second (requirement)` - ResourceTooltip
+- `should generate insight within 1 second (requirement)` - InsightGenerator
+- `should use cached insights immediately` - ResourceTooltip
+- `should handle concurrent requests efficiently` - Integration
+
+### Accessibility Testing
+
+All components include comprehensive accessibility tests:
+
+```bash
+# Run accessibility tests
+npm test -- -t "accessibility"
+```
+
+**Accessibility Coverage:**
+- ARIA roles (menu, menuitem, tooltip)
+- ARIA labels and descriptions
+- Keyboard navigation (Tab, Arrow, Enter, Escape)
+- Screen reader announcements
+- Focus management
+- Keyboard-only workflows
+
+### Mock AI Provider
+
+Tests use mock AI provider with configurable responses:
+
+```typescript
+import { createMockAIResponse } from '../helpers/test-utils'
+
+const mockAIProvider = {
+  complete: jest.fn().mockResolvedValue(
+    createMockAIResponse({
+      content: 'Pod is running normally with all containers ready.'
+    })
+  )
+}
+```
+
+### Test Utilities
+
+New utilities for Feature #3:
+
+```typescript
+// Performance measurement
+const { result, durationMs } = await measureTime(async () => {
+  return await generator.generateInsight('pod-1', 'Pod')
+})
+expect(durationMs).toBeLessThan(1000)
+
+// Mock kubectl
+const mockKubectl = new MockKubectlExecutor()
+mockKubectl.addResponse('get pod nginx', '{"status": "Running"}')
+
+// Performance helpers
+await performanceHelpers.assertPerformance(
+  () => loadTooltip(),
+  1000,  // max duration in ms
+  'Tooltip loading'
+)
+```
+
+### Coverage Goals
+
+Feature #3 specific coverage targets:
+
+- **ContextMenu Component**: >95% coverage
+- **ResourceTooltip Component**: >95% coverage
+- **InsightGenerator Service**: >90% coverage
+- **Integration Tests**: 100% of user flows
+
+### Test-Driven Development
+
+Tests were written following TDD principles:
+
+1. ✅ Tests written first (before implementation)
+2. ✅ Tests define component contracts
+3. ✅ Tests verify performance requirements
+4. ✅ Tests validate accessibility
+5. ✅ Tests cover error conditions
+
+### CI/CD Integration
+
+Tests run automatically:
+- On every commit
+- In pull requests
+- Before merging to main
+
+**GitHub Actions workflow:**
+```yaml
+- name: Run Feature #3 Tests
+  run: |
+    npm test -- --testPathPattern="(ContextMenu|ResourceTooltip|insight-generator|context-menu-integration)"
+    npm run test:coverage
+```
+
+### Known Limitations
+
+1. **React Testing Library**: Requires React 16.8+ for hooks
+2. **Fake Timers**: Some tests use fake timers for performance testing
+3. **Mocked AI**: Tests use mocked AI responses, not real API calls
+4. **No E2E Browser**: Component tests don't run in real browser
+
+### Next Steps
+
+1. Implement components based on test specifications
+2. Run tests in watch mode during development
+3. Achieve >90% coverage before marking feature complete
+4. Add visual regression tests (optional)
+
 ## Additional Resources
 
 - [Jest Documentation](https://jestjs.io/docs/getting-started)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 - [Testing Best Practices](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
+- [Accessibility Testing](https://www.w3.org/WAI/test-evaluate/)
 - [Kui Testing Guide](../../docs/testing.md)

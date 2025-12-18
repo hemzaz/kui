@@ -24,6 +24,9 @@ import { onConnection, disableBashSessions } from './server'
 
 const debug = Debug('plugins/bash-like/pty/channel')
 
+/** Event handler type for channel events */
+type ChannelEventHandler = (data?: unknown) => void
+
 export interface Channel {
   /** is the channel alive? */
   isAlive?: boolean
@@ -34,10 +37,12 @@ export interface Channel {
   /** Send a message over the channel */
   send: (msg: string | Buffer) => void
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  on: (eventType: string, handler: any) => void
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  removeEventListener: (eventType: string, handler: any) => void
+  /** Register an event listener */
+  on: (eventType: string, handler: ChannelEventHandler) => void
+
+  /** Remove an event listener */
+  removeEventListener: (eventType: string, handler: ChannelEventHandler) => void
+
   readyState: number
 }
 
@@ -92,8 +97,7 @@ export class InProcessChannel extends EventEmitter implements Channel {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  removeEventListener(eventType: string, handler: any) {
+  removeEventListener(eventType: string, handler: ChannelEventHandler) {
     this.off(eventType, handler)
   }
 }
@@ -138,8 +142,7 @@ export class WebViewChannelRendererSide extends EventEmitter implements Channel 
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  removeEventListener(eventType: string, handler: any) {
+  removeEventListener(eventType: string, handler: ChannelEventHandler) {
     this.off(eventType, handler)
   }
 }

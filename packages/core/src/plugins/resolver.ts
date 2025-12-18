@@ -23,6 +23,14 @@ import { proxy } from '../core/command-tree'
 import { CommandBase } from '../models/command'
 import { KuiPlugin, PluginRegistration } from '../models/plugin'
 
+// Import Tauri plugin loading utilities
+import {
+  shouldUseTauriEnhancements,
+  applyRuntimeStrategy,
+  getPluginConcurrency,
+  shouldPreloadPlugin
+} from '../main/tauri-plugins'
+
 const debug = Debug('core/plugins/resolver')
 
 export interface PluginResolver {
@@ -69,32 +77,39 @@ const prequire = async (
       // note how we stash a promise in the registrar immediately, to
       // avoid race conditions with multiple threads trying to prequire
       // the same plugin
-      // eslint-disable-next-line no-async-promise-executor
-      registrar[route] = new Promise(async (resolve, reject) => {
+      registrar[route] = (async () => {
         const module = prescan.flat.find(_ => _.route === route)
         if (module) {
           try {
             // NOTE ON @kui-shell relativization: this is important so that
             // webpack can be instructed to pull in the plugins into the build
             // see the corresponding NOTE in ./assembler.ts and ./preloader.ts
-            const registrationRef =
+
+            // Create the import promise
+            const importPromise =
               module.path.charAt(0) === '/'
-                ? await import(/* webpackIgnore: true */ module.path)
+                ? import(/* webpackIgnore: true */ module.path)
                 : module.route === 'client'
-                ? await import('@kui-shell/clien' + webpackPath(module.route).slice(5) + '/mdist/plugin')
-                : await import('@kui-shell/plugin-' + webpackPath(module.route) + '/mdist/plugin')
+                ? import('@kui-shell/clien' + webpackPath(module.route).slice(5) + '/mdist/plugin')
+                : import('@kui-shell/plugin-' + webpackPath(module.route) + '/mdist/plugin')
+
+            // Apply runtime-specific loading strategy (Tauri/Electron)
+            const registrationRef = shouldUseTauriEnhancements()
+              ? await applyRuntimeStrategy(importPromise, route)
+              : await importPromise
+
             const registration: PluginRegistration = registrationRef.default || registrationRef
             const combinedOptions = Object.assign({ usage: prescan.usage, docs: prescan.docs }, options)
 
-            resolve(registration(proxy(route), combinedOptions))
+            return registration(proxy(route), combinedOptions)
           } catch (err) {
             console.error(`prequire error ${route}`, err)
-            reject(err)
+            throw err
           }
         } else {
-          reject(new Error(`Internal error: plugin ${route} not found`))
+          throw new Error(`Internal error: plugin ${route} not found`)
         }
-      })
+      })()
     }
   } catch (err) {
     debug('prequire failure', route)
@@ -118,8 +133,7 @@ export const makeResolver = (prescan: PrescanModel, registrar: Record<string, Ku
       if (!plugin) {
         return
       } else if (!isResolved[plugin]) {
-        // eslint-disable-next-line no-async-promise-executor
-        isResolved[plugin] = new Promise(async (resolve, reject) => {
+        isResolved[plugin] = (async () => {
           try {
             const prereqs = prescan.topological[plugin]
             if (prereqs) {
@@ -127,12 +141,12 @@ export const makeResolver = (prescan: PrescanModel, registrar: Record<string, Ku
             }
 
             const loadedPlugin = prequire(plugin, prescan, registrar)
-            resolve(loadedPlugin)
+            return loadedPlugin
           } catch (err) {
             console.error(`Error resolving plugin ${plugin}`, err)
-            reject(err)
+            throw err
           }
-        })
+        })()
       }
 
       // NOTE: even if isResolved[plugin] already has an entry, we may
@@ -188,9 +202,11 @@ export const makeResolver = (prescan: PrescanModel, registrar: Record<string, Ku
         }
       }
       if (plugin) {
+        // Resolve the plugin using runtime-aware loading (Tauri/Electron)
         await resolveOne(plugin)
       } else if (prescan.catchalls.length > 0 && tryCatchalls) {
         // see if we have catchall
+        // In Tauri runtime, catchalls may be loaded with higher concurrency
         await Promise.all(prescan.catchalls.map(_ => resolveOne(_.plugin))).catch(err => {
           console.error(
             'There seems to be an inconsistency in the prescan model versus the current state of the filesystem: the prescan model refers to a catchall that cannot currently be found',

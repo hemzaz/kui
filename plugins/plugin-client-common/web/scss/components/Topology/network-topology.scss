@@ -1,0 +1,246 @@
+/*
+ * Copyright 2025 The Kubernetes Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.kui-network-topology-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: var(--color-base01);
+}
+
+.network-topology-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-base00);
+  border-bottom: 1px solid var(--color-base02);
+  flex-shrink: 0;
+
+  .toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--color-text-01);
+      cursor: pointer;
+
+      input[type='checkbox'] {
+        cursor: pointer;
+      }
+    }
+
+    select {
+      padding: 0.375rem 0.75rem;
+      border: 1px solid var(--color-base02);
+      border-radius: 4px;
+      background: var(--color-base00);
+      color: var(--color-text-01);
+      font-size: 0.875rem;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-brand-01);
+        box-shadow: 0 0 0 2px rgba(var(--color-brand-01-rgb), 0.2);
+      }
+    }
+  }
+
+  .legend {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--color-text-02);
+
+      .legend-line {
+        width: 30px;
+        height: 2px;
+
+        &.allowed {
+          background: #28a745;
+        }
+
+        &.denied {
+          background: #dc3545;
+          background-image: repeating-linear-gradient(
+            90deg,
+            #dc3545,
+            #dc3545 5px,
+            transparent 5px,
+            transparent 10px
+          );
+        }
+      }
+    }
+  }
+}
+
+.network-topology-canvas {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.network-topology-stats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-base00);
+  border-top: 1px solid var(--color-base02);
+  flex-shrink: 0;
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+
+    .stat-label {
+      color: var(--color-text-02);
+      font-weight: 500;
+    }
+
+    .stat-value {
+      color: var(--color-text-01);
+      font-weight: 600;
+    }
+  }
+}
+
+// Connection highlighting
+.react-flow__edge.connection-allowed {
+  .react-flow__edge-path {
+    stroke: #28a745;
+    stroke-width: 2;
+    animation: flow-allowed 2s linear infinite;
+  }
+}
+
+.react-flow__edge.connection-denied {
+  .react-flow__edge-path {
+    stroke: #dc3545;
+    stroke-width: 2;
+    stroke-dasharray: 5, 5;
+    animation: flow-denied 1s linear infinite;
+  }
+}
+
+@keyframes flow-allowed {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 20;
+  }
+}
+
+@keyframes flow-denied {
+  0% {
+    stroke-dashoffset: 10;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+// Policy node styling
+.network-policy-node {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--color-base00);
+  border: 2px solid #6f42c1;
+  border-radius: 8px;
+  min-width: 160px;
+  box-shadow: 0 2px 8px rgba(111, 66, 193, 0.2);
+
+  .node-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(111, 66, 193, 0.1);
+    color: #6f42c1;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .node-content {
+    flex: 1;
+    min-width: 0;
+
+    .node-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text-01);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .node-meta {
+      font-size: 0.75rem;
+      color: var(--color-text-02);
+    }
+  }
+}
+
+// Dark theme
+body[kui-theme-style='dark'] {
+  .kui-network-topology-view {
+    --color-base00: #1e1e1e;
+    --color-base01: #252525;
+    --color-base02: #3e3e3e;
+    --color-text-01: #e0e0e0;
+    --color-text-02: #a0a0a0;
+    --color-brand-01: #0d6efd;
+    --color-brand-01-rgb: 13, 110, 253;
+  }
+}
+
+// Light theme
+body[kui-theme-style='light'] {
+  .kui-network-topology-view {
+    --color-base00: #ffffff;
+    --color-base01: #f8f9fa;
+    --color-base02: #dee2e6;
+    --color-text-01: #212529;
+    --color-text-02: #6c757d;
+    --color-brand-01: #0d6efd;
+    --color-brand-01-rgb: 13, 110, 253;
+  }
+}

@@ -53,6 +53,7 @@ import StatusStripe, { Props as StatusStripeProps } from './StatusStripe'
 
 import Alert from '../spi/Alert'
 import Loading from '../spi/Loading'
+import { CommandPalette, Command, CommandCategory } from '../CommandPalette'
 
 const InputStripe = React.lazy(() => import('./InputStripe'))
 const LoadingCard = React.lazy(() => import('./LoadingCard'))
@@ -105,6 +106,7 @@ type State = KuiConfiguration & {
   isBootstrapped: boolean
   commandLine?: string[]
   quietExecCommand?: boolean
+  showCommandPalette?: boolean
 }
 
 /**
@@ -175,13 +177,33 @@ export class Kui extends React.PureComponent<Props, State> {
       this.state = {
         isBootstrapped: !!props.noBootstrap,
         commandLine,
-        quietExecCommand
+        quietExecCommand,
+        showCommandPalette: false
       }
+    }
+  }
+
+  private handleKeyDown = (evt: KeyboardEvent) => {
+    // Cmd+K on macOS
+    const isCommandPaletteShortcut =
+      evt.metaKey && evt.key === 'k' && !evt.shiftKey && !evt.altKey && !evt.ctrlKey
+
+    if (isCommandPaletteShortcut) {
+      evt.preventDefault()
+      this.setState({ showCommandPalette: true })
+    }
+
+    // Escape to close palette
+    if (evt.key === 'Escape' && this.state.showCommandPalette) {
+      this.setState({ showCommandPalette: false })
     }
   }
 
   public async componentDidMount() {
     const themeP = await findThemeByName((await getPersistedThemeChoice()) || (await getDefaultTheme()))
+
+    // Add keyboard event listener for command palette
+    window.addEventListener('keydown', this.handleKeyDown)
 
     /* if (!this.props.noBootstrap) {
       await import('@kui-shell/core')
@@ -333,6 +355,10 @@ export class Kui extends React.PureComponent<Props, State> {
     }
   }
 
+  public componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown)
+  }
+
   public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error(error, errorInfo)
   }
@@ -353,6 +379,44 @@ export class Kui extends React.PureComponent<Props, State> {
   }
 
   private readonly _onTabReady = this.onTabReady.bind(this)
+
+  private getSampleCommands(): Command[] {
+    // TODO: This should be populated by plugins registering commands
+    // For now, return sample commands to demonstrate the palette
+    return [
+      {
+        id: 'kubectl.get.pods',
+        name: 'Get Pods',
+        description: 'List all pods in the current namespace',
+        category: CommandCategory.Kubectl,
+        icon: '📦',
+        keyBinding: 'Cmd+Shift+P',
+        action: () => {
+          console.log('Execute: kubectl get pods')
+        }
+      },
+      {
+        id: 'kubectl.get.deployments',
+        name: 'Get Deployments',
+        description: 'List all deployments in the current namespace',
+        category: CommandCategory.Workloads,
+        resourceType: 'deployment',
+        action: () => {
+          console.log('Execute: kubectl get deployments')
+        }
+      },
+      {
+        id: 'settings.theme',
+        name: 'Change Theme',
+        description: 'Switch between light and dark themes',
+        category: CommandCategory.Settings,
+        icon: '🎨',
+        action: () => {
+          console.log('Open theme selector')
+        }
+      }
+    ]
+  }
 
   public render() {
     if (!this.state.isBootstrapped) {
@@ -375,6 +439,12 @@ export class Kui extends React.PureComponent<Props, State> {
         <KuiContext.Provider value={this.state}>
           <React.Suspense fallback={<div />}>
             <div className="kui--full-height">
+              {this.state.showCommandPalette && (
+                <CommandPalette
+                  commands={this.getSampleCommands()}
+                  onDismiss={() => this.setState({ showCommandPalette: false })}
+                />
+              )}
               <TabContainer
                 productName={this.props.productName}
                 version={this.props.version}
